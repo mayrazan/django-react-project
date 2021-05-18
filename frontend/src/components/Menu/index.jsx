@@ -14,8 +14,8 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
 import ViewListIcon from "@material-ui/icons/ViewList";
+import { NavLink } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -82,12 +82,73 @@ const useStyles = makeStyles((theme) => ({
   iconColor: {
     color: "white",
   },
+  link: {
+    textDecoration: "none",
+    color: "white",
+  },
 }));
 
-export default function MenuDrawer() {
+export default function MenuDrawer({ children }) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+
+  const menuListInfo = [
+    {
+      id: 1,
+      name: "Síndico",
+      icon: <ViewListIcon />,
+      link: "/sindico",
+    },
+    {
+      id: 2,
+      name: "Condôminos",
+      icon: <ViewListIcon />,
+      link: "/sindico",
+    },
+    {
+      id: 3,
+      name: "Usuários",
+      icon: <ViewListIcon />,
+      link: "/sindico",
+    },
+    {
+      id: 4,
+      name: "Relatórios",
+      icon: <ViewListIcon />,
+      link: "/sindico",
+    },
+    {
+      id: 5,
+      name: "Perfis de acesso",
+      icon: <ViewListIcon />,
+      link: "/sindico",
+    },
+    {
+      id: 6,
+      name: "Indicadores",
+      icon: <ViewListIcon />,
+      link: "/sindico",
+    },
+    {
+      id: 7,
+      name: "Logs",
+      icon: <ViewListIcon />,
+      link: "/sindico",
+    },
+    {
+      id: 8,
+      name: "Banco de dados",
+      icon: <ViewListIcon />,
+      link: "/sindico",
+    },
+    {
+      id: 9,
+      name: "Backups",
+      icon: <ViewListIcon />,
+      link: "/sindico",
+    },
+  ];
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -146,24 +207,19 @@ export default function MenuDrawer() {
         </div>
         <Divider />
         <List>
-          {[
-            "Síndico",
-            "Condôminos",
-            "Usuários",
-            "Relatórios",
-            "Perfis de acesso",
-            "Indicadores",
-            "Logs",
-            "Banco de dados",
-            "Backups",
-          ].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon className={classes.iconColor}>
-                {index % 2 === 0 ? <ViewListIcon /> : <ViewListIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          {menuListInfo.map((el) => {
+            return (
+              <ListItem button key={el.id}>
+                <ListItemIcon className={classes.iconColor}>
+                  {el.icon}
+                </ListItemIcon>
+
+                <NavLink exact to={el.link} className={classes.link}>
+                  {el.name}
+                </NavLink>
+              </ListItem>
+            );
+          })}
         </List>
       </Drawer>
       <main
@@ -172,8 +228,32 @@ export default function MenuDrawer() {
         })}
       >
         <div className={classes.drawerHeader} />
-        <Typography variant="h4">Seja bem-vindo(a)!</Typography>
+        {children}
       </main>
     </div>
   );
 }
+
+// {[
+//   "Síndico",
+//   "Condôminos",
+//   "Usuários",
+//   "Relatórios",
+//   "Perfis de acesso",
+//   "Indicadores",
+//   "Logs",
+//   "Banco de dados",
+//   "Backups",
+// ].map((text, index) => (
+//   <ListItem button key={text}>
+//     <ListItemIcon className={classes.iconColor}>
+//       {index % 2 === 0 ? <ViewListIcon /> : <ViewListIcon />}
+//     </ListItemIcon>
+
+//     <NavLink to={toPage} className={classes.link}>
+//       {text}
+//     </NavLink>
+
+//     {/* <ListItemText primary={text} /> */}
+//   </ListItem>
+// ))}

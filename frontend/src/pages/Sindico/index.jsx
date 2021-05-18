@@ -1,14 +1,14 @@
 import Typography from "@material-ui/core/Typography";
 import MenuDrawer from "../../components/Menu";
 
-const Home = () => {
+const Sindico = () => {
   return (
     <>
       <MenuDrawer>
-        <Typography variant="h4">Seja bem-vindo(a)!</Typography>
+        <Typography variant="h4">sindicos</Typography>
       </MenuDrawer>
     </>
   );
 };
 
-export default Home;
+export default Sindico;
