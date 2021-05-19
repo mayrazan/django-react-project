@@ -4,9 +4,8 @@ import MenuDrawer from "../../components/Menu";
 const Sindico = () => {
   return (
     <>
-      <MenuDrawer>
-        <Typography variant="h4">sindicos</Typography>
-      </MenuDrawer>
+      <MenuDrawer></MenuDrawer>
+      <Typography variant="h4">sindicos</Typography>
     </>
   );
 };

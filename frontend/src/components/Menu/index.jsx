@@ -1,47 +1,20 @@
 import React, { useState } from "react";
-import clsx from "clsx";
+// import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ViewListIcon from "@material-ui/icons/ViewList";
-import { NavLink } from "react-router-dom";
+import Header from "../Header";
+import ItemsMenuList from "../ItemsMenuList";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
-  },
-  appBar: {
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  hide: {
-    display: "none",
   },
   drawer: {
     width: drawerWidth,
@@ -56,11 +29,11 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
     ...theme.mixins.toolbar,
     justifyContent: "flex-end",
   },
   content: {
+    display: "flex",
     flexGrow: 1,
     padding: theme.spacing(3),
     transition: theme.transitions.create("margin", {
@@ -79,76 +52,12 @@ const useStyles = makeStyles((theme) => ({
   buttonBack: {
     color: "white",
   },
-  iconColor: {
-    color: "white",
-  },
-  link: {
-    textDecoration: "none",
-    color: "white",
-  },
 }));
 
-export default function MenuDrawer({ children }) {
+export default function MenuDrawer() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-
-  const menuListInfo = [
-    {
-      id: 1,
-      name: "Síndico",
-      icon: <ViewListIcon />,
-      link: "/sindico",
-    },
-    {
-      id: 2,
-      name: "Condôminos",
-      icon: <ViewListIcon />,
-      link: "/sindico",
-    },
-    {
-      id: 3,
-      name: "Usuários",
-      icon: <ViewListIcon />,
-      link: "/sindico",
-    },
-    {
-      id: 4,
-      name: "Relatórios",
-      icon: <ViewListIcon />,
-      link: "/sindico",
-    },
-    {
-      id: 5,
-      name: "Perfis de acesso",
-      icon: <ViewListIcon />,
-      link: "/sindico",
-    },
-    {
-      id: 6,
-      name: "Indicadores",
-      icon: <ViewListIcon />,
-      link: "/sindico",
-    },
-    {
-      id: 7,
-      name: "Logs",
-      icon: <ViewListIcon />,
-      link: "/sindico",
-    },
-    {
-      id: 8,
-      name: "Banco de dados",
-      icon: <ViewListIcon />,
-      link: "/sindico",
-    },
-    {
-      id: 9,
-      name: "Backups",
-      icon: <ViewListIcon />,
-      link: "/sindico",
-    },
-  ];
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -159,31 +68,11 @@ export default function MenuDrawer({ children }) {
   };
 
   return (
-    <div className={classes.root}>
+    <>
+      {/* <div className={classes.root}> */}
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-        color="transparent"
-      >
-        <Toolbar>
-          <Typography variant="h6" noWrap>
-            Condomínio Quinta
-          </Typography>
 
-          <IconButton
-            color="default"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, open && classes.hide)}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
+      <Header handleDrawerOpen={handleDrawerOpen} open={open} />
       <Drawer
         className={classes.drawer}
         variant="persistent"
@@ -206,54 +95,18 @@ export default function MenuDrawer({ children }) {
           </IconButton>
         </div>
         <Divider />
-        <List>
-          {menuListInfo.map((el) => {
-            return (
-              <ListItem button key={el.id}>
-                <ListItemIcon className={classes.iconColor}>
-                  {el.icon}
-                </ListItemIcon>
-
-                <NavLink exact to={el.link} className={classes.link}>
-                  {el.name}
-                </NavLink>
-              </ListItem>
-            );
-          })}
-        </List>
+        <ItemsMenuList />
       </Drawer>
-      <main
+      {/* </div> */}
+
+      {/* <main
         className={clsx(classes.content, {
           [classes.contentShift]: open,
         })}
       >
         <div className={classes.drawerHeader} />
         {children}
-      </main>
-    </div>
+      </main> */}
+    </>
   );
 }
-
-// {[
-//   "Síndico",
-//   "Condôminos",
-//   "Usuários",
-//   "Relatórios",
-//   "Perfis de acesso",
-//   "Indicadores",
-//   "Logs",
-//   "Banco de dados",
-//   "Backups",
-// ].map((text, index) => (
-//   <ListItem button key={text}>
-//     <ListItemIcon className={classes.iconColor}>
-//       {index % 2 === 0 ? <ViewListIcon /> : <ViewListIcon />}
-//     </ListItemIcon>
-
-//     <NavLink to={toPage} className={classes.link}>
-//       {text}
-//     </NavLink>
-
-//     {/* <ListItemText primary={text} /> */}
-//   </ListItem>
-// ))}
