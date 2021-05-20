@@ -12,54 +12,69 @@ export const menuListInfo = [
     id: 1,
     name: "Síndico",
     icon: <ViewListIcon />,
-    link: "/sindico",
+    link: "/admin/sindico",
   },
   {
     id: 2,
     name: "Condôminos",
     icon: <ViewListIcon />,
-    link: "/condominos",
+    link: "/admin/condominos",
   },
   {
     id: 3,
     name: "Usuários",
     icon: <PersonOutlineOutlinedIcon />,
-    link: "/usuarios",
+    link: "/admin/usuarios",
   },
   {
     id: 4,
     name: "Relatórios",
     icon: <AssignmentOutlinedIcon />,
-    link: "/relatorios",
+    link: "/admin/relatorios",
   },
   {
     id: 5,
     name: "Perfis de acesso",
     icon: <LockOutlinedIcon />,
-    link: "/perfis-acesso",
+    link: "/admin/perfis-acesso",
   },
   {
     id: 6,
     name: "Indicadores",
     icon: <ViewModuleOutlinedIcon />,
-    link: "/indicadores",
+    link: "/admin/indicadores",
   },
   {
     id: 7,
     name: "Logs",
     icon: <LocalOfferOutlinedIcon />,
-    link: "/logs",
+    link: "/admin/logs",
   },
   {
     id: 8,
     name: "Banco de dados",
     icon: <StorageOutlinedIcon />,
-    link: "/banco-dados",
+    link: "/admin/banco-dados",
   },
   {
     id: 9,
     name: "Backups",
     icon: <BackupOutlinedIcon />,
-    link: "/backups",
+    link: "/admin/backups",
+  },
+  {
+    id: 10,
+    name: "Chamados",
+    icon: <ViewListIcon />,
+    link: "/admin/chamados",
+  },
+];
+
+export const menuListInfoUser = [
+  {
+    id: 1,
+    name: "Chamados",
+    icon: <ViewListIcon />,
+    link: "/chamados",
   },
 ];

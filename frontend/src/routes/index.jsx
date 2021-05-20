@@ -1,15 +1,15 @@
 import React from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
-import Home from "../pages/Home";
-import Sindico from "../pages/Sindico";
+import Home from "../pages/AdminPages/Home";
+import Sindico from "../pages/AdminPages/Sindico";
 
 const Routes = () => {
   return (
     <BrowserRouter forceRefresh>
       <Switch>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/sindico" component={Sindico} />
-        <Redirect to="/" />
+        <Route exact path="/admin" component={Home} />
+        <Route exact path="/admin/sindico" component={Sindico} />
+        <Redirect to="/admin" />
       </Switch>
     </BrowserRouter>
   );

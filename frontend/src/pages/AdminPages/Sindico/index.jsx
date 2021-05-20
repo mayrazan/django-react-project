@@ -1,5 +1,5 @@
 import Typography from "@material-ui/core/Typography";
-import MenuDrawer from "../../components/Menu";
+import MenuDrawer from "../../../components/shared/Menu";
 
 const Sindico = () => {
   return (

@@ -8,7 +8,7 @@ import IconButton from "@material-ui/core/IconButton";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import Header from "../Header";
-import ItemsMenuList from "../ItemsMenuList";
+import ItemsMenuList from "../../Admin/ItemsMenuList";
 
 const drawerWidth = 240;
 
