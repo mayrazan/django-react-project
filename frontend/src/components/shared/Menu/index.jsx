@@ -9,6 +9,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import Header from "../Header";
 import ItemsMenuList from "../../Admin/ItemsMenuList";
+import { colors } from "../../../styles/colors";
 
 const drawerWidth = 240;
 
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: "#272c30",
+    backgroundColor: `${colors.menu}`,
     color: "white",
   },
   drawerHeader: {
