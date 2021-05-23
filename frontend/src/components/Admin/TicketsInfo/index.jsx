@@ -1,6 +1,6 @@
 import { Typography } from "@material-ui/core";
 import { ContainerTicketStyled } from "./style";
-import TicketsTable from "./TicketsTable";
+import TableContent from "../../shared/TableContent";
 
 const TicketsInfo = () => {
   return (
@@ -8,7 +8,7 @@ const TicketsInfo = () => {
       <Typography variant="h4">Ticket</Typography>
       <ContainerTicketStyled>
         <input></input>
-        <TicketsTable />
+        <TableContent type={1} />
       </ContainerTicketStyled>
     </>
   );
