@@ -1,9 +1,10 @@
-import { headCellsTickets } from "./tableList";
+import { columnTickets } from "./tableList";
 import TableCell from "@material-ui/core/TableCell";
 
 export const chooseTable = (type) => {
   if (type === 1) {
-    return headCellsTickets;
+    // return headCellsTickets;
+    return columnTickets;
   }
 };
 
