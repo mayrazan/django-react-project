@@ -6,21 +6,29 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useEffect, useState } from "react";
-import { getDataApi } from "../../../services/infoApi";
+import { getDataApi, updateTicket } from "../../../services/infoApi";
+import Loading from "../../shared/Loading";
+import { colors } from "../../../styles/colors";
+import { ContainerBtnStyled } from "./style";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
+    [theme.breakpoints.down("sm")]: {
+      marginTop: 0,
+    },
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    backgroundColor: colors.white,
   },
   form: {
     width: "100%",
     marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(3, "auto", 2),
+    display: "flex",
   },
   alerts: {
     width: "100%",
@@ -28,12 +36,26 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(2),
     },
   },
+  main: {
+    backgroundColor: colors.white,
+  },
 }));
 
 const ViewCurrentTicket = () => {
   const { id } = useParams();
   const [currentTicket, setTicket] = useState({});
   const [rows, setRows] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [form, setForm] = useState({
+    name: "",
+    apNumber: 0,
+    description: "",
+    apOccurrence: 0,
+    problem: "",
+    status: "",
+    priority: "",
+    date: "",
+  });
 
   const history = useHistory();
 
@@ -49,108 +71,150 @@ const ViewCurrentTicket = () => {
       (ticket) => ticket.id.toString() === id.toString()
     );
     ticketSelected && setTicket(ticketSelected);
-  }, [rows, id]);
+  }, [id, rows]);
 
   const {
     name,
     apNumber,
-    // apOccurrence,
+    apOccurrence,
     problem,
     status,
-    // file,
-    // priority,
-    // date,
+    priority,
+    date,
     description,
   } = currentTicket;
 
+  useEffect(() => {
+    setForm({
+      name: name,
+      apNumber: apNumber,
+      description: description,
+      apOccurrence: apOccurrence,
+      problem: problem,
+      status: status,
+      priority: priority,
+      date: date,
+    });
+    setTimeout(() => setIsLoading(false), 900);
+  }, [
+    apNumber,
+    apOccurrence,
+    date,
+    description,
+    name,
+    priority,
+    problem,
+    status,
+  ]);
+
   const classes = useStyles();
-  const [form, setForm] = useState({
-    name: "",
-    apNumber: "",
-    textField: "",
-  });
+
+  const saveChanges = () => {
+    (async () => {
+      await updateTicket(id.toString(), form).then(
+        history.push("/admin/chamados")
+      );
+    })();
+  };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="md" className={classes.main}>
       <CssBaseline />
+      <ContainerBtnStyled>
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+          onClick={() => history.push("/admin/chamados")}
+        >
+          Voltar
+        </Button>
+      </ContainerBtnStyled>
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
           Ticket
         </Typography>
 
-        <form className={classes.form}>
-          <TextField
-            value={name}
-            onChange={(event) => {
-              setForm({ ...form, name: event.target.value });
-            }}
-            name="name"
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-          />
-          <TextField
-            name="apNumber"
-            value={apNumber}
-            onChange={(event) => {
-              setForm({ ...form, apNumber: event.target.value });
-            }}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-          />
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <form className={classes.form}>
+            <TextField
+              value={form.name}
+              onChange={(event) => {
+                setForm({ ...form, name: event.target.value });
+              }}
+              name="name"
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Nome"
+            />
+            <TextField
+              name="apNumber"
+              value={form.apNumber}
+              onChange={(event) => {
+                setForm({ ...form, apNumber: event.target.value });
+              }}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Nº Apartamento"
+            />
 
-          <TextField
-            value={problem}
-            onChange={(event) => {
-              setForm({ ...form, name: event.target.value });
-            }}
-            name="name"
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-          />
-          <TextField
-            value={status}
-            onChange={(event) => {
-              setForm({ ...form, name: event.target.value });
-            }}
-            name="name"
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            multiline
-            rows={4}
-            name="textField"
-            label="Campo de texto"
-            id="textField"
-            value={description}
-            onChange={(event) => {
-              setForm({ ...form, textField: event.target.value });
-            }}
-          />
+            <TextField
+              value={form.problem}
+              onChange={(event) => {
+                setForm({ ...form, problem: event.target.value });
+              }}
+              name="name"
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Perturbação"
+            />
+            <TextField
+              value={form.status}
+              onChange={(event) => {
+                setForm({ ...form, status: event.target.value });
+              }}
+              name="name"
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Status"
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              multiline
+              rows={4}
+              name="description"
+              id="description"
+              label="Descrição do problema"
+              value={form.description}
+              onChange={(event) => {
+                setForm({ ...form, description: event.target.value });
+              }}
+            />
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={() => history.push("/admin/chamados")}
-          >
-            Salvar Alterações
-          </Button>
-        </form>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={saveChanges}
+            >
+              Salvar Alterações
+            </Button>
+          </form>
+        )}
       </div>
     </Container>
   );

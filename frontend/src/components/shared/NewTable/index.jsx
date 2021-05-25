@@ -42,7 +42,11 @@ export function NewTable({ arrayColumn, arrayRows }) {
   };
 
   const redirectToTicket = (id) => {
-    history.push(`/admin/visualizar-chamado/${id}`);
+    if (isSelected) {
+      history.push(`/admin/visualizar-chamado/${id}`);
+    } else {
+      alert("Selecione uma informação primeiro!");
+    }
   };
 
   console.log(isSelected);
