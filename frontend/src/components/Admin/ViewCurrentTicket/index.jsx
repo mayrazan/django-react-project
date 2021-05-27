@@ -71,54 +71,89 @@ const ViewCurrentTicket = () => {
   }, []);
 
   useEffect(() => {
-    const ticketSelected = rows.find(
-      (ticket) => ticket.id.toString() === id.toString()
-    );
-    ticketSelected && setTicket(ticketSelected);
-  }, [id, rows]);
-
-  const {
-    name,
-    apNumber,
-    apOccurrence,
-    problem,
-    status,
-    priority,
-    date,
-    description,
-  } = currentTicket;
-
-  useEffect(() => {
-    setForm({
-      name: name,
-      apNumber: apNumber,
-      description: description,
-      apOccurrence: apOccurrence,
-      problem: problem,
-      status: status,
-      priority: priority,
-      date: date,
-    });
-    setTimeout(() => setIsLoading(false), 900);
+    (async () => {
+      const ticketSelected = await rows.find(
+        (ticket) => ticket.id.toString() === id.toString()
+      );
+      ticketSelected && setTicket(ticketSelected);
+      setForm({
+        name: currentTicket.name,
+        apNumber: currentTicket.apNumber,
+        description: currentTicket.description,
+        apOccurrence: currentTicket.apOccurrence,
+        problem: currentTicket.problem,
+        status: currentTicket.status,
+        priority: currentTicket.priority,
+        date: currentTicket.date,
+      });
+      setTimeout(() => setIsLoading(false), 1900);
+    })();
   }, [
-    apNumber,
-    apOccurrence,
-    date,
-    description,
-    name,
-    priority,
-    problem,
-    status,
+    currentTicket.apNumber,
+    currentTicket.apOccurrence,
+    currentTicket.date,
+    currentTicket.description,
+    currentTicket.name,
+    currentTicket.priority,
+    currentTicket.problem,
+    currentTicket.status,
+    id,
+    rows,
   ]);
+
+  // const {
+  //   name,
+  //   apNumber,
+  //   apOccurrence,
+  //   problem,
+  //   status,
+  //   priority,
+  //   date,
+  //   description,
+  // } = currentTicket;
+
+  // useEffect(() => {
+  //   setForm({
+  //     name: name,
+  //     apNumber: apNumber,
+  //     description: description,
+  //     apOccurrence: apOccurrence,
+  //     problem: problem,
+  //     status: status,
+  //     priority: priority,
+  //     date: date,
+  //   });
+  //   setTimeout(() => setIsLoading(false), 900);
+  // }, [
+  //   apNumber,
+  //   apOccurrence,
+  //   date,
+  //   description,
+  //   name,
+  //   priority,
+  //   problem,
+  //   status,
+  // ]);
 
   const classes = useStyles();
 
-  const saveChanges = () => {
+  const saveChanges = (event) => {
+    event.preventDefault();
     (async () => {
-      await updateTicket(id.toString(), form).then(
-        history.push("/admin/chamados")
-      );
+      const result = {
+        name: form.name,
+        apNumber: form.apNumber,
+        apOccurrence: form.apOccurrence,
+        date: form.date,
+        description: form.description,
+        priority: form.priority,
+        problem: form.problem,
+        status: form.status,
+      };
+      const updatedResults = await updateTicket(id.toString(), result);
+      setTicket(updatedResults);
     })();
+    setTimeout(() => window.location.reload(), 900);
   };
 
   const selectStatus = () => {

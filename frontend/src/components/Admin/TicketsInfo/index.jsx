@@ -6,11 +6,12 @@ import { getDataApi } from "../../../services/infoApi";
 import Loading from "../../shared/Loading";
 import { columnTickets } from "../../../mocks/tableList";
 // import DataTable from "../../shared/NewTable";
-// import { deleteInfo } from "../../../services/infoApi";
+import { deleteInfo } from "../../../services/infoApi";
 
 const TicketsInfo = () => {
   const [rows, setRows] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [ticketId, setTicketId] = useState(null);
 
   useEffect(() => {
     const load = async () => {
@@ -21,17 +22,19 @@ const TicketsInfo = () => {
     load();
   }, []);
 
-  // const removeTicket = (id) => {
-  //   if (id) {
-  //     (async () => {
-  //       await deleteInfo(id);
-  //       const del = rows.filter((row) => id !== row.id);
-  //       setRows(del);
-  //     })();
-  //   } else {
-  //     alert("Selecione uma informação primeiro!");
-  //   }
-  // };
+  const removeTicket = (id) => {
+    if (id) {
+      (async () => {
+        await deleteInfo(id);
+        const del = rows.filter((row) => id !== row.id);
+        setRows(del);
+        setTicketId(id);
+      })();
+    } else {
+      alert("Selecione uma informação primeiro!");
+    }
+  };
+  console.log(ticketId);
 
   return (
     <>
@@ -47,7 +50,7 @@ const TicketsInfo = () => {
             <NewTable
               arrayColumn={columnTickets}
               arrayRows={rows}
-              // onClickRemove={() => removeTicket(15)}
+              onClickRemove={() => removeTicket(ticketId)}
             />
             {/* <DataTable columns={columnTicketsDataGrid} rows={rows} /> */}
           </ContainerTicketStyled>

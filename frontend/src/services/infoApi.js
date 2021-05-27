@@ -10,7 +10,7 @@ export async function registerInfo(url, form = {}) {
   return response.data;
 }
 
-export async function updateTicket(id, item = {}) {
+export async function updateTicket(id, item) {
   const response = await api.put(`tickets/${id}`, item);
   return response.data;
 }
