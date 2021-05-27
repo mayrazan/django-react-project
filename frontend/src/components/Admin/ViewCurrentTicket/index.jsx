@@ -10,6 +10,8 @@ import { getDataApi, updateTicket } from "../../../services/infoApi";
 import Loading from "../../shared/Loading";
 import { colors } from "../../../styles/colors";
 import { ContainerBtnStyled } from "./style";
+import SelectContainer from "../../shared/SelectContainer";
+import { MenuItem } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -38,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
   main: {
     backgroundColor: colors.white,
+    borderRadius: "5px",
   },
 }));
 
@@ -45,6 +48,7 @@ const ViewCurrentTicket = () => {
   const { id } = useParams();
   const [currentTicket, setTicket] = useState({});
   const [rows, setRows] = useState([]);
+
   const [isLoading, setIsLoading] = useState(true);
   const [form, setForm] = useState({
     name: "",
@@ -117,6 +121,49 @@ const ViewCurrentTicket = () => {
     })();
   };
 
+  const selectStatus = () => {
+    const options = ["Em aberto", "Em análise", "Concluído", "Rejeitado"];
+
+    return (
+      <SelectContainer
+        value={form.status}
+        onChange={(event) => {
+          setForm({ ...form, status: event.target.value });
+        }}
+        label="Status"
+      >
+        {options.map((item, index) => {
+          return (
+            <MenuItem key={index} value={item}>
+              {item}
+            </MenuItem>
+          );
+        })}
+      </SelectContainer>
+    );
+  };
+
+  const selectPriority = () => {
+    const optionsPriority = ["Baixa", "Media", "Alta"];
+    return (
+      <SelectContainer
+        value={form.priority}
+        onChange={(event) => {
+          setForm({ ...form, priority: event.target.value });
+        }}
+        label="Prioridade"
+      >
+        {optionsPriority.map((item, index) => {
+          return (
+            <MenuItem key={index} value={item}>
+              {item}
+            </MenuItem>
+          );
+        })}
+      </SelectContainer>
+    );
+  };
+
   return (
     <Container component="main" maxWidth="md" className={classes.main}>
       <CssBaseline />
@@ -169,25 +216,14 @@ const ViewCurrentTicket = () => {
               onChange={(event) => {
                 setForm({ ...form, problem: event.target.value });
               }}
-              name="name"
+              name="problem"
               variant="outlined"
               margin="normal"
               required
               fullWidth
               label="Perturbação"
             />
-            <TextField
-              value={form.status}
-              onChange={(event) => {
-                setForm({ ...form, status: event.target.value });
-              }}
-              name="name"
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              label="Status"
-            />
+
             <TextField
               variant="outlined"
               margin="normal"
@@ -204,6 +240,21 @@ const ViewCurrentTicket = () => {
               }}
             />
 
+            <TextField
+              value={form.apOccurrence}
+              onChange={(event) => {
+                setForm({ ...form, apOccurrence: event.target.value });
+              }}
+              name="apOccurrence"
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Nº Ap. de ocorrência"
+            />
+
+            {selectStatus()}
+            {selectPriority()}
             <Button
               type="submit"
               variant="contained"

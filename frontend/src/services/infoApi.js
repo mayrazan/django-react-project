@@ -5,7 +5,7 @@ export async function getDataApi(url) {
   return response.data;
 }
 
-export async function registerForm(url, form = {}) {
+export async function registerInfo(url, form = {}) {
   const response = await api.post(url, form);
   return response.data;
 }
@@ -22,5 +22,10 @@ export async function updateUser(id, item = {}) {
 
 export async function updateProblems(id, item = {}) {
   const response = await api.put(`problems/${id}`, item);
+  return response.data;
+}
+
+export async function deleteInfo(id) {
+  const response = await api.delete(`tickets/${id}`);
   return response.data;
 }
