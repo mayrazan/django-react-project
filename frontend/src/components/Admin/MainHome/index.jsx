@@ -75,20 +75,6 @@ const MainHome = () => {
           Seja bem-vindo(a)!
         </Typography>
       </ContainerWelcomeStyled>
-      {/* <ContainerDisplayStyled>
-        <ContainerUsersStyled>
-          <EqualizerOutlinedIcon />
-          <Typography variant="h6" className={classes.text}>
-            0 Condôminos
-          </Typography>
-        </ContainerUsersStyled>
-        <ContainerUsersStyled>
-          <EqualizerOutlinedIcon />
-          <Typography variant="h6" className={classes.text}>
-            0 Síndicos
-          </Typography>
-        </ContainerUsersStyled>
-      </ContainerDisplayStyled> */}
       <ContainerDisplayStyled>
         <Paper className={classes.paper}>
           <Grid container spacing={2} className={classes.grid}>

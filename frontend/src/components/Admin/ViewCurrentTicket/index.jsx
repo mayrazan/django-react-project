@@ -15,7 +15,6 @@ import { MenuItem } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
     [theme.breakpoints.down("sm")]: {
       marginTop: 0,
     },
@@ -26,11 +25,14 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: "100%",
-    marginTop: theme.spacing(1),
+    paddingTop: theme.spacing(1),
   },
   submit: {
     margin: theme.spacing(3, "auto", 2),
     display: "flex",
+    "@media (max-height: 946px)": {
+      margin: "auto",
+    },
   },
   alerts: {
     width: "100%",
@@ -41,6 +43,12 @@ const useStyles = makeStyles((theme) => ({
   main: {
     backgroundColor: colors.white,
     borderRadius: "5px",
+  },
+  field: {
+    "@media (max-height: 946px)": {
+      paddingBottom: ".5rem",
+      marginBottom: 0,
+    },
   },
 }));
 
@@ -59,6 +67,7 @@ const ViewCurrentTicket = () => {
     status: "",
     priority: "",
     date: "",
+    feedbackManager: "",
   });
 
   const history = useHistory();
@@ -85,6 +94,7 @@ const ViewCurrentTicket = () => {
         status: currentTicket.status,
         priority: currentTicket.priority,
         date: currentTicket.date,
+        feedbackManager: currentTicket.feedbackManager,
       });
       setTimeout(() => setIsLoading(false), 1900);
     })();
@@ -93,6 +103,7 @@ const ViewCurrentTicket = () => {
     currentTicket.apOccurrence,
     currentTicket.date,
     currentTicket.description,
+    currentTicket.feedbackManager,
     currentTicket.name,
     currentTicket.priority,
     currentTicket.problem,
@@ -100,40 +111,6 @@ const ViewCurrentTicket = () => {
     id,
     rows,
   ]);
-
-  // const {
-  //   name,
-  //   apNumber,
-  //   apOccurrence,
-  //   problem,
-  //   status,
-  //   priority,
-  //   date,
-  //   description,
-  // } = currentTicket;
-
-  // useEffect(() => {
-  //   setForm({
-  //     name: name,
-  //     apNumber: apNumber,
-  //     description: description,
-  //     apOccurrence: apOccurrence,
-  //     problem: problem,
-  //     status: status,
-  //     priority: priority,
-  //     date: date,
-  //   });
-  //   setTimeout(() => setIsLoading(false), 900);
-  // }, [
-  //   apNumber,
-  //   apOccurrence,
-  //   date,
-  //   description,
-  //   name,
-  //   priority,
-  //   problem,
-  //   status,
-  // ]);
 
   const classes = useStyles();
 
@@ -149,6 +126,7 @@ const ViewCurrentTicket = () => {
         priority: form.priority,
         problem: form.problem,
         status: form.status,
+        feedbackManager: form.feedbackManager,
       };
       const updatedResults = await updateTicket(id.toString(), result);
       setTicket(updatedResults);
@@ -232,6 +210,7 @@ const ViewCurrentTicket = () => {
               required
               fullWidth
               label="Nome"
+              className={classes.field}
             />
             <TextField
               name="apNumber"
@@ -244,6 +223,7 @@ const ViewCurrentTicket = () => {
               required
               fullWidth
               label="Nº Apartamento"
+              className={classes.field}
             />
 
             <TextField
@@ -257,6 +237,7 @@ const ViewCurrentTicket = () => {
               required
               fullWidth
               label="Perturbação"
+              className={classes.field}
             />
 
             <TextField
@@ -273,6 +254,7 @@ const ViewCurrentTicket = () => {
               onChange={(event) => {
                 setForm({ ...form, description: event.target.value });
               }}
+              className={classes.field}
             />
 
             <TextField
@@ -286,10 +268,28 @@ const ViewCurrentTicket = () => {
               required
               fullWidth
               label="Nº Ap. de ocorrência"
+              className={classes.field}
             />
 
             {selectStatus()}
             {selectPriority()}
+
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              multiline
+              rows={4}
+              name="feedback"
+              id="feedback"
+              label="Resposta Síndico"
+              value={form.feedbackManager}
+              onChange={(event) => {
+                setForm({ ...form, feedbackManager: event.target.value });
+              }}
+              className={classes.field}
+            />
             <Button
               type="submit"
               variant="contained"

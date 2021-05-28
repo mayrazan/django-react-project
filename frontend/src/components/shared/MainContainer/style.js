@@ -6,9 +6,13 @@ export const MainContainerStyled = styled.div`
   background-color: ${colors.background};
   width: 100%;
   height: calc(100% - 64px);
-  padding: 1.563rem 1rem 0 15.938rem;
+  padding: 1.563rem 1rem 1rem 15.938rem;
 
   @media ${device.maxXs} {
     padding: 0;
+  }
+
+  @media ${device.hmd} {
+    overflow: auto;
   }
 `;

@@ -6,4 +6,5 @@ export const device = {
   md: `(min-width: 992px)`,
   lg: `(min-width: 1200px)`,
   xl: `(min-width: 1366px)`,
+  hmd: `(max-height: 946px)`,
 };
