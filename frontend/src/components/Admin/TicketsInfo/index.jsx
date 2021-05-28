@@ -8,7 +8,6 @@ const TicketsInfo = () => {
     <>
       <Typography variant="h4">Ticket</Typography>
       <ContainerTicketStyled>
-        <input></input>
         <TicketsTable arrayColumn={columnTickets} />
       </ContainerTicketStyled>
     </>

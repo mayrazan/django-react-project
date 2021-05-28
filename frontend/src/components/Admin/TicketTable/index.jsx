@@ -8,7 +8,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import { Button } from "@material-ui/core";
+import { Button, MenuItem, TextField } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { CSVLink } from "react-csv";
 import jsPDF from "jspdf";
@@ -16,6 +16,7 @@ import "jspdf-autotable";
 import { deleteInfo, getDataApi } from "../../../services/infoApi";
 import Loading from "../../shared/Loading";
 import ReactExport from "react-data-export";
+import SelectContainer from "../../shared/SelectContainer";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -38,15 +39,63 @@ export function TicketsTable({ arrayColumn }) {
   const [idValue, setIdValue] = useState(0);
   const [rows, setRows] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [status, setStatus] = useState("Todos");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const load = async () => {
       const response = await getDataApi("tickets");
       setRows(response);
+
+      let filteredStatus = response;
+      setRows(filteredStatus);
+
+      if (status !== "Todos") {
+        filteredStatus = filteredStatus.filter(
+          (stat) => stat.status === status
+        );
+      }
+      setRows(filteredStatus);
       setTimeout(() => setIsLoading(false), 700);
+
+      let results = response;
+      if (search) {
+        results = results.filter((value) =>
+          value.problem.toLowerCase().includes(search.toLowerCase())
+        );
+        setRows(results);
+      }
     };
     load();
-  }, []);
+  }, [search, status]);
+
+  const selectStatus = () => {
+    const options = [
+      "Todos",
+      "Em aberto",
+      "Em análise",
+      "Concluído",
+      "Rejeitado",
+    ];
+
+    return (
+      <SelectContainer
+        value={status}
+        onChange={(event) => {
+          setStatus(event.target.value);
+        }}
+        label="Status"
+      >
+        {options.map((item, index) => {
+          return (
+            <MenuItem key={index} value={item}>
+              {item}
+            </MenuItem>
+          );
+        })}
+      </SelectContainer>
+    );
+  };
 
   const removeTicket = (id) => {
     if (isSelected) {
@@ -140,35 +189,36 @@ export function TicketsTable({ arrayColumn }) {
         </>
       ) : (
         <>
-          <Button>
-            <CSVLink data={rows}>CSV</CSVLink>
-          </Button>
-          <Button onClick={() => window.print()}>Print</Button>
-          <Button onClick={exportPDF}>PDF</Button>
+          <div>
+            <TextField
+              id="outlined-search"
+              label="Perturbação"
+              type="search"
+              variant="outlined"
+              onChange={(event) => setSearch(event.target.value)}
+              value={search}
+            />
 
-          <ExcelFile element={<button>Excel</button>}>
-            <ExcelSheet data={rows} name="Tickets">
-              {arrayColumn.map((col) => (
-                <>
-                  <ExcelColumn label={col.label} value="name" key={col.id} />
-                  <ExcelColumn label={col.label} value="problem" key={col.id} />
-                  <ExcelColumn label={col.label} value="file" key={col.id} />
-                  <ExcelColumn
-                    label={col.label}
-                    value="apNumber"
-                    key={col.id}
-                  />
-                  <ExcelColumn label={col.label} value="date" key={col.id} />
-                  <ExcelColumn label={col.label} value="status" key={col.id} />
-                  <ExcelColumn
-                    label={col.label}
-                    value="priority"
-                    key={col.id}
-                  />
-                </>
-              ))}
-            </ExcelSheet>
-          </ExcelFile>
+            {selectStatus()}
+
+            <Button>
+              <CSVLink data={rows}>CSV</CSVLink>
+            </Button>
+            <Button onClick={() => window.print()}>Print</Button>
+            <Button onClick={exportPDF}>PDF</Button>
+
+            <ExcelFile element={<Button>Excel</Button>} filename="Tickets">
+              <ExcelSheet data={rows} name="Tickets">
+                <ExcelColumn label="Nome" value="name" />
+                <ExcelColumn label="Nº Ap." value="apNumber" />
+                <ExcelColumn label="Data" value="date" />
+                <ExcelColumn label="Perturbação" value="problem" />
+                <ExcelColumn label="Descrição" value="description" />
+                <ExcelColumn label="Nº Ap. Ocorrência" value="apOccurrence" />
+                <ExcelColumn label="Resposta Síndico" value="feedbackManager" />
+              </ExcelSheet>
+            </ExcelFile>
+          </div>
 
           <Paper className={classes.root}>
             <TableContainer className={classes.container}>
