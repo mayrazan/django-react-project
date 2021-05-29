@@ -29,3 +29,8 @@ export async function deleteInfo(id) {
   const response = await api.delete(`tickets/${id}`);
   return response.data;
 }
+
+export async function deleteManager(id) {
+  const response = await api.delete(`admin/${id}`);
+  return response.data;
+}

@@ -22,3 +22,18 @@ export const columnTickets = [
     minWidth: 170,
   },
 ];
+
+export const columnManagers = [
+  { id: "name", label: "Nome", minWidth: 170 },
+  { id: "lastName", label: "Sobrenome", minWidth: 170 },
+  {
+    id: "email",
+    label: "Email",
+    minWidth: 170,
+  },
+  {
+    id: "apNumber",
+    label: "Nº Ap.",
+    minWidth: 170,
+  },
+];
