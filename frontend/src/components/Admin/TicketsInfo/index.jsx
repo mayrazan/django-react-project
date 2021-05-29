@@ -6,7 +6,9 @@ import { columnTickets } from "../../../mocks/tableList";
 const TicketsInfo = () => {
   return (
     <>
-      <Typography variant="h4">Ticket</Typography>
+      <Typography variant="h4" style={{ paddingBottom: "1rem" }}>
+        Ticket
+      </Typography>
       <ContainerTicketStyled>
         <TicketsTable arrayColumn={columnTickets} />
       </ContainerTicketStyled>

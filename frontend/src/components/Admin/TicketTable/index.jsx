@@ -17,6 +17,7 @@ import { deleteInfo, getDataApi } from "../../../services/infoApi";
 import Loading from "../../shared/Loading";
 import ReactExport from "react-data-export";
 import SelectContainer from "../../shared/SelectContainer";
+import { HeaderFooterTicketContainer } from "./style";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -27,6 +28,9 @@ const useStyles = makeStyles(() => ({
   },
   tableRow: {
     cursor: "pointer",
+  },
+  link: {
+    color: "white",
   },
 }));
 
@@ -189,7 +193,7 @@ export function TicketsTable({ arrayColumn }) {
         </>
       ) : (
         <>
-          <div>
+          <HeaderFooterTicketContainer>
             <TextField
               id="outlined-search"
               label="Perturbação"
@@ -201,13 +205,30 @@ export function TicketsTable({ arrayColumn }) {
 
             {selectStatus()}
 
-            <Button>
-              <CSVLink data={rows}>CSV</CSVLink>
+            <Button variant="contained" color="primary">
+              <CSVLink data={rows} className={classes.link}>
+                CSV
+              </CSVLink>
             </Button>
-            <Button onClick={() => window.print()}>Print</Button>
-            <Button onClick={exportPDF}>PDF</Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => window.print()}
+            >
+              Print
+            </Button>
+            <Button variant="contained" color="primary" onClick={exportPDF}>
+              PDF
+            </Button>
 
-            <ExcelFile element={<Button>Excel</Button>} filename="Tickets">
+            <ExcelFile
+              element={
+                <Button variant="contained" color="primary">
+                  Excel
+                </Button>
+              }
+              filename="Tickets"
+            >
               <ExcelSheet data={rows} name="Tickets">
                 <ExcelColumn label="Nome" value="name" />
                 <ExcelColumn label="Nº Ap." value="apNumber" />
@@ -218,7 +239,7 @@ export function TicketsTable({ arrayColumn }) {
                 <ExcelColumn label="Resposta Síndico" value="feedbackManager" />
               </ExcelSheet>
             </ExcelFile>
-          </div>
+          </HeaderFooterTicketContainer>
 
           <Paper className={classes.root}>
             <TableContainer className={classes.container}>
@@ -236,34 +257,45 @@ export function TicketsTable({ arrayColumn }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => {
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={row.id}
-                          onClick={() => {
-                            setIdValue(row.id);
-                            setIsSelected(true);
-                          }}
-                          // style={{
-                          //   backgroundColor: row.id === idValue ? "blue" : "white",
-                          // }}
-                          selected={idValue === row.id}
-                          className={classes.tableRow}
-                        >
-                          {arrayColumn.map((column) => {
-                            const value = row[column.id];
-                            return (
-                              <TableCell key={column.id}>{value}</TableCell>
-                            );
-                          })}
-                        </TableRow>
-                      );
-                    })}
+                  {rows.length > 0 ? (
+                    rows
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((row) => {
+                        return (
+                          <TableRow
+                            hover
+                            role="checkbox"
+                            tabIndex={-1}
+                            key={row.id}
+                            onClick={() => {
+                              setIdValue(row.id);
+                              setIsSelected(true);
+                            }}
+                            // style={{
+                            //   backgroundColor: row.id === idValue ? "blue" : "white",
+                            // }}
+                            selected={idValue === row.id}
+                            className={classes.tableRow}
+                          >
+                            {arrayColumn.map((column, index) => {
+                              const value = row[column.id];
+                              return (
+                                <TableCell key={column.id}>{value}</TableCell>
+                              );
+                            })}
+                          </TableRow>
+                        );
+                      })
+                  ) : (
+                    <TableRow>
+                      <TableCell align="center" colSpan={6}>
+                        Nenhum registro encontrado
+                      </TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -277,10 +309,36 @@ export function TicketsTable({ arrayColumn }) {
               onChangeRowsPerPage={handleChangeRowsPerPage}
               labelRowsPerPage="Resultados por página"
             />
-            <Button onClick={() => history.push(`/`)}>Voltar</Button>
-            <Button onClick={() => redirectToTicket(idValue)}>Editar</Button>
-            <Button>Cadastrar</Button>
-            <Button onClick={() => removeTicket(idValue)}>Remover</Button>
+            <HeaderFooterTicketContainer>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => history.push("/")}
+              >
+                Voltar
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => redirectToTicket(idValue)}
+              >
+                Editar
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => history.push("/admin/cadastro-chamado")}
+              >
+                Cadastrar
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => removeTicket(idValue)}
+              >
+                Remover
+              </Button>
+            </HeaderFooterTicketContainer>
           </Paper>
         </>
       )}

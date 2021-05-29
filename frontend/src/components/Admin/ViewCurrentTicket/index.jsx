@@ -50,6 +50,13 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: 0,
     },
   },
+  dateField: {
+    marginTop: theme.spacing(1),
+    "@media (max-height: 946px)": {
+      paddingBottom: ".5rem",
+      marginBottom: 0,
+    },
+  },
 }));
 
 const ViewCurrentTicket = () => {
@@ -68,6 +75,7 @@ const ViewCurrentTicket = () => {
     priority: "",
     date: "",
     feedbackManager: "",
+    file: [],
   });
 
   const history = useHistory();
@@ -95,6 +103,7 @@ const ViewCurrentTicket = () => {
         priority: currentTicket.priority,
         date: currentTicket.date,
         feedbackManager: currentTicket.feedbackManager,
+        file: currentTicket.file,
       });
       setTimeout(() => setIsLoading(false), 1900);
     })();
@@ -104,6 +113,7 @@ const ViewCurrentTicket = () => {
     currentTicket.date,
     currentTicket.description,
     currentTicket.feedbackManager,
+    currentTicket.file,
     currentTicket.name,
     currentTicket.priority,
     currentTicket.problem,
@@ -127,11 +137,12 @@ const ViewCurrentTicket = () => {
         problem: form.problem,
         status: form.status,
         feedbackManager: form.feedbackManager,
+        file: form.file,
       };
       const updatedResults = await updateTicket(id.toString(), result);
       setTicket(updatedResults);
     })();
-    setTimeout(() => window.location.reload(), 900);
+    setTimeout(() => window.location.reload(), 1900);
   };
 
   const selectStatus = () => {
@@ -176,6 +187,34 @@ const ViewCurrentTicket = () => {
       </SelectContainer>
     );
   };
+
+  // const reader = (file) => {
+  //   return new Promise((resolve, reject) => {
+  //     const fileReader = new FileReader();
+  //     fileReader.onload = () => resolve(fileReader.result);
+  //     fileReader.readAsDataURL(file);
+  //   });
+  // };
+  // const readFile = (file) => {
+  //   reader(file).then((result) => setForm({ ...form, file: result }));
+  // };
+
+  // const downloadFile = () => {
+  //   axios({
+  //     url: `${form.file[0].path}`, //your url
+  //     method: "GET",
+  //     responseType: "blob",
+  //     // responseType: "arraybuffer",
+  //   }).then((response) => {
+  //     const url = window.URL.createObjectURL(new Blob([response.data]));
+  //     console.log(url);
+  //     const link = document.createElement("a");
+  //     link.href = url;
+  //     link.setAttribute("download", "file.png"); //or any other extension
+  //     document.body.appendChild(link);
+  //     link.click();
+  //   });
+  // };
 
   return (
     <Container component="main" maxWidth="md" className={classes.main}>
@@ -275,9 +314,21 @@ const ViewCurrentTicket = () => {
             {selectPriority()}
 
             <TextField
+              value={form.date}
+              name="date"
               variant="outlined"
               margin="normal"
-              required
+              disabled
+              label="Data de abertura"
+              className={classes.dateField}
+              onChange={(event) => {
+                setForm({ ...form, date: event.target.value });
+              }}
+            />
+
+            <TextField
+              variant="outlined"
+              margin="normal"
               fullWidth
               multiline
               rows={4}
