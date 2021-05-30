@@ -1,16 +1,16 @@
-import ViewCurrentTicket from "../../../components/Admin/ViewCurrentTicket";
+import RegisterNotifications from "../../../components/Admin/RegisterNotifications";
 import MainContainer from "../../../components/shared/MainContainer";
 import MenuDrawer from "../../../components/shared/Menu";
 
-const ViewTickets = () => {
+const Notifications = () => {
   return (
     <>
       <MenuDrawer />
       <MainContainer>
-        <ViewCurrentTicket />
+        <RegisterNotifications />
       </MainContainer>
     </>
   );
 };
 
-export default ViewTickets;
+export default Notifications;

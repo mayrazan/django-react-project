@@ -1,5 +1,3 @@
-import { Typography } from "@material-ui/core";
-import { columnManagers } from "../../../mocks/tableList";
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -10,18 +8,20 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import { Button, TextField } from "@material-ui/core";
+import { Button, MenuItem, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { CSVLink } from "react-csv";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { deleteManager, getDataApi } from "../../../services/infoApi";
+import { getDataApi } from "../../../services/infoApi";
 import Loading from "../../shared/Loading";
 import ReactExport from "react-data-export";
+import SelectContainer from "../../shared/SelectContainer";
 import {
-  HeaderFooterContainer,
   ContainerStyled,
+  HeaderFooterContainer,
 } from "../../shared/StyleComponents/style";
+import { columnTicketsUser } from "../../../mocks/tableList";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -38,45 +38,60 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ManagerInfo = () => {
+const MyTickets = () => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const history = useHistory();
-  const [isSelected, setIsSelected] = useState(false);
-  const [idValue, setIdValue] = useState(0);
   const [rows, setRows] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("Todos");
 
   useEffect(() => {
     const load = async () => {
-      const response = await getDataApi("admin");
+      const response = await getDataApi("tickets");
       setRows(response);
 
-      setTimeout(() => setIsLoading(false), 700);
+      let filteredStatus = response;
+      setRows(filteredStatus);
 
-      let results = response;
-      if (search) {
-        results = results.filter((value) =>
-          value.name.toLowerCase().includes(search.toLowerCase())
+      if (status !== "Todos") {
+        filteredStatus = filteredStatus.filter(
+          (stat) => stat.status === status
         );
-        setRows(results);
       }
+      setRows(filteredStatus);
+      setTimeout(() => setIsLoading(false), 700);
     };
     load();
-  }, [search]);
+  }, [status]);
 
-  const removeManager = (id) => {
-    if (isSelected) {
-      (async () => {
-        await deleteManager(id);
-        const del = rows.filter((row) => id !== row.id);
-        setRows(del);
-      })();
-    } else {
-      alert("Selecione uma informação primeiro!");
-    }
+  const selectStatus = () => {
+    const options = [
+      "Todos",
+      "Em aberto",
+      "Em análise",
+      "Concluído",
+      "Rejeitado",
+    ];
+
+    return (
+      <SelectContainer
+        value={status}
+        onChange={(event) => {
+          setStatus(event.target.value);
+        }}
+        label="Status"
+      >
+        {options.map((item, index) => {
+          return (
+            <MenuItem key={index} value={item}>
+              {item}
+            </MenuItem>
+          );
+        })}
+      </SelectContainer>
+    );
   };
 
   const handleChangePage = (event, newPage) => {
@@ -99,15 +114,31 @@ const ManagerInfo = () => {
 
     doc.setFontSize(15);
 
-    const title = "Síndicos";
-    const headers = [["NOME", "SOBRENOME", "EMAIL", "Nº AP.", "TELEFONE"]];
+    const title = "Tickets";
+    const headers = [
+      [
+        "NOME",
+        "Nº AP.",
+        "PERTURBAÇÃO",
+        "DATA ABERTURA",
+        "STATUS",
+        "PRIORIDADE",
+        "DESCRIÇÃO",
+        "Nº AP. OCORRÊNCIA",
+        "RESPOSTA",
+      ],
+    ];
 
     const data = rows.map((el) => [
       el.name,
-      el.lastName,
-      el.email,
       el.apNumber,
-      el.phone,
+      el.problem,
+      el.date,
+      el.status,
+      el.priority,
+      el.description,
+      el.apOccurrence,
+      el.feedbackManager,
     ]);
 
     let content = {
@@ -120,7 +151,7 @@ const ManagerInfo = () => {
 
     doc.text(title, marginLeft, 40);
     doc.autoTable(content);
-    doc.save("sindicos.pdf");
+    doc.save("tickets.pdf");
   };
 
   const ExcelFile = ReactExport.ExcelFile;
@@ -130,7 +161,7 @@ const ManagerInfo = () => {
   return (
     <>
       <Typography variant="h4" style={{ paddingBottom: "1rem" }}>
-        Síndicos
+        Tickets
       </Typography>
       <ContainerStyled>
         {isLoading ? (
@@ -140,14 +171,7 @@ const ManagerInfo = () => {
         ) : (
           <>
             <HeaderFooterContainer>
-              <TextField
-                id="outlined-search"
-                label="Nome"
-                type="search"
-                variant="outlined"
-                onChange={(event) => setSearch(event.target.value)}
-                value={search}
-              />
+              {selectStatus()}
 
               <Button variant="contained" color="primary">
                 <CSVLink data={rows} className={classes.link}>
@@ -171,14 +195,19 @@ const ManagerInfo = () => {
                     Excel
                   </Button>
                 }
-                filename="Sindicos"
+                filename="Tickets"
               >
-                <ExcelSheet data={rows} name="Sindicos">
+                <ExcelSheet data={rows} name="Tickets">
                   <ExcelColumn label="Nome" value="name" />
-                  <ExcelColumn label="Sobrenome" value="lastName" />
-                  <ExcelColumn label="Email" value="email" />
                   <ExcelColumn label="Nº Ap." value="apNumber" />
-                  <ExcelColumn label="Telefone" value="phone" />
+                  <ExcelColumn label="Data" value="date" />
+                  <ExcelColumn label="Perturbação" value="problem" />
+                  <ExcelColumn label="Descrição" value="description" />
+                  <ExcelColumn label="Nº Ap. Ocorrência" value="apOccurrence" />
+                  <ExcelColumn
+                    label="Resposta Síndico"
+                    value="feedbackManager"
+                  />
                 </ExcelSheet>
               </ExcelFile>
             </HeaderFooterContainer>
@@ -188,7 +217,7 @@ const ManagerInfo = () => {
                 <Table stickyHeader aria-label="sticky table" id="table-ticket">
                   <TableHead>
                     <TableRow>
-                      {columnManagers.map((column) => (
+                      {columnTicketsUser.map((column) => (
                         <TableCell
                           key={column.id}
                           style={{ minWidth: column.minWidth }}
@@ -212,14 +241,9 @@ const ManagerInfo = () => {
                               role="checkbox"
                               tabIndex={-1}
                               key={row.id}
-                              onClick={() => {
-                                setIdValue(row.id);
-                                setIsSelected(true);
-                              }}
-                              selected={idValue === row.id}
                               className={classes.tableRow}
                             >
-                              {columnManagers.map((column) => {
+                              {columnTicketsUser.map((column, index) => {
                                 const value = row[column.id];
                                 return (
                                   <TableCell key={column.id}>{value}</TableCell>
@@ -260,16 +284,9 @@ const ManagerInfo = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => history.push("/admin/cadastro-sindico")}
+                  onClick={() => history.push("/cadastro-chamado")}
                 >
                   Cadastrar
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => removeManager(idValue)}
-                >
-                  Remover
                 </Button>
               </HeaderFooterContainer>
             </Paper>
@@ -280,4 +297,4 @@ const ManagerInfo = () => {
   );
 };
 
-export default ManagerInfo;
+export default MyTickets;

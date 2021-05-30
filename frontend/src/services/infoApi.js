@@ -5,6 +5,11 @@ export async function getDataApi(url) {
   return response.data;
 }
 
+export async function getUser(id) {
+  const response = await api.get(`users/${id}`);
+  return response.data;
+}
+
 export async function registerInfo(url, form = {}) {
   const response = await api.post(url, form);
   return response.data;
@@ -32,5 +37,10 @@ export async function deleteInfo(id) {
 
 export async function deleteManager(id) {
   const response = await api.delete(`admin/${id}`);
+  return response.data;
+}
+
+export async function deleteUser(id) {
+  const response = await api.delete(`users/${id}`);
   return response.data;
 }

@@ -1,16 +1,16 @@
-import ViewCurrentTicket from "../../../components/Admin/ViewCurrentTicket";
+import RenterInfo from "../../../components/Admin/RenterInfo";
 import MainContainer from "../../../components/shared/MainContainer";
 import MenuDrawer from "../../../components/shared/Menu";
 
-const ViewTickets = () => {
+const Renter = () => {
   return (
     <>
       <MenuDrawer />
       <MainContainer>
-        <ViewCurrentTicket />
+        <RenterInfo />
       </MainContainer>
     </>
   );
 };
 
-export default ViewTickets;
+export default Renter;

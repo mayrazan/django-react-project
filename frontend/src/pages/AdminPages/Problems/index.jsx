@@ -1,16 +1,16 @@
-import ViewCurrentTicket from "../../../components/Admin/ViewCurrentTicket";
+import RegisterProblemsType from "../../../components/Admin/RegisterProblemsType";
 import MainContainer from "../../../components/shared/MainContainer";
 import MenuDrawer from "../../../components/shared/Menu";
 
-const ViewTickets = () => {
+const Problems = () => {
   return (
     <>
       <MenuDrawer />
       <MainContainer>
-        <ViewCurrentTicket />
+        <RegisterProblemsType />
       </MainContainer>
     </>
   );
 };
 
-export default ViewTickets;
+export default Problems;

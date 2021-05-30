@@ -10,7 +10,6 @@ import { registerInfo } from "../../../services/infoApi";
 import { colors } from "../../../styles/colors";
 import { alertMessage, successMessage } from "../../../utils/messages";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
-import ProfileImage from "../../shared/ProfileImage";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -51,15 +50,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RegisterManager = () => {
+const RegisterProblemsType = () => {
   const [form, setForm] = useState({
-    name: "",
-    lastName: "",
-    email: "",
-    password: "",
-    apNumber: 0,
-    phone: "",
-    avatar: "",
+    problemType: "",
   });
 
   const history = useHistory();
@@ -67,13 +60,11 @@ const RegisterManager = () => {
 
   const [isMessageVisible, setMessageVisible] = useState(false);
   const [isMessageSuccess, setMessageSuccess] = useState(false);
-  const [preview, setPreview] = useState({ prev: null, src: "" });
 
   async function onSubmit(event) {
     event.preventDefault();
-    setForm({ ...form, avatar: preview.src });
     if (validateForm()) {
-      await registerInfo("admin", form);
+      await registerInfo("problems", form);
       setMessageSuccess(true);
 
       setTimeout(() => window.location.reload(), 500);
@@ -81,14 +72,7 @@ const RegisterManager = () => {
   }
 
   const validateForm = () => {
-    if (
-      form.name &&
-      form.lastName &&
-      form.email &&
-      form.apNumber &&
-      form.password &&
-      form.phone
-    ) {
+    if (form.problemType) {
       setMessageVisible(false);
 
       return true;
@@ -96,7 +80,6 @@ const RegisterManager = () => {
       setMessageVisible(true);
     }
   };
-  console.log(preview);
 
   return (
     <Container component="main" maxWidth="md" className={classes.main}>
@@ -106,7 +89,7 @@ const RegisterManager = () => {
           variant="contained"
           color="primary"
           className={classes.submit}
-          onClick={() => history.push("/admin/sindicos")}
+          onClick={() => history.push("/admin")}
         >
           Voltar
         </Button>
@@ -114,92 +97,21 @@ const RegisterManager = () => {
 
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Registrar Síndico
+          Registrar Tipo de Problemas
         </Typography>
 
         <form className={classes.form}>
-          <ProfileImage setPreview={setPreview} />
           <TextField
-            value={form.name}
+            value={form.problemType}
             onChange={(event) => {
-              setForm({ ...form, name: event.target.value });
+              setForm({ ...form, problemType: event.target.value });
             }}
-            name="name"
+            name="problemType"
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            label="Nome"
-            className={classes.field}
-          />
-          <TextField
-            name="lastName"
-            value={form.lastName}
-            onChange={(event) => {
-              setForm({ ...form, lastName: event.target.value });
-            }}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Sobrenome"
-            className={classes.field}
-          />
-
-          <TextField
-            name="apNumber"
-            value={form.apNumber}
-            onChange={(event) => {
-              setForm({ ...form, apNumber: event.target.value });
-            }}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Nº Apartamento"
-            className={classes.field}
-          />
-
-          <TextField
-            value={form.email}
-            onChange={(event) => {
-              setForm({ ...form, email: event.target.value });
-            }}
-            name="email"
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Email"
-            className={classes.field}
-          />
-
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Senha"
-            value={form.password}
-            onChange={(event) => {
-              setForm({ ...form, password: event.target.value });
-            }}
-            className={classes.field}
-            type="password"
-          />
-
-          <TextField
-            value={form.phone}
-            onChange={(event) => {
-              setForm({ ...form, phone: event.target.value });
-            }}
-            name="phone"
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Telefone"
+            label="Tipo de Problema"
             className={classes.field}
           />
 
@@ -221,4 +133,4 @@ const RegisterManager = () => {
   );
 };
 
-export default RegisterManager;
+export default RegisterProblemsType;

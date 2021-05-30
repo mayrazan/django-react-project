@@ -1,5 +1,5 @@
 import { Typography } from "@material-ui/core";
-import { columnManagers } from "../../../mocks/tableList";
+import { columnRenters } from "../../../mocks/tableList";
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -15,7 +15,7 @@ import { useHistory } from "react-router-dom";
 import { CSVLink } from "react-csv";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { deleteManager, getDataApi } from "../../../services/infoApi";
+import { deleteUser, getDataApi } from "../../../services/infoApi";
 import Loading from "../../shared/Loading";
 import ReactExport from "react-data-export";
 import {
@@ -38,7 +38,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ManagerInfo = () => {
+const RenterInfo = () => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -51,7 +51,7 @@ const ManagerInfo = () => {
 
   useEffect(() => {
     const load = async () => {
-      const response = await getDataApi("admin");
+      const response = await getDataApi("users");
       setRows(response);
 
       setTimeout(() => setIsLoading(false), 700);
@@ -67,10 +67,10 @@ const ManagerInfo = () => {
     load();
   }, [search]);
 
-  const removeManager = (id) => {
+  const removeUser = (id) => {
     if (isSelected) {
       (async () => {
-        await deleteManager(id);
+        await deleteUser(id);
         const del = rows.filter((row) => id !== row.id);
         setRows(del);
       })();
@@ -100,14 +100,18 @@ const ManagerInfo = () => {
     doc.setFontSize(15);
 
     const title = "Síndicos";
-    const headers = [["NOME", "SOBRENOME", "EMAIL", "Nº AP.", "TELEFONE"]];
+    const headers = [
+      ["NOME", "SOBRENOME", "EMAIL", "Nº AP.", "ANDAR", "TELEFONE", "CPF"],
+    ];
 
     const data = rows.map((el) => [
       el.name,
       el.lastName,
       el.email,
-      el.apNumber,
+      el.numAp,
+      el.floor,
       el.phone,
+      el.cpf,
     ]);
 
     let content = {
@@ -120,17 +124,25 @@ const ManagerInfo = () => {
 
     doc.text(title, marginLeft, 40);
     doc.autoTable(content);
-    doc.save("sindicos.pdf");
+    doc.save("condominos.pdf");
   };
 
   const ExcelFile = ReactExport.ExcelFile;
   const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
   const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
+  const redirectToUser = (id) => {
+    if (isSelected) {
+      history.push(`/admin/visualizar-condomino/${id}`);
+    } else {
+      alert("Selecione uma informação primeiro!");
+    }
+  };
+
   return (
     <>
       <Typography variant="h4" style={{ paddingBottom: "1rem" }}>
-        Síndicos
+        Condôminos
       </Typography>
       <ContainerStyled>
         {isLoading ? (
@@ -171,14 +183,16 @@ const ManagerInfo = () => {
                     Excel
                   </Button>
                 }
-                filename="Sindicos"
+                filename="Condominos"
               >
-                <ExcelSheet data={rows} name="Sindicos">
+                <ExcelSheet data={rows} name="Condominos">
                   <ExcelColumn label="Nome" value="name" />
                   <ExcelColumn label="Sobrenome" value="lastName" />
                   <ExcelColumn label="Email" value="email" />
-                  <ExcelColumn label="Nº Ap." value="apNumber" />
+                  <ExcelColumn label="Nº Ap." value="numAp" />
+                  <ExcelColumn label="Andar" value="floor" />
                   <ExcelColumn label="Telefone" value="phone" />
+                  <ExcelColumn label="CPF" value="cpf" />
                 </ExcelSheet>
               </ExcelFile>
             </HeaderFooterContainer>
@@ -188,7 +202,7 @@ const ManagerInfo = () => {
                 <Table stickyHeader aria-label="sticky table" id="table-ticket">
                   <TableHead>
                     <TableRow>
-                      {columnManagers.map((column) => (
+                      {columnRenters.map((column) => (
                         <TableCell
                           key={column.id}
                           style={{ minWidth: column.minWidth }}
@@ -219,7 +233,7 @@ const ManagerInfo = () => {
                               selected={idValue === row.id}
                               className={classes.tableRow}
                             >
-                              {columnManagers.map((column) => {
+                              {columnRenters.map((column) => {
                                 const value = row[column.id];
                                 return (
                                   <TableCell key={column.id}>{value}</TableCell>
@@ -260,14 +274,14 @@ const ManagerInfo = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => history.push("/admin/cadastro-sindico")}
+                  onClick={() => redirectToUser(idValue)}
                 >
-                  Cadastrar
+                  Visualizar
                 </Button>
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => removeManager(idValue)}
+                  onClick={() => removeUser(idValue)}
                 >
                   Remover
                 </Button>
@@ -280,4 +294,4 @@ const ManagerInfo = () => {
   );
 };
 
-export default ManagerInfo;
+export default RenterInfo;

@@ -17,7 +17,7 @@ import { deleteInfo, getDataApi } from "../../../services/infoApi";
 import Loading from "../../shared/Loading";
 import ReactExport from "react-data-export";
 import SelectContainer from "../../shared/SelectContainer";
-import { HeaderFooterTicketContainer } from "./style";
+import { HeaderFooterContainer } from "../../shared/StyleComponents/style";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -193,7 +193,7 @@ export function TicketsTable({ arrayColumn }) {
         </>
       ) : (
         <>
-          <HeaderFooterTicketContainer>
+          <HeaderFooterContainer>
             <TextField
               id="outlined-search"
               label="Perturbação"
@@ -239,7 +239,7 @@ export function TicketsTable({ arrayColumn }) {
                 <ExcelColumn label="Resposta Síndico" value="feedbackManager" />
               </ExcelSheet>
             </ExcelFile>
-          </HeaderFooterTicketContainer>
+          </HeaderFooterContainer>
 
           <Paper className={classes.root}>
             <TableContainer className={classes.container}>
@@ -309,7 +309,7 @@ export function TicketsTable({ arrayColumn }) {
               onChangeRowsPerPage={handleChangeRowsPerPage}
               labelRowsPerPage="Resultados por página"
             />
-            <HeaderFooterTicketContainer>
+            <HeaderFooterContainer>
               <Button
                 variant="contained"
                 color="primary"
@@ -338,7 +338,7 @@ export function TicketsTable({ arrayColumn }) {
               >
                 Remover
               </Button>
-            </HeaderFooterTicketContainer>
+            </HeaderFooterContainer>
           </Paper>
         </>
       )}

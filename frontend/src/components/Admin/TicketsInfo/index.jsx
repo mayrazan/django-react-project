@@ -1,5 +1,5 @@
 import { Typography } from "@material-ui/core";
-import { ContainerTicketStyled } from "./style";
+import { ContainerMainStyled } from "../../shared/StyleComponents/style";
 import { TicketsTable } from "../TicketTable";
 import { columnTickets } from "../../../mocks/tableList";
 
@@ -9,9 +9,9 @@ const TicketsInfo = () => {
       <Typography variant="h4" style={{ paddingBottom: "1rem" }}>
         Ticket
       </Typography>
-      <ContainerTicketStyled>
+      <ContainerMainStyled>
         <TicketsTable arrayColumn={columnTickets} />
-      </ContainerTicketStyled>
+      </ContainerMainStyled>
     </>
   );
 };

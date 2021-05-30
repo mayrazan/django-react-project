@@ -51,15 +51,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RegisterManager = () => {
+const RegisterRenter = () => {
   const [form, setForm] = useState({
     name: "",
     lastName: "",
     email: "",
     password: "",
-    apNumber: 0,
+    numAp: 0,
     phone: "",
     avatar: "",
+    floor: "",
+    cpf: "",
   });
 
   const history = useHistory();
@@ -73,7 +75,7 @@ const RegisterManager = () => {
     event.preventDefault();
     setForm({ ...form, avatar: preview.src });
     if (validateForm()) {
-      await registerInfo("admin", form);
+      await registerInfo("users", form);
       setMessageSuccess(true);
 
       setTimeout(() => window.location.reload(), 500);
@@ -85,9 +87,11 @@ const RegisterManager = () => {
       form.name &&
       form.lastName &&
       form.email &&
-      form.apNumber &&
+      form.numAp &&
       form.password &&
-      form.phone
+      form.phone &&
+      form.numAp &&
+      form.floor
     ) {
       setMessageVisible(false);
 
@@ -106,7 +110,7 @@ const RegisterManager = () => {
           variant="contained"
           color="primary"
           className={classes.submit}
-          onClick={() => history.push("/admin/sindicos")}
+          onClick={() => history.push("/login")}
         >
           Voltar
         </Button>
@@ -114,7 +118,7 @@ const RegisterManager = () => {
 
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Registrar Síndico
+          Registrar Condômino
         </Typography>
 
         <form className={classes.form}>
@@ -147,10 +151,10 @@ const RegisterManager = () => {
           />
 
           <TextField
-            name="apNumber"
-            value={form.apNumber}
+            name="numAp"
+            value={form.numAp}
             onChange={(event) => {
-              setForm({ ...form, apNumber: event.target.value });
+              setForm({ ...form, numAp: event.target.value });
             }}
             variant="outlined"
             margin="normal"
@@ -203,6 +207,34 @@ const RegisterManager = () => {
             className={classes.field}
           />
 
+          <TextField
+            value={form.cpf}
+            onChange={(event) => {
+              setForm({ ...form, cpf: event.target.value });
+            }}
+            name="cpf"
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Cpf"
+            className={classes.field}
+          />
+
+          <TextField
+            value={form.floor}
+            onChange={(event) => {
+              setForm({ ...form, floor: event.target.value });
+            }}
+            name="floor"
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Andar"
+            className={classes.field}
+          />
+
           <Button
             type="submit"
             variant="contained"
@@ -221,4 +253,4 @@ const RegisterManager = () => {
   );
 };
 
-export default RegisterManager;
+export default RegisterRenter;

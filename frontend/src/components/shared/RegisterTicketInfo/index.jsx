@@ -9,7 +9,7 @@ import { useState } from "react";
 import { registerInfo } from "../../../services/infoApi";
 import { colors } from "../../../styles/colors";
 import { alertMessage, successMessage } from "../../../utils/messages";
-import { ContainerBtnStyled } from "./style";
+import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
 import { DropzoneArea } from "material-ui-dropzone";
 import {
   AttachFile,
@@ -126,7 +126,7 @@ const RegisterTicketInfo = () => {
           variant="contained"
           color="primary"
           className={classes.submit}
-          onClick={() => history.push("/admin/chamados")}
+          onClick={() => history.push("/")}
         >
           Voltar
         </Button>

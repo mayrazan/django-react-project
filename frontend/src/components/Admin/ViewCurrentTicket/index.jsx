@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { getDataApi, updateTicket } from "../../../services/infoApi";
 import Loading from "../../shared/Loading";
 import { colors } from "../../../styles/colors";
-import { ContainerBtnStyled } from "./style";
+import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
 import SelectContainer from "../../shared/SelectContainer";
 import { MenuItem } from "@material-ui/core";
 

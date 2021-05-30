@@ -106,7 +106,7 @@ const MainHome = () => {
             <Grid item className={classes.container}>
               <ButtonBase
                 className={classes.image}
-                onClick={() => redirectTo("sindico")}
+                onClick={() => redirectTo("sindicos")}
               >
                 <EqualizerOutlinedIcon className={classes.img} />
               </ButtonBase>
