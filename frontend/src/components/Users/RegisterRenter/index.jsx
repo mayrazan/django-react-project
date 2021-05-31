@@ -20,7 +20,8 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    backgroundColor: colors.white,
+    color: "white",
+    // backgroundColor: colors.white,
   },
   form: {
     width: "100%",
@@ -40,13 +41,35 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   main: {
-    backgroundColor: colors.white,
+    backgroundColor: "#274b82",
     borderRadius: "5px",
   },
   field: {
     "@media (max-height: 946px)": {
       paddingBottom: ".5rem",
       marginBottom: 0,
+    },
+    "& .MuiFormLabel-root": {
+      color: colors.white,
+    },
+    "& .MuiInputBase-root": {
+      color: colors.white,
+    },
+    "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: colors.white,
+    },
+    "& .MuiOutlinedInput-notchedOutline": {
+      borderColor: colors.white,
+    },
+  },
+  container: {
+    width: "100%",
+    height: "auto",
+    backgroundColor: "#162e54",
+    color: colors.white,
+    paddingTop: "2rem",
+    "@media (min-height: 915px)": {
+      height: "100%",
     },
   },
 }));
@@ -100,156 +123,165 @@ const RegisterRenter = () => {
       setMessageVisible(true);
     }
   };
-  console.log(preview);
 
   return (
-    <Container component="main" maxWidth="md" className={classes.main}>
-      <CssBaseline />
-      <ContainerBtnStyled>
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.submit}
-          onClick={() => history.push("/login")}
-        >
-          Voltar
-        </Button>
-      </ContainerBtnStyled>
-
-      <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
-          Registrar Condômino
-        </Typography>
-
-        <form className={classes.form}>
-          <ProfileImage setPreview={setPreview} />
-          <TextField
-            value={form.name}
-            onChange={(event) => {
-              setForm({ ...form, name: event.target.value });
-            }}
-            name="name"
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Nome"
-            className={classes.field}
-          />
-          <TextField
-            name="lastName"
-            value={form.lastName}
-            onChange={(event) => {
-              setForm({ ...form, lastName: event.target.value });
-            }}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Sobrenome"
-            className={classes.field}
-          />
-
-          <TextField
-            name="numAp"
-            value={form.numAp}
-            onChange={(event) => {
-              setForm({ ...form, numAp: event.target.value });
-            }}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Nº Apartamento"
-            className={classes.field}
-          />
-
-          <TextField
-            value={form.email}
-            onChange={(event) => {
-              setForm({ ...form, email: event.target.value });
-            }}
-            name="email"
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Email"
-            className={classes.field}
-          />
-
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Senha"
-            value={form.password}
-            onChange={(event) => {
-              setForm({ ...form, password: event.target.value });
-            }}
-            className={classes.field}
-            type="password"
-          />
-
-          <TextField
-            value={form.phone}
-            onChange={(event) => {
-              setForm({ ...form, phone: event.target.value });
-            }}
-            name="phone"
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Telefone"
-            className={classes.field}
-          />
-
-          <TextField
-            value={form.cpf}
-            onChange={(event) => {
-              setForm({ ...form, cpf: event.target.value });
-            }}
-            name="cpf"
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Cpf"
-            className={classes.field}
-          />
-
-          <TextField
-            value={form.floor}
-            onChange={(event) => {
-              setForm({ ...form, floor: event.target.value });
-            }}
-            name="floor"
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Andar"
-            className={classes.field}
-          />
-
+    <div className={classes.container}>
+      <Typography
+        component="h2"
+        variant="h4"
+        align="center"
+        style={{ paddingBottom: "2rem" }}
+      >
+        Condomínio Quintas das Flores
+      </Typography>
+      <Container component="main" maxWidth="md" className={classes.main}>
+        <CssBaseline />
+        <ContainerBtnStyled>
           <Button
-            type="submit"
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={onSubmit}
+            onClick={() => history.push("/login")}
           >
-            Cadastrar
+            Voltar
           </Button>
-        </form>
-      </div>
+        </ContainerBtnStyled>
 
-      {isMessageVisible && alertMessage(classes.alerts)}
-      {isMessageSuccess && successMessage(classes.alerts)}
-    </Container>
+        <div className={classes.paper}>
+          <Typography component="h1" variant="h5">
+            Registrar Condômino
+          </Typography>
+
+          <form className={classes.form}>
+            <ProfileImage setPreview={setPreview} />
+            <TextField
+              value={form.name}
+              onChange={(event) => {
+                setForm({ ...form, name: event.target.value });
+              }}
+              name="name"
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Nome"
+              className={classes.field}
+            />
+            <TextField
+              name="lastName"
+              value={form.lastName}
+              onChange={(event) => {
+                setForm({ ...form, lastName: event.target.value });
+              }}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Sobrenome"
+              className={classes.field}
+            />
+
+            <TextField
+              name="numAp"
+              value={form.numAp}
+              onChange={(event) => {
+                setForm({ ...form, numAp: event.target.value });
+              }}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Nº Apartamento"
+              className={classes.field}
+            />
+
+            <TextField
+              value={form.email}
+              onChange={(event) => {
+                setForm({ ...form, email: event.target.value });
+              }}
+              name="email"
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Email"
+              className={classes.field}
+            />
+
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Senha"
+              value={form.password}
+              onChange={(event) => {
+                setForm({ ...form, password: event.target.value });
+              }}
+              className={classes.field}
+              type="password"
+            />
+
+            <TextField
+              value={form.phone}
+              onChange={(event) => {
+                setForm({ ...form, phone: event.target.value });
+              }}
+              name="phone"
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Telefone"
+              className={classes.field}
+            />
+
+            <TextField
+              value={form.cpf}
+              onChange={(event) => {
+                setForm({ ...form, cpf: event.target.value });
+              }}
+              name="cpf"
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Cpf"
+              className={classes.field}
+            />
+
+            <TextField
+              value={form.floor}
+              onChange={(event) => {
+                setForm({ ...form, floor: event.target.value });
+              }}
+              name="floor"
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Andar"
+              className={classes.field}
+            />
+
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={onSubmit}
+            >
+              Registrar
+            </Button>
+          </form>
+        </div>
+
+        {isMessageVisible && alertMessage(classes.alerts)}
+        {isMessageSuccess && successMessage(classes.alerts)}
+      </Container>
+    </div>
   );
 };
 

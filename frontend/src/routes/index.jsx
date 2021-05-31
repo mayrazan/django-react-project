@@ -14,6 +14,9 @@ import UserHome from "../pages/UserPages/Home";
 import ViewTickets from "../pages/UserPages/ViewTickets";
 import Problems from "../pages/AdminPages/Problems";
 import Notifications from "../pages/AdminPages/Notifications";
+import Login from "../pages/Login";
+import LoginUser from "../components/shared/LoginContainer/LoginUser";
+import LoginAdmin from "../components/shared/LoginContainer/LoginAdmin";
 
 const Routes = () => {
   return (
@@ -49,6 +52,9 @@ const Routes = () => {
         <Route exact path="/cadastro-chamado" component={RegisterTicketUser} />
         <Route exact path="/" component={UserHome} />
         <Route exact path="/chamados" component={ViewTickets} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/login-usuario" component={LoginUser} />
+        <Route exact path="/login-admin" component={LoginAdmin} />
         <Redirect to="/admin" />
       </Switch>
     </BrowserRouter>
