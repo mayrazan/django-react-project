@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     color: colors.white,
     paddingTop: "2rem",
     "@media (min-height: 915px)": {
-      height: "100%",
+      height: "revert",
     },
   },
 }));
