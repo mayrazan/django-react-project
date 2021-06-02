@@ -23,12 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-e%!nz5t&v7#1btfe_9(w#hb&@bsh=f^t!+&cm#q%nha##jz#$^'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -132,6 +132,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -149,8 +150,6 @@ REST_FRAMEWORK = {
 
 load_dotenv()
 
-GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = 'mindful-pillar-315522-2a78b08a6b82.json'
+GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = 'mindful-pillar.json'
 
-# GOOGLE_DRIVE_STORAGE_MEDIA_ROOT = 'https://drive.google.com/drive/u/3/folders/1sId8KKQqKUggyotw8WTxxn_h5zlCD8WP'  # OPTIONAL
-# Configure Django App for Heroku.
 django_heroku.settings(locals())
