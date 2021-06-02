@@ -21,6 +21,10 @@ class Users(models.Model):
     isAdmin = models.BooleanField()
 
 
+class Problems(models.Model):
+    problemType = models.CharField(max_length=50)
+
+
 class Tickets(models.Model):
     STATUS_CHOICES = [
         ('AB', 'Em aberto'),
@@ -35,7 +39,7 @@ class Tickets(models.Model):
     ]
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
     files = models.FileField(upload_to='helpdesk/', storage=gd_storage)
-    problem = models.CharField(max_length=50)
+    problem = models.ForeignKey(Problems, on_delete=models.CASCADE)
     status = models.CharField(choices=STATUS_CHOICES,
                               default='AB', max_length=2)
     priority = models.CharField(choices=PRIORITY_CHOICES, max_length=2)
@@ -43,3 +47,17 @@ class Tickets(models.Model):
     description = models.TextField()
     feedbackManager = models.TextField()
     openDate = models.DateTimeField(auto_now_add=True)
+
+
+class Notifications(models.Model):
+    NOTIFICATION_CHOICES = [
+        ('MA', 'Manutenção'),
+        ('MU', 'Mudança'),
+        ('RE', 'Reunião'),
+        ('IG', 'Informações Gerais'),
+        ('OU', 'Outros')
+    ]
+    notificationType = models.CharField(choices=NOTIFICATION_CHOICES,
+                                        default='IG', max_length=2)
+    description = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
