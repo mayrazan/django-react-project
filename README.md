@@ -1,4 +1,4 @@
 "# django-react-project"
 
 api:
-https://condominio-quinta.herokuapp.com/api/
+https://condominio-quinta-tickets.herokuapp.com/api/
