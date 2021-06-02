@@ -149,7 +149,7 @@ REST_FRAMEWORK = {
 
 load_dotenv()
 
-GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = 'C:/Users/mayra/OneDrive/Documentos/analise e desenvolvimento de sistemas/3 semestre/projeto integrador/projeto-help-desk/helpdesk/mindful-pillar-315522-2a78b08a6b82.json'
+GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = 'mindful-pillar-315522-2a78b08a6b82.json'
 
 # GOOGLE_DRIVE_STORAGE_MEDIA_ROOT = 'https://drive.google.com/drive/u/3/folders/1sId8KKQqKUggyotw8WTxxn_h5zlCD8WP'  # OPTIONAL
 # Configure Django App for Heroku.
