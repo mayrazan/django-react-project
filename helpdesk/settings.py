@@ -159,6 +159,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 load_dotenv()
 
-GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = 'mindful-pillar.json'
+GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = os.environ.get(
+    'GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE')
 
 django_heroku.settings(locals())
