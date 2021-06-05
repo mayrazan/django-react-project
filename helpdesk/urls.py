@@ -16,16 +16,28 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
-from api.views import UsersViewSet, TicketsViewSet, NotificationsViewSet, ProblemsViewSet
+from api.views import TicketsView
+from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from api.views import CustomTokenObtainPairView
 
-router = routers.DefaultRouter()
-router.register(r'users', UsersViewSet)
-router.register(r'tickets', TicketsViewSet)
-router.register(r'notifications', NotificationsViewSet)
-router.register(r'problems', ProblemsViewSet)
+# from api.views import UsersViewSet, TicketsViewSet, NotificationsViewSet, ProblemsViewSet
+
+# router = routers.DefaultRouter()
+# router.register(r'users', UsersViewSet)
+# router.register(r'tickets', TicketsViewSet)
+# router.register(r'notifications', NotificationsViewSet)
+# router.register(r'problems', ProblemsViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
-    path('api/', include('rest_framework.urls', namespace='rest_framework'))
+    path('api/', include('api.urls')),
+    path('api/token/', CustomTokenObtainPairView.as_view(),
+         name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # path('tickets/', TicketsView.as_view()),
+    # path('api/', include(router.urls)),
+    # path('api/', include('rest_framework.urls', namespace='rest_framework')),
 ]
+
+# urlpatterns = format_suffix_patterns(urlpatterns)
