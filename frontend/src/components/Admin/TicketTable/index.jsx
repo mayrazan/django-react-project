@@ -48,12 +48,9 @@ export function TicketsTable({ arrayColumn }) {
 
   useEffect(() => {
     const load = async () => {
-      const response = await getDataApi("tickets");
-      setRows(response);
+      const response = await getDataApi("tickets/");
 
       let filteredStatus = response;
-      setRows(filteredStatus);
-
       if (status !== "Todos") {
         filteredStatus = filteredStatus.filter(
           (stat) => stat.status === status
@@ -124,7 +121,7 @@ export function TicketsTable({ arrayColumn }) {
 
   const redirectToTicket = (id) => {
     if (isSelected) {
-      history.push(`/admin/visualizar-chamado/${id}`);
+      history.push(`/admin/visualizar-chamado/${id}/`);
     } else {
       alert("Selecione uma informação primeiro!");
     }
@@ -157,14 +154,14 @@ export function TicketsTable({ arrayColumn }) {
     ];
 
     const data = rows.map((el) => [
-      el.name,
-      el.apNumber,
+      el.user.name,
+      el.user.numAp,
       el.problem,
-      el.date,
+      el.openDate,
       el.status,
       el.priority,
       el.description,
-      el.apOccurrence,
+      el.numApOccurrence,
       el.feedbackManager,
     ]);
 
@@ -231,11 +228,14 @@ export function TicketsTable({ arrayColumn }) {
             >
               <ExcelSheet data={rows} name="Tickets">
                 <ExcelColumn label="Nome" value="name" />
-                <ExcelColumn label="Nº Ap." value="apNumber" />
-                <ExcelColumn label="Data" value="date" />
+                <ExcelColumn label="Nº Ap." value="numAp" />
+                <ExcelColumn label="Data" value="openDate" />
                 <ExcelColumn label="Perturbação" value="problem" />
                 <ExcelColumn label="Descrição" value="description" />
-                <ExcelColumn label="Nº Ap. Ocorrência" value="apOccurrence" />
+                <ExcelColumn
+                  label="Nº Ap. Ocorrência"
+                  value="numApOccurrence"
+                />
                 <ExcelColumn label="Resposta Síndico" value="feedbackManager" />
               </ExcelSheet>
             </ExcelFile>
@@ -274,16 +274,16 @@ export function TicketsTable({ arrayColumn }) {
                               setIdValue(row.id);
                               setIsSelected(true);
                             }}
-                            // style={{
-                            //   backgroundColor: row.id === idValue ? "blue" : "white",
-                            // }}
                             selected={idValue === row.id}
                             className={classes.tableRow}
                           >
-                            {arrayColumn.map((column, index) => {
+                            {arrayColumn.map((column) => {
+                              const valueUser = row.user[column.id];
                               const value = row[column.id];
                               return (
-                                <TableCell key={column.id}>{value}</TableCell>
+                                <TableCell key={column.id}>
+                                  {value || valueUser}
+                                </TableCell>
                               );
                             })}
                           </TableRow>
@@ -327,7 +327,7 @@ export function TicketsTable({ arrayColumn }) {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => history.push("/admin/cadastro-chamado")}
+                onClick={() => history.push("/admin/cadastro-chamado/")}
               >
                 Cadastrar
               </Button>

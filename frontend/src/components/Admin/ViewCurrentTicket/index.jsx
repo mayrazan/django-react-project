@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useEffect, useState } from "react";
-import { getDataApi, updateTicket } from "../../../services/infoApi";
+import { getDataApi, updateTicketPatch } from "../../../services/infoApi";
 import Loading from "../../shared/Loading";
 import { colors } from "../../../styles/colors";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
@@ -66,23 +66,22 @@ const ViewCurrentTicket = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [form, setForm] = useState({
-    name: "",
-    apNumber: 0,
-    description: "",
-    apOccurrence: 0,
-    problem: "",
+    user: [],
+    files: null,
     status: "",
     priority: "",
-    date: "",
+    numApOccurrence: 0,
+    description: "",
     feedbackManager: "",
-    file: [],
+    problem: "",
+    openDate: "",
   });
 
   const history = useHistory();
 
   useEffect(() => {
     (async () => {
-      const response = await getDataApi("tickets");
+      const response = await getDataApi("tickets/");
       setRows(response);
     })();
   }, []);
@@ -90,34 +89,33 @@ const ViewCurrentTicket = () => {
   useEffect(() => {
     (async () => {
       const ticketSelected = await rows.find(
-        (ticket) => ticket.id.toString() === id.toString()
+        (ticket) => ticket.id.toString() === id
       );
       ticketSelected && setTicket(ticketSelected);
       setForm({
-        name: currentTicket.name,
-        apNumber: currentTicket.apNumber,
+        user: currentTicket.user,
         description: currentTicket.description,
-        apOccurrence: currentTicket.apOccurrence,
+        numApOccurrence: currentTicket.numApOccurrence,
         problem: currentTicket.problem,
         status: currentTicket.status,
         priority: currentTicket.priority,
-        date: currentTicket.date,
+        openDate: currentTicket.openDate,
         feedbackManager: currentTicket.feedbackManager,
-        file: currentTicket.file,
+        files: currentTicket.files,
       });
       setTimeout(() => setIsLoading(false), 1900);
     })();
   }, [
-    currentTicket.apNumber,
-    currentTicket.apOccurrence,
-    currentTicket.date,
     currentTicket.description,
     currentTicket.feedbackManager,
-    currentTicket.file,
+    currentTicket.files,
     currentTicket.name,
+    currentTicket.numApOccurrence,
+    currentTicket.openDate,
     currentTicket.priority,
     currentTicket.problem,
     currentTicket.status,
+    currentTicket.user,
     id,
     rows,
   ]);
@@ -126,21 +124,14 @@ const ViewCurrentTicket = () => {
 
   const saveChanges = (event) => {
     event.preventDefault();
+
     (async () => {
-      const result = {
-        name: form.name,
-        apNumber: form.apNumber,
-        apOccurrence: form.apOccurrence,
-        date: form.date,
-        description: form.description,
-        priority: form.priority,
-        problem: form.problem,
+      await updateTicketPatch(id, {
         status: form.status,
+        priority: form.priority,
         feedbackManager: form.feedbackManager,
-        file: form.file,
-      };
-      const updatedResults = await updateTicket(id.toString(), result);
-      setTicket(updatedResults);
+      });
+      // setTicket(updatedResults);
     })();
     setTimeout(() => window.location.reload(), 1900);
   };
@@ -188,33 +179,8 @@ const ViewCurrentTicket = () => {
     );
   };
 
-  // const reader = (file) => {
-  //   return new Promise((resolve, reject) => {
-  //     const fileReader = new FileReader();
-  //     fileReader.onload = () => resolve(fileReader.result);
-  //     fileReader.readAsDataURL(file);
-  //   });
-  // };
-  // const readFile = (file) => {
-  //   reader(file).then((result) => setForm({ ...form, file: result }));
-  // };
-
-  // const downloadFile = () => {
-  //   axios({
-  //     url: `${form.file[0].path}`, //your url
-  //     method: "GET",
-  //     responseType: "blob",
-  //     // responseType: "arraybuffer",
-  //   }).then((response) => {
-  //     const url = window.URL.createObjectURL(new Blob([response.data]));
-  //     console.log(url);
-  //     const link = document.createElement("a");
-  //     link.href = url;
-  //     link.setAttribute("download", "file.png"); //or any other extension
-  //     document.body.appendChild(link);
-  //     link.click();
-  //   });
-  // };
+  const userResult = rows.map((el) => el.user);
+  const userName = userResult.map((el) => el.name);
 
   return (
     <Container component="main" maxWidth="md" className={classes.main}>
@@ -224,7 +190,7 @@ const ViewCurrentTicket = () => {
           variant="contained"
           color="primary"
           className={classes.submit}
-          onClick={() => history.push("/admin/chamados")}
+          onClick={() => history.push("/admin/chamados/")}
         >
           Voltar
         </Button>
@@ -239,11 +205,9 @@ const ViewCurrentTicket = () => {
         ) : (
           <form className={classes.form}>
             <TextField
-              value={form.name}
-              onChange={(event) => {
-                setForm({ ...form, name: event.target.value });
-              }}
-              name="name"
+              defaultValue={userName}
+              disabled
+              name="user"
               variant="outlined"
               margin="normal"
               required
@@ -251,25 +215,10 @@ const ViewCurrentTicket = () => {
               label="Nome"
               className={classes.field}
             />
-            <TextField
-              name="apNumber"
-              value={form.apNumber}
-              onChange={(event) => {
-                setForm({ ...form, apNumber: event.target.value });
-              }}
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              label="Nº Apartamento"
-              className={classes.field}
-            />
 
             <TextField
-              value={form.problem}
-              onChange={(event) => {
-                setForm({ ...form, problem: event.target.value });
-              }}
+              defaultValue={form.problem}
+              disabled
               name="problem"
               variant="outlined"
               margin="normal"
@@ -289,19 +238,15 @@ const ViewCurrentTicket = () => {
               name="description"
               id="description"
               label="Descrição do problema"
-              value={form.description}
-              onChange={(event) => {
-                setForm({ ...form, description: event.target.value });
-              }}
+              defaultValue={form.description}
+              disabled
               className={classes.field}
             />
 
             <TextField
-              value={form.apOccurrence}
-              onChange={(event) => {
-                setForm({ ...form, apOccurrence: event.target.value });
-              }}
-              name="apOccurrence"
+              defaultValue={form.numApOccurrence}
+              disabled
+              name="numApOccurrence"
               variant="outlined"
               margin="normal"
               required
@@ -314,15 +259,15 @@ const ViewCurrentTicket = () => {
             {selectPriority()}
 
             <TextField
-              value={form.date}
-              name="date"
+              value={form.openDate}
+              name="openDate"
               variant="outlined"
               margin="normal"
               disabled
               label="Data de abertura"
               className={classes.dateField}
               onChange={(event) => {
-                setForm({ ...form, date: event.target.value });
+                setForm({ ...form, openDate: event.target.value });
               }}
             />
 

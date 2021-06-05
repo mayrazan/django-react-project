@@ -20,7 +20,7 @@ import LoginAdmin from "../components/shared/LoginContainer/LoginAdmin";
 
 const Routes = () => {
   return (
-    <BrowserRouter forceRefresh>
+    <BrowserRouter>
       <Switch>
         <Route exact path="/admin" component={Home} />
         <Route exact path="/admin/sindicos" component={Manager} />

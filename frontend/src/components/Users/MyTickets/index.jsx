@@ -49,11 +49,12 @@ const MyTickets = () => {
 
   useEffect(() => {
     const load = async () => {
-      const response = await getDataApi("tickets");
-      setRows(response);
+      const response = await getDataApi("tickets/");
+      // const responseUser = await getDataApi("users/");
 
+      // const resultsUser = responseUser.filter((el) => el.isUser);
       let filteredStatus = response;
-      setRows(filteredStatus);
+      // const results = filteredStatus.filter((el) => el.user.id === resultsUser.id);
 
       if (status !== "Todos") {
         filteredStatus = filteredStatus.filter(
@@ -130,14 +131,14 @@ const MyTickets = () => {
     ];
 
     const data = rows.map((el) => [
-      el.name,
-      el.apNumber,
+      el.user.name,
+      el.user.numAp,
       el.problem,
-      el.date,
+      el.openDate,
       el.status,
       el.priority,
       el.description,
-      el.apOccurrence,
+      el.numApOccurrence,
       el.feedbackManager,
     ]);
 
@@ -199,11 +200,14 @@ const MyTickets = () => {
               >
                 <ExcelSheet data={rows} name="Tickets">
                   <ExcelColumn label="Nome" value="name" />
-                  <ExcelColumn label="Nº Ap." value="apNumber" />
-                  <ExcelColumn label="Data" value="date" />
+                  <ExcelColumn label="Nº Ap." value="numAp" />
+                  <ExcelColumn label="Data" value="openDate" />
                   <ExcelColumn label="Perturbação" value="problem" />
                   <ExcelColumn label="Descrição" value="description" />
-                  <ExcelColumn label="Nº Ap. Ocorrência" value="apOccurrence" />
+                  <ExcelColumn
+                    label="Nº Ap. Ocorrência"
+                    value="numApOccurrence"
+                  />
                   <ExcelColumn
                     label="Resposta Síndico"
                     value="feedbackManager"
@@ -244,9 +248,12 @@ const MyTickets = () => {
                               className={classes.tableRow}
                             >
                               {columnTicketsUser.map((column, index) => {
+                                const valueUser = row.user[column.id];
                                 const value = row[column.id];
                                 return (
-                                  <TableCell key={column.id}>{value}</TableCell>
+                                  <TableCell key={column.id}>
+                                    {value || valueUser}
+                                  </TableCell>
                                 );
                               })}
                             </TableRow>

@@ -79,8 +79,9 @@ const LoginUser = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await getDataApi("users");
-      setForm(response);
+      const response = await getDataApi("users/");
+      let results = response.filter((el) => el.isUser);
+      setForm(results);
     })();
   }, []);
 

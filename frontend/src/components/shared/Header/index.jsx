@@ -11,6 +11,8 @@ import Menu from "@material-ui/core/Menu";
 import clsx from "clsx";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import { ContainerProfileStyled } from "./style";
+import { useUserContext } from "../../../context/ContextUser";
+import { useHistory } from "react-router";
 
 // const drawerWidth = 240;
 
@@ -47,6 +49,8 @@ export default function Header({ handleDrawerOpen, open }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openEl = Boolean(anchorEl);
+  const { handleLogout } = useUserContext();
+  const history = useHistory();
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -54,6 +58,11 @@ export default function Header({ handleDrawerOpen, open }) {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const rediretToLogin = () => {
+    handleLogout();
+    history.push("/login");
   };
 
   return (
@@ -121,7 +130,7 @@ export default function Header({ handleDrawerOpen, open }) {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>Minha Conta</MenuItem>
-              <MenuItem onClick={handleClose}>Sair</MenuItem>
+              <MenuItem onClick={rediretToLogin}>Sair</MenuItem>
             </Menu>
           </ContainerProfileStyled>
         </Toolbar>

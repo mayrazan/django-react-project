@@ -68,8 +68,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#162e54",
     color: colors.white,
     paddingTop: "2rem",
-    "@media (min-height: 915px)": {
-      height: "revert",
+    "@media (min-height: 1029px)": {
+      height: "100%",
     },
   },
 }));
@@ -82,9 +82,12 @@ const RegisterRenter = () => {
     password: "",
     numAp: 0,
     phone: "",
-    avatar: "",
+    avatar: null,
     floor: "",
     cpf: "",
+    isUser: true,
+    isAdmin: false,
+    is_active: true,
   });
 
   const history = useHistory();
@@ -92,13 +95,13 @@ const RegisterRenter = () => {
 
   const [isMessageVisible, setMessageVisible] = useState(false);
   const [isMessageSuccess, setMessageSuccess] = useState(false);
-  const [preview, setPreview] = useState({ prev: null, src: "" });
+  const [preview, setPreview] = useState({ prev: null, src: null });
 
   async function onSubmit(event) {
     event.preventDefault();
     setForm({ ...form, avatar: preview.src });
     if (validateForm()) {
-      await registerInfo("users", form);
+      await registerInfo("users/", form);
       setMessageSuccess(true);
 
       setTimeout(() => window.location.reload(), 500);

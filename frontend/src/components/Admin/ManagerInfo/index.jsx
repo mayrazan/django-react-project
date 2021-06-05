@@ -51,12 +51,12 @@ const ManagerInfo = () => {
 
   useEffect(() => {
     const load = async () => {
-      const response = await getDataApi("admin");
-      setRows(response);
+      const response = await getDataApi("users/");
 
       setTimeout(() => setIsLoading(false), 700);
 
-      let results = response;
+      let results = response.filter((el) => el.isAdmin);
+      setRows(results);
       if (search) {
         results = results.filter((value) =>
           value.name.toLowerCase().includes(search.toLowerCase())
@@ -106,7 +106,7 @@ const ManagerInfo = () => {
       el.name,
       el.lastName,
       el.email,
-      el.apNumber,
+      el.numAp,
       el.phone,
     ]);
 
@@ -177,7 +177,7 @@ const ManagerInfo = () => {
                   <ExcelColumn label="Nome" value="name" />
                   <ExcelColumn label="Sobrenome" value="lastName" />
                   <ExcelColumn label="Email" value="email" />
-                  <ExcelColumn label="Nº Ap." value="apNumber" />
+                  <ExcelColumn label="Nº Ap." value="numAp" />
                   <ExcelColumn label="Telefone" value="phone" />
                 </ExcelSheet>
               </ExcelFile>

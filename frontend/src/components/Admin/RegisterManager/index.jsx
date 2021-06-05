@@ -55,11 +55,15 @@ const RegisterManager = () => {
   const [form, setForm] = useState({
     name: "",
     lastName: "",
+    avatar: null,
+    numAp: 0,
     email: "",
     password: "",
-    apNumber: 0,
     phone: "",
-    avatar: "",
+    isUser: false,
+    isAdmin: true,
+    floor: 0,
+    is_active: true,
   });
 
   const history = useHistory();
@@ -67,13 +71,13 @@ const RegisterManager = () => {
 
   const [isMessageVisible, setMessageVisible] = useState(false);
   const [isMessageSuccess, setMessageSuccess] = useState(false);
-  const [preview, setPreview] = useState({ prev: null, src: "" });
+  const [preview, setPreview] = useState({ prev: null, src: null });
 
   async function onSubmit(event) {
     event.preventDefault();
     setForm({ ...form, avatar: preview.src });
     if (validateForm()) {
-      await registerInfo("admin", form);
+      await registerInfo("users/", form);
       setMessageSuccess(true);
 
       setTimeout(() => window.location.reload(), 500);
@@ -85,7 +89,7 @@ const RegisterManager = () => {
       form.name &&
       form.lastName &&
       form.email &&
-      form.apNumber &&
+      form.numAp &&
       form.password &&
       form.phone
     ) {
@@ -96,7 +100,6 @@ const RegisterManager = () => {
       setMessageVisible(true);
     }
   };
-  console.log(preview);
 
   return (
     <Container component="main" maxWidth="md" className={classes.main}>
@@ -148,9 +151,9 @@ const RegisterManager = () => {
 
           <TextField
             name="apNumber"
-            value={form.apNumber}
+            value={form.numAp}
             onChange={(event) => {
-              setForm({ ...form, apNumber: event.target.value });
+              setForm({ ...form, numAp: event.target.value });
             }}
             variant="outlined"
             margin="normal"

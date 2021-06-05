@@ -64,7 +64,7 @@ const RegisterProblemsType = () => {
   async function onSubmit(event) {
     event.preventDefault();
     if (validateForm()) {
-      await registerInfo("problems", form);
+      await registerInfo("problems/", form);
       setMessageSuccess(true);
 
       setTimeout(() => window.location.reload(), 500);

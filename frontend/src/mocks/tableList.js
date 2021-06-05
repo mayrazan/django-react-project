@@ -2,12 +2,12 @@ export const columnTickets = [
   { id: "name", label: "Nome", minWidth: 170 },
   { id: "problem", label: "Perturbação", minWidth: 170 },
   {
-    id: "apNumber",
+    id: "numAp",
     label: "Apartamento",
     minWidth: 170,
   },
   {
-    id: "date",
+    id: "openDate",
     label: "Data",
     minWidth: 170,
   },
@@ -32,7 +32,7 @@ export const columnManagers = [
     minWidth: 170,
   },
   {
-    id: "apNumber",
+    id: "numAp",
     label: "Nº Ap.",
     minWidth: 170,
   },
@@ -77,12 +77,12 @@ export const columnTicketsUser = [
   { id: "name", label: "Nome", minWidth: 170 },
   { id: "problem", label: "Perturbação", minWidth: 170 },
   {
-    id: "apNumber",
+    id: "numAp",
     label: "Apartamento",
     minWidth: 170,
   },
   {
-    id: "date",
+    id: "openDate",
     label: "Data",
     minWidth: 170,
   },
@@ -102,7 +102,7 @@ export const columnTicketsUser = [
     minWidth: 200,
   },
   {
-    id: "apOccurrence",
+    id: "numApOccurrence",
     label: "Nº Ap. Ocorrência",
     minWidth: 170,
   },

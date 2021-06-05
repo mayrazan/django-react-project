@@ -3,13 +3,12 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { getDataApi } from "../../../../services/infoApi";
 import { alertMessage } from "../../../../utils/messages";
 import { colors } from "../../../../styles/colors";
 import { TextField } from "@material-ui/core";
 import { ContainerBtnStyled } from "../../StyleComponents/style";
+import { useUserContext } from "../../../../context/ContextUser";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -71,42 +70,22 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginAdmin = () => {
   const classes = useStyles();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isMessageVisible, setMessageVisible] = useState(false);
   const history = useHistory();
-  const [form, setForm] = useState([]);
+  const {
+    onChangeEmail,
+    onChangePassword,
+    isMessageVisible,
+    handleLogin,
+    redirectToHome,
+    login,
+  } = useUserContext();
 
-  useEffect(() => {
-    (async () => {
-      const response = await getDataApi("admin");
-      setForm(response);
-    })();
-  }, []);
-
-  function onSubmit(event) {
+  const onSubmit = (event) => {
     event.preventDefault();
+    handleLogin();
     redirectToHome();
-  }
-
-  function validateAccount() {
-    const response = form.filter((field) => {
-      return field.email === email && field.password === password;
-    });
-
-    return response;
-  }
-
-  function redirectToHome() {
-    if (validateAccount().length > 0) {
-      setMessageVisible(false);
-      history.push("/admin");
-
-      window.location.reload();
-    } else {
-      setMessageVisible(true);
-    }
-  }
+    history.push("/admin");
+  };
 
   return (
     <div className={classes.container}>
@@ -140,10 +119,8 @@ const LoginAdmin = () => {
               label="Email"
               name="email"
               autoFocus
-              value={email}
-              onChange={(event) => {
-                setEmail(event.target.value);
-              }}
+              value={login.email}
+              onChange={onChangeEmail}
               className={classes.field}
               required
               fullWidth
@@ -155,10 +132,8 @@ const LoginAdmin = () => {
               name="password"
               label="Senha"
               type="password"
-              value={password}
-              onChange={(event) => {
-                setPassword(event.target.value);
-              }}
+              value={login.password}
+              onChange={onChangePassword}
               className={classes.field}
               required
               fullWidth

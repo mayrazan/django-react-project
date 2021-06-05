@@ -51,12 +51,12 @@ const RenterInfo = () => {
 
   useEffect(() => {
     const load = async () => {
-      const response = await getDataApi("users");
-      setRows(response);
+      const response = await getDataApi("users/");
 
       setTimeout(() => setIsLoading(false), 700);
 
-      let results = response;
+      let results = response.filter((el) => el.isUser);
+      setRows(results);
       if (search) {
         results = results.filter((value) =>
           value.name.toLowerCase().includes(search.toLowerCase())

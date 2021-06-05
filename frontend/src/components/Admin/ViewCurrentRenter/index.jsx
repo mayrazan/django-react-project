@@ -66,20 +66,20 @@ const ViewCurrentRenter = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [form, setForm] = useState({
     name: "",
-    numAp: 0,
     lastName: "",
-    avatar: "",
+    avatar: null,
+    numAp: 0,
     floor: 0,
     email: "",
-    phone: "",
     cpf: "",
+    phone: "",
   });
 
   const history = useHistory();
 
   useEffect(() => {
     (async () => {
-      const response = await getDataApi("users");
+      const response = await getDataApi("users/");
       setRows(response);
     })();
   }, []);
