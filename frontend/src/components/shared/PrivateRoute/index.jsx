@@ -1,19 +1,13 @@
 import { Route, Redirect } from "react-router-dom";
-import Loading from "../Loading";
+import { useUserContext } from "../../../context/ContextUser";
 
-const PrivateRoute = ({ component: Component, auth, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) => {
-      if (auth.isLoading) {
-        return <Loading />;
-      } else if (!auth.isAuthenticated) {
-        return <Redirect to="/login" />;
-      } else {
-        return <Component {...props} />;
-      }
-    }}
-  />
-);
+const PrivateRoute = ({ auth, ...rest }) => {
+  const { isAuthenticated } = useUserContext();
+
+  if (!isAuthenticated && auth) {
+    return <Redirect to="/login" />;
+  }
+  return <Route {...rest} />;
+};
 
 export default PrivateRoute;

@@ -64,6 +64,7 @@ const errorInterceptor = (error) => {
         // if token refresh fails, logout the user to avoid potential security risks.
         localStorage.removeItem("access");
         localStorage.removeItem("refresh");
+        localStorage.removeItem("userLogged");
         authRequest.defaults.headers["Authorization"] = "";
         return Promise.reject(error);
       });

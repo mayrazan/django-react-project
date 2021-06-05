@@ -10,6 +10,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import Header from "../Header";
 import ItemsMenuList from "../../Admin/ItemsMenuList";
 import { colors } from "../../../styles/colors";
+import MenuItems from "../../Users/MenuItems";
 
 const drawerWidth = 240;
 
@@ -55,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MenuDrawer() {
+export default function MenuDrawer({ type }) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
@@ -96,18 +97,8 @@ export default function MenuDrawer() {
           </IconButton>
         </div>
         <Divider />
-        <ItemsMenuList />
+        {!type ? <ItemsMenuList /> : <MenuItems />}
       </Drawer>
-      {/* </div> */}
-
-      {/* <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open,
-        })}
-      >
-        <div className={classes.drawerHeader} />
-        {children}
-      </main> */}
     </>
   );
 }

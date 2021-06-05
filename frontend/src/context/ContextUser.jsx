@@ -8,16 +8,13 @@ function UserProvider({ children }) {
     handleLogin,
     handleLogout,
     isAuthenticated,
-    isUser,
-    isAdmin,
     credentials,
-    token,
-    onChangeEmail,
-    onChangePassword,
-    isMessageVisible,
     redirectToHome,
     login,
-    userId,
+    onChangeEmail,
+    onChangePassword,
+    currentUser,
+    loading,
   } = useContextUser();
 
   return (
@@ -26,16 +23,13 @@ function UserProvider({ children }) {
         handleLogin,
         handleLogout,
         isAuthenticated,
-        isUser,
-        isAdmin,
         credentials,
-        token,
-        onChangeEmail,
-        onChangePassword,
-        isMessageVisible,
         redirectToHome,
         login,
-        userId,
+        onChangeEmail,
+        onChangePassword,
+        currentUser,
+        loading,
       }}
     >
       {children}

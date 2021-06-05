@@ -3,13 +3,13 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { getDataApi } from "../../../../services/infoApi";
-import { alertMessage } from "../../../../utils/messages";
 import { colors } from "../../../../styles/colors";
 import { TextField } from "@material-ui/core";
 import { ContainerBtnStyled } from "../../StyleComponents/style";
+import { useUserContext } from "../../../../context/ContextUser";
+import { useState } from "react";
+import { alertMessage } from "../../../../utils/messages";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -71,43 +71,32 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginUser = () => {
   const classes = useStyles();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isMessageVisible, setMessageVisible] = useState(false);
   const history = useHistory();
-  const [form, setForm] = useState([]);
+  const {
+    onChangeEmail,
+    onChangePassword,
+    handleLogin,
+    redirectToHome,
+    login,
+  } = useUserContext();
+  const [isMessageVisible, setMessageVisible] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      const response = await getDataApi("users/");
-      let results = response.filter((el) => el.isUser);
-      setForm(results);
-    })();
-  }, []);
-
-  function onSubmit(event) {
+  const onSubmit = (event) => {
     event.preventDefault();
     redirectToHome();
-  }
+    const user = JSON.parse(localStorage.getItem("userLogged"));
+    const isUser = user !== null && user !== undefined ? user[0].isUser : false;
 
-  function validateAccount() {
-    const response = form.filter((field) => {
-      return field.email === email && field.password === password;
-    });
-
-    return response;
-  }
-
-  function redirectToHome() {
-    if (validateAccount().length > 0) {
-      setMessageVisible(false);
+    if (window.location.pathname === "/login-usuario" && isUser) {
+      handleLogin();
       history.push("/");
-
-      window.location.reload();
     } else {
       setMessageVisible(true);
+      alert("Login invalido");
+      localStorage.removeItem("userLogged");
     }
-  }
+    setTimeout(() => window.location.reload(), 700);
+  };
 
   return (
     <div className={classes.container}>
@@ -126,7 +115,10 @@ const LoginUser = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={() => history.push("/login")}
+            onClick={() => {
+              history.push("/login");
+              window.location.reload();
+            }}
           >
             Voltar
           </Button>
@@ -141,30 +133,28 @@ const LoginUser = () => {
               label="Email"
               name="email"
               autoFocus
-              value={email}
-              onChange={(event) => {
-                setEmail(event.target.value);
-              }}
+              value={login.email}
+              onChange={onChangeEmail}
               className={classes.field}
               required
               fullWidth
               variant="outlined"
               margin="normal"
+              autoComplete="off"
             />
 
             <TextField
               name="password"
               label="Senha"
               type="password"
-              value={password}
-              onChange={(event) => {
-                setPassword(event.target.value);
-              }}
+              value={login.password}
+              onChange={onChangePassword}
               className={classes.field}
               required
               fullWidth
               variant="outlined"
               margin="normal"
+              autoComplete="off"
             />
 
             <Button

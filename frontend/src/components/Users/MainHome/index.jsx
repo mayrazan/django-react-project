@@ -13,12 +13,14 @@ const useStyles = makeStyles((theme) => ({
 
 const MainHome = () => {
   const classes = useStyles();
+  const currentUser = JSON.parse(localStorage.getItem("userLogged"));
+  const userName = currentUser.map((el) => el.name);
 
   return (
     <ContainerHomeStyled>
       <ContainerWelcomeStyled>
         <Typography variant="h4" className={classes.text}>
-          Seja bem-vindo(a)!
+          Seja bem-vindo(a) {userName}!
         </Typography>
       </ContainerWelcomeStyled>
     </ContainerHomeStyled>

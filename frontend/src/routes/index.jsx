@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Redirect, Switch, Route } from "react-router-dom";
 import Home from "../pages/AdminPages/Home";
 import RegisterTicket from "../pages/AdminPages/RegisterTicket";
 import Manager from "../pages/AdminPages/Manager";
@@ -17,45 +17,74 @@ import Notifications from "../pages/AdminPages/Notifications";
 import Login from "../pages/Login";
 import LoginUser from "../components/shared/LoginContainer/LoginUser";
 import LoginAdmin from "../components/shared/LoginContainer/LoginAdmin";
+import { useUserContext } from "../context/ContextUser";
 
 const Routes = () => {
+  const { isAuthenticated } = useUserContext();
+  const user = JSON.parse(localStorage.getItem("userLogged"));
+  const isAdmin = user !== null && user !== undefined ? user[0].isAdmin : false;
+
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/admin" component={Home} />
-        <Route exact path="/admin/sindicos" component={Manager} />
-        <Route exact path="/admin/chamados" component={Tickets} />
-        <Route
-          exact
-          path="/admin/visualizar-chamado/:id"
-          component={ViewTicket}
-        />
-        <Route
-          exact
-          path="/admin/cadastro-chamado"
-          component={RegisterTicket}
-        />
-        <Route
-          exact
-          path="/admin/cadastro-sindico"
-          component={RegisterManagerPage}
-        />
-        <Route exact path="/admin/condominos" component={Renter} />
-        <Route
-          exact
-          path="/admin/visualizar-condomino/:id"
-          component={ViewRenter}
-        />
-        <Route exact path="/admin/cadastro-problemas" component={Problems} />
-        <Route exact path="/admin/avisos" component={Notifications} />
-        <Route exact path="/cadastro" component={RegisterUser} />
-        <Route exact path="/cadastro-chamado" component={RegisterTicketUser} />
-        <Route exact path="/" component={UserHome} />
-        <Route exact path="/chamados" component={ViewTickets} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/login-usuario" component={LoginUser} />
-        <Route exact path="/login-admin" component={LoginAdmin} />
-        <Redirect to="/admin" />
+        {isAuthenticated ? (
+          <>
+            {isAdmin ? (
+              <>
+                <Route exact path="/admin" component={Home} />
+                <Route exact path="/admin/sindicos" component={Manager} />
+                <Route exact path="/admin/chamados" component={Tickets} />
+                <Route
+                  exact
+                  path="/admin/visualizar-chamado/:id"
+                  component={ViewTicket}
+                />
+                <Route
+                  exact
+                  path="/admin/cadastro-chamado"
+                  component={RegisterTicket}
+                />
+                <Route
+                  exact
+                  path="/admin/cadastro-sindico"
+                  component={RegisterManagerPage}
+                />
+                <Route exact path="/admin/condominos" component={Renter} />
+                <Route
+                  exact
+                  path="/admin/visualizar-condomino/:id"
+                  component={ViewRenter}
+                />
+                <Route
+                  exact
+                  path="/admin/cadastro-problemas"
+                  component={Problems}
+                />
+                <Route exact path="/admin/avisos" component={Notifications} />
+                <Redirect to="/admin" />
+              </>
+            ) : (
+              <>
+                <Route exact path="/cadastro" component={RegisterUser} />
+                <Route
+                  exact
+                  path="/cadastro-chamado"
+                  component={RegisterTicketUser}
+                />
+                <Route exact path="/" component={UserHome} />
+                <Route exact path="/chamados" component={ViewTickets} />
+                <Redirect to="/" />
+              </>
+            )}
+          </>
+        ) : (
+          <>
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/login-usuario" component={LoginUser} />
+            <Route exact path="/login-admin" component={LoginAdmin} />
+            <Redirect to="/login" />
+          </>
+        )}
       </Switch>
     </BrowserRouter>
   );

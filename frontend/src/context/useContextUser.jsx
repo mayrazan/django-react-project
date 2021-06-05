@@ -9,14 +9,8 @@ export default function useContextUser() {
     password: "",
   });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isUser, setIsUser] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [token, setToken] = useState({
-    accessToken: "",
-    refreshToken: "",
-  });
-  const [isMessageVisible, setMessageVisible] = useState(false);
-  const [userId, setUserId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -25,31 +19,31 @@ export default function useContextUser() {
     })();
   }, []);
 
-  const validateAccount = () => {
-    return credentials.filter((el) =>
-      el.email === login.email && el.password === login.password
-        ? (setIsUser(true), setIsAdmin(true), setUserId(el.id))
-        : false
-    );
-  };
-
   const redirectToHome = () => {
-    if (validateAccount()) {
-      setMessageVisible(false);
-    } else {
-      setMessageVisible(true);
+    if (login.email && login.password) {
+      let result = credentials.filter((el) => el.email === login.email);
+      localStorage.setItem("userLogged", JSON.stringify(result));
+      const user = JSON.parse(localStorage.getItem("userLogged"));
+      setCurrentUser(user);
     }
   };
 
   const handleLogin = () => {
     const result = registerUser(login);
-    setToken({ accessToken: result.access, refreshToken: result.refresh });
-
-    setIsAuthenticated(true);
     return result;
   };
 
-  console.log(isAuthenticated);
+  useEffect(() => {
+    const tokenAccess = localStorage.getItem("access");
+    const tokenRefresh = localStorage.getItem("refresh");
+    if (tokenAccess || tokenRefresh) {
+      setIsAuthenticated(true);
+      setLoading(false);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, []);
+
   const onChangeEmail = (event) => {
     setLogin({ ...login, email: event.target.value });
   };
@@ -61,6 +55,7 @@ export default function useContextUser() {
   const handleLogout = () => {
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
+    localStorage.removeItem("userLogged");
     api.defaults.headers["Authorization"] = "";
     setIsAuthenticated(false);
   };
@@ -69,15 +64,12 @@ export default function useContextUser() {
     handleLogin,
     handleLogout,
     isAuthenticated,
-    isUser,
-    isAdmin,
     credentials,
-    token,
     onChangeEmail,
     onChangePassword,
-    isMessageVisible,
     redirectToHome,
     login,
-    userId,
+    currentUser,
+    loading,
   };
 }

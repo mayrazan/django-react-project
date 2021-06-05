@@ -11,6 +11,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import { useHistory } from "react-router";
+import { useUserContext } from "../../../context/ContextUser";
 
 const themeBreak = createMuiTheme({
   breakpoints: {
@@ -63,6 +64,11 @@ const useStyles = makeStyles((theme) => ({
 const MainHome = () => {
   const classes = useStyles();
   const history = useHistory();
+  const currentUser = JSON.parse(localStorage.getItem("userLogged"));
+  const userName = currentUser.map((el) => el.name);
+  const { credentials } = useUserContext();
+  const countAdmin = credentials.filter((el) => el.isAdmin).length;
+  const countUser = credentials.filter((el) => el.isUser).length;
 
   const redirectTo = (location) => {
     history.push(`/admin/${location}/`);
@@ -72,7 +78,7 @@ const MainHome = () => {
     <ContainerHomeStyled>
       <ContainerWelcomeStyled>
         <Typography variant="h4" className={classes.text}>
-          Seja bem-vindo(a)!
+          Seja bem-vindo(a) {userName}!
         </Typography>
       </ContainerWelcomeStyled>
       <ContainerDisplayStyled>
@@ -90,7 +96,7 @@ const MainHome = () => {
               <Grid item xs container direction="column" spacing={2}>
                 <Grid item xs>
                   <Typography gutterBottom variant="subtitle1">
-                    0
+                    {countUser}
                   </Typography>
                   <Typography variant="body2" gutterBottom>
                     Condôminos
@@ -115,7 +121,7 @@ const MainHome = () => {
               <Grid item xs container direction="column" spacing={2}>
                 <Grid item xs>
                   <Typography gutterBottom variant="subtitle1">
-                    0
+                    {countAdmin}
                   </Typography>
                   <Typography variant="body2" gutterBottom>
                     Síndicos

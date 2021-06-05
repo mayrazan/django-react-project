@@ -54,7 +54,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const RegisterTicketInfo = () => {
-  const [rows, setRows] = useState([]);
   const [problems, setProblems] = useState([]);
   const [form, setForm] = useState({
     description: "",
@@ -66,21 +65,17 @@ const RegisterTicketInfo = () => {
     feedbackManager: "",
     files: null,
   });
+  const currentUser = JSON.parse(localStorage.getItem("userLogged"));
 
   useEffect(() => {
     const load = async () => {
-      const responseUser = await getDataApi("users/");
       const responseProblems = await getDataApi("problems/");
-      const resultsUser = responseUser.filter((el) => el.isUser);
-
-      setRows(resultsUser);
       setProblems(responseProblems);
     };
     load();
   }, []);
 
-  const userId = rows.map((el) => el.id);
-
+  const userId = currentUser.map((el) => el.id);
   const history = useHistory();
   const classes = useStyles();
 
@@ -88,7 +83,7 @@ const RegisterTicketInfo = () => {
   const [isMessageSuccess, setMessageSuccess] = useState(false);
 
   const selectUser = () => {
-    return rows.map((item) => {
+    return currentUser.map((item) => {
       return (
         <div key={item.id}>
           <TextField
@@ -198,7 +193,6 @@ const RegisterTicketInfo = () => {
       setMessageVisible(true);
     }
   };
-  console.log(form.files);
 
   return (
     <Container component="main" maxWidth="md" className={classes.main}>

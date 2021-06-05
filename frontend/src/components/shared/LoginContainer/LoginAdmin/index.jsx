@@ -4,11 +4,13 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useHistory } from "react-router-dom";
-import { alertMessage } from "../../../../utils/messages";
+// import { alertMessage } from "../../../../utils/messages";
 import { colors } from "../../../../styles/colors";
 import { TextField } from "@material-ui/core";
 import { ContainerBtnStyled } from "../../StyleComponents/style";
 import { useUserContext } from "../../../../context/ContextUser";
+import { alertMessage } from "../../../../utils/messages";
+import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -74,17 +76,27 @@ const LoginAdmin = () => {
   const {
     onChangeEmail,
     onChangePassword,
-    isMessageVisible,
     handleLogin,
     redirectToHome,
     login,
   } = useUserContext();
+  const [isMessageVisible, setMessageVisible] = useState(false);
 
   const onSubmit = (event) => {
     event.preventDefault();
-    handleLogin();
     redirectToHome();
-    history.push("/admin");
+    const user = JSON.parse(localStorage.getItem("userLogged"));
+    const isUser =
+      user !== null && user !== undefined ? user[0].isAdmin : false;
+    if (window.location.pathname === "/login-admin" && isUser) {
+      handleLogin();
+      history.push("/admin");
+    } else {
+      setMessageVisible(true);
+      alert("Login invalido");
+      localStorage.removeItem("userLogged");
+    }
+    setTimeout(() => window.location.reload(), 700);
   };
 
   return (
@@ -104,7 +116,10 @@ const LoginAdmin = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={() => history.push("/login")}
+            onClick={() => {
+              history.push("/login");
+              window.location.reload();
+            }}
           >
             Voltar
           </Button>
@@ -126,6 +141,8 @@ const LoginAdmin = () => {
               fullWidth
               variant="outlined"
               margin="normal"
+              type="text"
+              autoComplete="off"
             />
 
             <TextField
@@ -139,6 +156,7 @@ const LoginAdmin = () => {
               fullWidth
               variant="outlined"
               margin="normal"
+              autoComplete="off"
             />
 
             <Button

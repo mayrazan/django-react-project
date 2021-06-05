@@ -6,11 +6,11 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useEffect, useState } from "react";
-import { getDataApi } from "../../../services/infoApi";
 import Loading from "../../shared/Loading";
 import { colors } from "../../../styles/colors";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
 import { Avatar } from "@material-ui/core";
+import { useUserContext } from "../../../context/ContextUser";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -61,8 +61,6 @@ const useStyles = makeStyles((theme) => ({
 const ViewCurrentRenter = () => {
   const { id } = useParams();
   const [currentRenter, setRenter] = useState({});
-  const [rows, setRows] = useState([]);
-
   const [isLoading, setIsLoading] = useState(true);
   const [form, setForm] = useState({
     name: "",
@@ -76,17 +74,11 @@ const ViewCurrentRenter = () => {
   });
 
   const history = useHistory();
+  const { credentials } = useUserContext();
 
   useEffect(() => {
     (async () => {
-      const response = await getDataApi("users/");
-      setRows(response);
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      const renterSelected = await rows.find(
+      const renterSelected = await credentials.find(
         (renter) => renter.id.toString() === id.toString()
       );
       renterSelected && setRenter(renterSelected);
@@ -103,6 +95,7 @@ const ViewCurrentRenter = () => {
       setTimeout(() => setIsLoading(false), 1900);
     })();
   }, [
+    credentials,
     currentRenter.avatar,
     currentRenter.cpf,
     currentRenter.email,
@@ -112,7 +105,6 @@ const ViewCurrentRenter = () => {
     currentRenter.numAp,
     currentRenter.phone,
     id,
-    rows,
   ]);
 
   const classes = useStyles();

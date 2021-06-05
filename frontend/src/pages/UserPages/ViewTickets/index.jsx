@@ -5,7 +5,7 @@ import MyTickets from "../../../components/Users/MyTickets";
 const ViewTickets = () => {
   return (
     <>
-      <MenuDrawer />
+      <MenuDrawer type />
       <MainContainer>
         <MyTickets />
       </MainContainer>

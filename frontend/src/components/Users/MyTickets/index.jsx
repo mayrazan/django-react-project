@@ -43,18 +43,16 @@ const MyTickets = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const history = useHistory();
-  const [rows, setRows] = useState([]);
+  const [rows, setRows] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [status, setStatus] = useState("Todos");
+  // const currentUser = JSON.parse(localStorage.getItem("userLogged"));
+  // const userID = currentUser.map((el) => el.id);
 
   useEffect(() => {
     const load = async () => {
       const response = await getDataApi("tickets/");
-      // const responseUser = await getDataApi("users/");
-
-      // const resultsUser = responseUser.filter((el) => el.isUser);
       let filteredStatus = response;
-      // const results = filteredStatus.filter((el) => el.user.id === resultsUser.id);
 
       if (status !== "Todos") {
         filteredStatus = filteredStatus.filter(

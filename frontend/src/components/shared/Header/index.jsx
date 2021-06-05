@@ -51,6 +51,8 @@ export default function Header({ handleDrawerOpen, open }) {
   const openEl = Boolean(anchorEl);
   const { handleLogout } = useUserContext();
   const history = useHistory();
+  const currentUser = JSON.parse(localStorage.getItem("userLogged"));
+  const userName = currentUser.map((el) => el.name + " " + el.lastName);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -102,7 +104,7 @@ export default function Header({ handleDrawerOpen, open }) {
               <AccountCircle />
             </IconButton>
             <Typography variant="h6" noWrap className={classes.text}>
-              Pedro Souza
+              {userName.toString()}
             </Typography>
 
             <IconButton

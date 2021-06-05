@@ -5,7 +5,7 @@ import MenuDrawer from "../../../components/shared/Menu";
 const UserHome = () => {
   return (
     <>
-      <MenuDrawer />
+      <MenuDrawer type />
       <MainContainer>
         <MainHome />
       </MainContainer>

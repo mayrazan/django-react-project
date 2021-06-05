@@ -15,13 +15,14 @@ import { useHistory } from "react-router-dom";
 import { CSVLink } from "react-csv";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { deleteManager, getDataApi } from "../../../services/infoApi";
+import { deleteManager } from "../../../services/infoApi";
 import Loading from "../../shared/Loading";
 import ReactExport from "react-data-export";
 import {
   HeaderFooterContainer,
   ContainerStyled,
 } from "../../shared/StyleComponents/style";
+import { useUserContext } from "../../../context/ContextUser";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -48,14 +49,13 @@ const ManagerInfo = () => {
   const [rows, setRows] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const { credentials } = useUserContext();
 
   useEffect(() => {
     const load = async () => {
-      const response = await getDataApi("users/");
-
       setTimeout(() => setIsLoading(false), 700);
 
-      let results = response.filter((el) => el.isAdmin);
+      let results = credentials.filter((el) => el.isAdmin);
       setRows(results);
       if (search) {
         results = results.filter((value) =>
@@ -65,7 +65,7 @@ const ManagerInfo = () => {
       }
     };
     load();
-  }, [search]);
+  }, [credentials, search]);
 
   const removeManager = (id) => {
     if (isSelected) {

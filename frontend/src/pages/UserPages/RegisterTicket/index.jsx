@@ -5,7 +5,7 @@ import MenuDrawer from "../../../components/shared/Menu";
 const RegisterTicketUser = () => {
   return (
     <>
-      <MenuDrawer />
+      <MenuDrawer type />
       <MainContainer>
         <RegisterTicketInfo />
       </MainContainer>
