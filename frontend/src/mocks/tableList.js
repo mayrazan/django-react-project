@@ -74,13 +74,7 @@ export const columnRenters = [
 ];
 
 export const columnTicketsUser = [
-  { id: "name", label: "Nome", minWidth: 170 },
   { id: "problem", label: "Perturbação", minWidth: 170 },
-  {
-    id: "numAp",
-    label: "Apartamento",
-    minWidth: 170,
-  },
   {
     id: "openDate",
     label: "Data",

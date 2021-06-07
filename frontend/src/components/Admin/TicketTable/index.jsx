@@ -322,7 +322,7 @@ export function TicketsTable({ arrayColumn }) {
                 color="primary"
                 onClick={() => redirectToTicket(idValue)}
               >
-                Editar
+                Alterar/Visualizar Chamado
               </Button>
               <Button
                 variant="contained"

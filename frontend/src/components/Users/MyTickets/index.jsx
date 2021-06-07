@@ -119,8 +119,6 @@ const MyTickets = () => {
     const title = "Tickets";
     const headers = [
       [
-        "NOME",
-        "Nº AP.",
         "PERTURBAÇÃO",
         "DATA ABERTURA",
         "STATUS",
@@ -132,8 +130,6 @@ const MyTickets = () => {
     ];
 
     const data = rows.map((el) => [
-      el.user.name,
-      el.user.numAp,
       el.problem,
       el.openDate,
       el.status,
@@ -200,8 +196,6 @@ const MyTickets = () => {
                 filename="Tickets"
               >
                 <ExcelSheet data={rows} name="Tickets">
-                  <ExcelColumn label="Nome" value="name" />
-                  <ExcelColumn label="Nº Ap." value="numAp" />
                   <ExcelColumn label="Data" value="openDate" />
                   <ExcelColumn label="Perturbação" value="problem" />
                   <ExcelColumn label="Descrição" value="description" />
@@ -249,12 +243,9 @@ const MyTickets = () => {
                               className={classes.tableRow}
                             >
                               {columnTicketsUser.map((column, index) => {
-                                const valueUser = row.user[column.id];
                                 const value = row[column.id];
                                 return (
-                                  <TableCell key={column.id}>
-                                    {value || valueUser}
-                                  </TableCell>
+                                  <TableCell key={column.id}>{value}</TableCell>
                                 );
                               })}
                             </TableRow>

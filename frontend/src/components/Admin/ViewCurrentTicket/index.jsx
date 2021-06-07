@@ -61,9 +61,6 @@ const useStyles = makeStyles((theme) => ({
 
 const ViewCurrentTicket = () => {
   const { id } = useParams();
-  const [currentTicket, setTicket] = useState({});
-  const [rows, setRows] = useState([]);
-
   const [isLoading, setIsLoading] = useState(true);
   const [form, setForm] = useState({
     user: [],
@@ -75,50 +72,31 @@ const ViewCurrentTicket = () => {
     feedbackManager: "",
     problem: "",
     openDate: "",
+    name: "",
+    numAp: null,
   });
 
   const history = useHistory();
 
   useEffect(() => {
     (async () => {
-      const response = await getDataApi("tickets/");
-      setRows(response);
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      const ticketSelected = await rows.find(
-        (ticket) => ticket.id.toString() === id
-      );
-      ticketSelected && setTicket(ticketSelected);
+      const response = await getDataApi(`tickets/${id}`);
       setForm({
-        user: currentTicket.user,
-        description: currentTicket.description,
-        numApOccurrence: currentTicket.numApOccurrence,
-        problem: currentTicket.problem,
-        status: currentTicket.status,
-        priority: currentTicket.priority,
-        openDate: currentTicket.openDate,
-        feedbackManager: currentTicket.feedbackManager,
-        files: currentTicket.files,
+        user: response.user,
+        description: response.description,
+        numApOccurrence: response.numApOccurrence,
+        problem: response.problem,
+        status: response.status,
+        priority: response.priority,
+        openDate: response.openDate,
+        feedbackManager: response.feedbackManager,
+        files: response.files,
+        name: response.user.name,
+        numAp: response.user.numAp,
       });
       setTimeout(() => setIsLoading(false), 1900);
     })();
-  }, [
-    currentTicket.description,
-    currentTicket.feedbackManager,
-    currentTicket.files,
-    currentTicket.name,
-    currentTicket.numApOccurrence,
-    currentTicket.openDate,
-    currentTicket.priority,
-    currentTicket.problem,
-    currentTicket.status,
-    currentTicket.user,
-    id,
-    rows,
-  ]);
+  }, [id]);
 
   const classes = useStyles();
 
@@ -179,9 +157,6 @@ const ViewCurrentTicket = () => {
     );
   };
 
-  const userResult = rows.map((el) => el.user);
-  const userName = userResult.map((el) => el.name);
-
   return (
     <Container component="main" maxWidth="md" className={classes.main}>
       <CssBaseline />
@@ -205,14 +180,26 @@ const ViewCurrentTicket = () => {
         ) : (
           <form className={classes.form}>
             <TextField
-              defaultValue={userName}
+              defaultValue={form.name}
               disabled
-              name="user"
+              name="name"
               variant="outlined"
               margin="normal"
               required
               fullWidth
               label="Nome"
+              className={classes.field}
+            />
+
+            <TextField
+              defaultValue={form.numAp}
+              disabled
+              name="numAp"
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Nº Ap."
               className={classes.field}
             />
 
@@ -287,6 +274,8 @@ const ViewCurrentTicket = () => {
               className={classes.field}
               autoComplete="off"
             />
+            {form.files && <Button>Download Arquivos</Button>}
+
             <Button
               type="submit"
               variant="contained"

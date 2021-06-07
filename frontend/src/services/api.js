@@ -69,6 +69,7 @@ const errorInterceptor = (error) => {
         localStorage.removeItem("access");
         localStorage.removeItem("refresh");
         localStorage.removeItem("userLogged");
+        localStorage.removeItem("role");
         authRequest.defaults.headers["Authorization"] = "";
         return Promise.reject(error);
       });

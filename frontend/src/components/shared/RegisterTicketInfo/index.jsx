@@ -10,7 +10,7 @@ import { getDataApi, registerInfo } from "../../../services/infoApi";
 import { colors } from "../../../styles/colors";
 import { alertMessage, successMessage } from "../../../utils/messages";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
-import { MenuItem } from "@material-ui/core";
+import { Input, MenuItem } from "@material-ui/core";
 import SelectContainer from "../SelectContainer";
 import GooglePicker from "react-google-picker";
 
@@ -251,19 +251,20 @@ const RegisterTicketInfo = () => {
             autoComplete="off"
           />
 
-          <input
+          <Input
             type="file"
             name="files"
             accept="image/*, video/*, audio/*"
             onChange={(event) => {
               setForm({ ...form, files: event.target.files[0] });
             }}
+            disableUnderline
           />
 
           <GooglePicker
             clientId={process.env.REACT_APP_GOOGLE_DRIVE_CLIENT_ID}
             developerKey={process.env.REACT_APP_GOOGLE_DRIVE_API_KEY}
-            scope={["https://www.googleapis.com/auth/drive.appdata"]}
+            scope={["https://www.googleapis.com/auth/drive.file"]}
             onChange={(data) => console.log("on change:", data)}
             onAuthFailed={(data) => console.log("on auth failed:", data)}
             multiselect={true}
