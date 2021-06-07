@@ -11,7 +11,7 @@ import axios from "axios";
 // https://condominio-quinta.herokuapp.com/api/ backup
 
 const api = axios.create({
-  baseURL: `http://127.0.0.1:8000/api/`,
+  baseURL: `https://condominio-quinta-tickets.herokuapp.com/api/`,
   timeout: 5000,
   headers: {
     // Authorization: `Bearer ${localStorage.getItem("access")}`,
@@ -38,7 +38,7 @@ const isCorrectRefreshError = (status) => {
 };
 
 const authRequest = axios.create({
-  baseURL: `http://127.0.0.1:8000/api/`,
+  baseURL: `https://condominio-quinta-tickets.herokuapp.com/api/`,
   timeout: 5000,
   headers: {
     Authorization: `Bearer ${localStorage.getItem("access")}`,
