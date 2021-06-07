@@ -5,6 +5,7 @@ import datetime
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.hashers import make_password
+import django_filters
 
 
 class UsersSerializer(serializers.ModelSerializer):
@@ -75,3 +76,16 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['id'] = user.id
 
         return token
+
+
+class TicketsFilterUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Tickets
+        fields = ['id', 'user', 'problem', 'status', 'priority',
+                  'numApOccurrence', 'description', 'feedbackManager', 'openDate', 'files']
+
+    # def to_representation(self, instance):
+    #     response = super().to_representation(instance)
+    #     response['user'] = UsersSerializer(instance.user).data
+    #     return response

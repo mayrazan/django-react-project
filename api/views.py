@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import permissions, status
-from api.serializers import UsersSerializer, TicketsSerializer, NotificationsSerializer, ProblemsSerializer, FilesSerializer, CustomTokenObtainPairSerializer
+from api.serializers import CustomTokenObtainPairSerializer, FilesSerializer, NotificationsSerializer, ProblemsSerializer, TicketsFilterUserSerializer, TicketsSerializer, UsersSerializer
 from api.models import Users, Tickets, Notifications, Problems, Files
 from django.core.mail import send_mail
 from rest_framework.decorators import api_view, permission_classes
@@ -10,6 +10,9 @@ from rest_framework.views import APIView
 from django.http.response import Http404
 from django.http.multipartparser import MultiPartParser
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework import generics
+from django_filters import rest_framework as filters
+from rest_framework import viewsets
 
 
 class TicketsView(APIView):
@@ -71,6 +74,23 @@ class TicketView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TicketsUserListView(viewsets.ModelViewSet):
+    permission_classes = [permissions.AllowAny]
+    # queryset = Tickets.objects.all()
+    serializer_class = TicketsFilterUserSerializer
+    # filter_backends = (filters.DjangoFilterBackend,)
+    # filterset_fields = ['userID']
+    # filterset_class = TicketsFilterUserSerializer
+
+    queryset = Tickets.objects.all()
+    # user, userID, userID_id, user_id
+
+    def get_queryset(self):
+        print(self.kwargs.get('user'))
+        return self.queryset \
+            .filter(user=self.kwargs.get('user'))
 
 
 class UsersView(APIView):

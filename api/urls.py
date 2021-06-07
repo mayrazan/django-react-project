@@ -2,12 +2,15 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 from . import views
+from django.conf.urls import url, re_path
 
 
 # app_name will help us do a reverse look-up latter.
 urlpatterns = [
     path('tickets/', views.TicketsView.as_view()),
     path('tickets/<int:pk>/', views.TicketView.as_view()),
+    path('tickets/users/<user>/',
+         views.TicketsUserListView.as_view({'get': 'list'})),
     path('users/', views.UsersView.as_view()),
     path('users/<int:pk>/', views.UserView.as_view()),
     path('problems/', views.ProblemsView.as_view()),

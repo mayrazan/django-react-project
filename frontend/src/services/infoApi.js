@@ -27,6 +27,13 @@ export async function getUser(id) {
   return response.data;
 }
 
+export async function getUserTickets(id) {
+  const response = await api.get(`tickets/users/${id}/`, config.headers, {
+    withCredentials: true,
+  });
+  return response.data;
+}
+
 export async function registerInfo(url, form = {}) {
   const response = await api.post(url, form);
   return response.data;

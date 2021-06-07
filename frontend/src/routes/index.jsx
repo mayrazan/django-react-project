@@ -20,9 +20,9 @@ import LoginAdmin from "../components/shared/LoginContainer/LoginAdmin";
 import { useUserContext } from "../context/ContextUser";
 
 const Routes = () => {
-  const { isAuthenticated } = useUserContext();
-  const user = JSON.parse(localStorage.getItem("userLogged"));
-  const isAdmin = user !== null && user !== undefined ? user[0].isAdmin : false;
+  const { isAuthenticated, isAdmin } = useUserContext();
+  // const user = JSON.parse(localStorage.getItem("userLogged"));
+  // const isAdmin = user !== null && user !== undefined ? user[0].isAdmin : false;
 
   return (
     <BrowserRouter>

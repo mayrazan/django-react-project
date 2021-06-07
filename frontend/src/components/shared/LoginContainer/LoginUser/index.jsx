@@ -8,7 +8,6 @@ import { colors } from "../../../../styles/colors";
 import { TextField } from "@material-ui/core";
 import { ContainerBtnStyled } from "../../StyleComponents/style";
 import { useUserContext } from "../../../../context/ContextUser";
-import { useState } from "react";
 import { alertMessage } from "../../../../utils/messages";
 
 const useStyles = makeStyles((theme) => ({
@@ -75,26 +74,17 @@ const LoginUser = () => {
   const {
     onChangeEmail,
     onChangePassword,
-    handleLogin,
     redirectToHome,
     login,
+    isMessageVisible,
   } = useUserContext();
-  const [isMessageVisible, setMessageVisible] = useState(false);
+  // const [isMessageVisible, setMessageVisible] = useState(false);
 
   const onSubmit = (event) => {
     event.preventDefault();
     redirectToHome();
-    const user = JSON.parse(localStorage.getItem("userLogged"));
-    const isUser = user !== null && user !== undefined ? user[0].isUser : false;
 
-    if (window.location.pathname === "/login-usuario" && isUser) {
-      handleLogin();
-      history.push("/");
-    } else {
-      setMessageVisible(true);
-      alert("Login invalido");
-      localStorage.removeItem("userLogged");
-    }
+    history.push("/");
     setTimeout(() => window.location.reload(), 700);
   };
 

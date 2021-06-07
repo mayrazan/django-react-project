@@ -285,6 +285,7 @@ const ViewCurrentTicket = () => {
                 setForm({ ...form, feedbackManager: event.target.value });
               }}
               className={classes.field}
+              autoComplete="off"
             />
             <Button
               type="submit"

@@ -233,6 +233,7 @@ const RegisterTicketInfo = () => {
               setForm({ ...form, description: event.target.value });
             }}
             className={classes.field}
+            autoComplete="off"
           />
 
           <TextField
@@ -247,6 +248,7 @@ const RegisterTicketInfo = () => {
             fullWidth
             label="Nº Ap. de ocorrência"
             className={classes.field}
+            autoComplete="off"
           />
 
           <input

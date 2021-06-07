@@ -13,7 +13,7 @@ import { useHistory } from "react-router-dom";
 import { CSVLink } from "react-csv";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { getDataApi } from "../../../services/infoApi";
+import { getUserTickets } from "../../../services/infoApi";
 import Loading from "../../shared/Loading";
 import ReactExport from "react-data-export";
 import SelectContainer from "../../shared/SelectContainer";
@@ -46,12 +46,14 @@ const MyTickets = () => {
   const [rows, setRows] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [status, setStatus] = useState("Todos");
-  // const currentUser = JSON.parse(localStorage.getItem("userLogged"));
-  // const userID = currentUser.map((el) => el.id);
+  const currentUser = JSON.parse(localStorage.getItem("userLogged"));
 
   useEffect(() => {
     const load = async () => {
-      const response = await getDataApi("tickets/");
+      const userID = currentUser.map((el) => el.id);
+      const response = await getUserTickets(`${userID[0]}`);
+      // const responseUser = await getUserTickets(`${userID[0]}`);
+      // console.log(responseUser);
       let filteredStatus = response;
 
       if (status !== "Todos") {
@@ -63,6 +65,7 @@ const MyTickets = () => {
       setTimeout(() => setIsLoading(false), 700);
     };
     load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
   const selectStatus = () => {

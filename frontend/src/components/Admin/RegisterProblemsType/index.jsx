@@ -113,6 +113,7 @@ const RegisterProblemsType = () => {
             fullWidth
             label="Tipo de Problema"
             className={classes.field}
+            autoComplete="off"
           />
 
           <Button

@@ -5,7 +5,6 @@ const Context = createContext({});
 
 function UserProvider({ children }) {
   const {
-    handleLogin,
     handleLogout,
     isAuthenticated,
     credentials,
@@ -13,14 +12,14 @@ function UserProvider({ children }) {
     login,
     onChangeEmail,
     onChangePassword,
-    currentUser,
     loading,
+    isAdmin,
+    isMessageVisible,
   } = useContextUser();
 
   return (
     <Context.Provider
       value={{
-        handleLogin,
         handleLogout,
         isAuthenticated,
         credentials,
@@ -28,8 +27,9 @@ function UserProvider({ children }) {
         login,
         onChangeEmail,
         onChangePassword,
-        currentUser,
         loading,
+        isAdmin,
+        isMessageVisible,
       }}
     >
       {children}

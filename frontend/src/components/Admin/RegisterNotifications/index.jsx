@@ -148,6 +148,7 @@ const RegisterNotifications = () => {
               setForm({ ...form, description: event.target.value });
             }}
             className={classes.field}
+            autoComplete="off"
           />
 
           <Button

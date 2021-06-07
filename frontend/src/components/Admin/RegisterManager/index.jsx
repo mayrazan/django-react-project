@@ -134,6 +134,7 @@ const RegisterManager = () => {
             fullWidth
             label="Nome"
             className={classes.field}
+            autoComplete="off"
           />
           <TextField
             name="lastName"
@@ -147,6 +148,7 @@ const RegisterManager = () => {
             fullWidth
             label="Sobrenome"
             className={classes.field}
+            autoComplete="off"
           />
 
           <TextField
@@ -161,6 +163,7 @@ const RegisterManager = () => {
             fullWidth
             label="Nº Apartamento"
             className={classes.field}
+            autoComplete="off"
           />
 
           <TextField
@@ -175,6 +178,7 @@ const RegisterManager = () => {
             fullWidth
             label="Email"
             className={classes.field}
+            autoComplete="off"
           />
 
           <TextField
@@ -190,6 +194,7 @@ const RegisterManager = () => {
             }}
             className={classes.field}
             type="password"
+            autoComplete="off"
           />
 
           <TextField
@@ -204,6 +209,7 @@ const RegisterManager = () => {
             fullWidth
             label="Telefone"
             className={classes.field}
+            autoComplete="off"
           />
 
           <Button

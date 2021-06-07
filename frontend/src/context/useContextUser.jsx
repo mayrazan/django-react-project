@@ -10,7 +10,8 @@ export default function useContextUser() {
   });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isMessageVisible, setMessageVisible] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -19,13 +20,52 @@ export default function useContextUser() {
     })();
   }, []);
 
+  let userAdmin = "";
+  let user = "";
+  let isAdminLogged = null;
+  let isUserLogged = null;
+
   const redirectToHome = () => {
     if (login.email && login.password) {
       let result = credentials.filter((el) => el.email === login.email);
       localStorage.setItem("userLogged", JSON.stringify(result));
-      const user = JSON.parse(localStorage.getItem("userLogged"));
-      setCurrentUser(user);
+      if (result.length > 0) {
+        let userJsonString = localStorage.getItem("userLogged");
+        if (userJsonString) {
+          userAdmin = JSON.parse(userJsonString);
+          user = JSON.parse(userJsonString);
+        }
+        isAdminLogged = userAdmin.map((el) => el.isAdmin);
+        isUserLogged = user.map((el) => el.isUser);
+
+        if (
+          window.location.pathname === "/login-admin" &&
+          isAdminLogged[0] &&
+          isUserLogged[0] === false
+        ) {
+          handleLogin();
+          localStorage.setItem("role", JSON.stringify(true));
+        } else if (
+          window.location.pathname === "/login-usuario" &&
+          isUserLogged[0] &&
+          isAdminLogged[0] === false
+        ) {
+          handleLogin();
+          localStorage.setItem("role", JSON.stringify(false));
+        } else {
+          setMessageVisible(true);
+          alert("Login invalido");
+          localStorage.removeItem("userLogged");
+        }
+      } else {
+        setMessageVisible(true);
+        alert("login invalido");
+      }
+    } else {
+      setMessageVisible(true);
+      alert("login invalido");
     }
+    setTimeout(() => window.location.reload(), 700);
   };
 
   const handleLogin = () => {
@@ -33,16 +73,29 @@ export default function useContextUser() {
     return result;
   };
 
+  let userJSON = JSON.parse(localStorage.getItem("role"));
+
   useEffect(() => {
     const tokenAccess = localStorage.getItem("access");
     const tokenRefresh = localStorage.getItem("refresh");
+
+    if (userJSON) {
+      if (userJSON === true) {
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
+      }
+    }
+
     if (tokenAccess || tokenRefresh) {
       setIsAuthenticated(true);
       setLoading(false);
     } else {
       setIsAuthenticated(false);
+      localStorage.removeItem("userLogged");
+      // localStorage.removeItem("role");
     }
-  }, []);
+  }, [userJSON]);
 
   const onChangeEmail = (event) => {
     setLogin({ ...login, email: event.target.value });
@@ -56,6 +109,7 @@ export default function useContextUser() {
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
     localStorage.removeItem("userLogged");
+    // localStorage.removeItem("role");
     api.defaults.headers["Authorization"] = "";
     setIsAuthenticated(false);
   };
@@ -69,7 +123,8 @@ export default function useContextUser() {
     onChangePassword,
     redirectToHome,
     login,
-    currentUser,
     loading,
+    isAdmin,
+    isMessageVisible,
   };
 }

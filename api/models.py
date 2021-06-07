@@ -6,9 +6,8 @@ from django.contrib.auth.models import (
 from django.contrib.auth.hashers import make_password
 
 permission = GoogleDriveFilePermission(
-    GoogleDrivePermissionRole.READER,
-    GoogleDrivePermissionType.USER,
-    "condominioquintahelpdesk@gmail.com"
+    GoogleDrivePermissionRole.WRITER,
+    GoogleDrivePermissionType.ANYONE
 )
 
 # Define Google Drive Storage
@@ -45,7 +44,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     avatar = models.ImageField(
         upload_to='helpdesk/', storage=gd_storage, blank=True, null=True)
-    numAp = models.IntegerField()
+    numAp = models.IntegerField(unique=True)
     floor = models.IntegerField(blank=True, null=True)
     password = models.CharField(max_length=255)
     cpf = models.CharField(max_length=11, blank=True)
@@ -88,7 +87,7 @@ class Tickets(models.Model):
         ('Alta', 'Alta'),
     ]
     user = models.ForeignKey(
-        Users, on_delete=models.SET_NULL, null=True, blank=True)
+        Users, on_delete=models.SET_NULL, null=True, blank=True, related_name='user')
     problem = models.ForeignKey(
         Problems, on_delete=models.CASCADE, to_field='problemType')
     status = models.CharField(choices=STATUS_CHOICES,
@@ -100,6 +99,8 @@ class Tickets(models.Model):
     openDate = models.DateTimeField(auto_now_add=True)
     files = models.FileField(upload_to='helpdesk/',
                              storage=gd_storage, blank=True, null=True)
+    # userID = models.ForeignKey(
+    #     Users, on_delete=models.SET_NULL, related_name='+', null=True, blank=True, to_field='numAp', unique=True)
 
     def __str__(self):
         return self.problem

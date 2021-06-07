@@ -4,13 +4,11 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useHistory } from "react-router-dom";
-// import { alertMessage } from "../../../../utils/messages";
 import { colors } from "../../../../styles/colors";
 import { TextField } from "@material-ui/core";
 import { ContainerBtnStyled } from "../../StyleComponents/style";
 import { useUserContext } from "../../../../context/ContextUser";
 import { alertMessage } from "../../../../utils/messages";
-import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -76,26 +74,17 @@ const LoginAdmin = () => {
   const {
     onChangeEmail,
     onChangePassword,
-    handleLogin,
     redirectToHome,
     login,
+    isMessageVisible,
   } = useUserContext();
-  const [isMessageVisible, setMessageVisible] = useState(false);
+  // const [isMessageVisible, setMessageVisible] = useState(false);
 
   const onSubmit = (event) => {
     event.preventDefault();
     redirectToHome();
-    const user = JSON.parse(localStorage.getItem("userLogged"));
-    const isUser =
-      user !== null && user !== undefined ? user[0].isAdmin : false;
-    if (window.location.pathname === "/login-admin" && isUser) {
-      handleLogin();
-      history.push("/admin");
-    } else {
-      setMessageVisible(true);
-      alert("Login invalido");
-      localStorage.removeItem("userLogged");
-    }
+
+    history.push("/");
     setTimeout(() => window.location.reload(), 700);
   };
 
