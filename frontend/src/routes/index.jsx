@@ -65,7 +65,6 @@ const Routes = () => {
               </>
             ) : (
               <>
-                <Route exact path="/cadastro" component={RegisterUser} />
                 <Route
                   exact
                   path="/cadastro-chamado"
@@ -82,6 +81,7 @@ const Routes = () => {
             <Route exact path="/login" component={Login} />
             <Route exact path="/login-usuario" component={LoginUser} />
             <Route exact path="/login-admin" component={LoginAdmin} />
+            <Route exact path="/cadastro" component={RegisterUser} />
             <Redirect to="/login" />
           </>
         )}

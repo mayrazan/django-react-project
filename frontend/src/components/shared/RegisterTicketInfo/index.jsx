@@ -12,7 +12,7 @@ import { alertMessage, successMessage } from "../../../utils/messages";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
 import { Input, MenuItem } from "@material-ui/core";
 import SelectContainer from "../SelectContainer";
-import GooglePicker from "react-google-picker";
+// import GooglePicker from "react-google-picker";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -261,7 +261,7 @@ const RegisterTicketInfo = () => {
             disableUnderline
           />
 
-          <GooglePicker
+          {/* <GooglePicker
             clientId={process.env.REACT_APP_GOOGLE_DRIVE_CLIENT_ID}
             developerKey={process.env.REACT_APP_GOOGLE_DRIVE_API_KEY}
             scope={["https://www.googleapis.com/auth/drive.file"]}
@@ -291,7 +291,7 @@ const RegisterTicketInfo = () => {
           >
             <span>Click</span>
             <div className="google"></div>
-          </GooglePicker>
+          </GooglePicker> */}
 
           <Button
             type="submit"

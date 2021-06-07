@@ -15,9 +15,9 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { deleteInfo, getDataApi } from "../../../services/infoApi";
 import Loading from "../../shared/Loading";
-import ReactExport from "react-data-export";
 import SelectContainer from "../../shared/SelectContainer";
 import { HeaderFooterContainer } from "../../shared/StyleComponents/style";
+import XLSX from "xlsx";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -178,9 +178,40 @@ export function TicketsTable({ arrayColumn }) {
     doc.save("tickets.pdf");
   };
 
-  const ExcelFile = ReactExport.ExcelFile;
-  const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
-  const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+  const downloadxls = (data) => {
+    const result = rows.map((el) => [
+      el.user.name,
+      el.user.numAp,
+      el.problem,
+      el.openDate,
+      el.status,
+      el.priority,
+      el.description,
+      el.numApOccurrence,
+      el.feedbackManager,
+    ]);
+    const headings = [
+      [
+        "Nome",
+        "Nº Ap.",
+        "Perturbação",
+        "Data",
+        "Status",
+        "Prioridade",
+        "Descrição",
+        "Nº Ap. Ocorrência",
+        "Resolução",
+      ],
+    ];
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(result, {
+      origin: "A2",
+      skipHeader: true,
+    });
+    XLSX.utils.sheet_add_aoa(ws, headings);
+    XLSX.utils.book_append_sheet(wb, ws);
+    XLSX.writeFile(wb, "tickets.xlsx");
+  };
 
   return (
     <>
@@ -218,27 +249,15 @@ export function TicketsTable({ arrayColumn }) {
               PDF
             </Button>
 
-            <ExcelFile
-              element={
-                <Button variant="contained" color="primary">
-                  Excel
-                </Button>
-              }
-              filename="Tickets"
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={(e) => {
+                downloadxls(e, rows);
+              }}
             >
-              <ExcelSheet data={rows} name="Tickets">
-                <ExcelColumn label="Nome" value="name" />
-                <ExcelColumn label="Nº Ap." value="numAp" />
-                <ExcelColumn label="Data" value="openDate" />
-                <ExcelColumn label="Perturbação" value="problem" />
-                <ExcelColumn label="Descrição" value="description" />
-                <ExcelColumn
-                  label="Nº Ap. Ocorrência"
-                  value="numApOccurrence"
-                />
-                <ExcelColumn label="Resposta Síndico" value="feedbackManager" />
-              </ExcelSheet>
-            </ExcelFile>
+              Excel
+            </Button>
           </HeaderFooterContainer>
 
           <Paper className={classes.root}>

@@ -20,6 +20,7 @@ export const columnTickets = [
     id: "priority",
     label: "Prioridade",
     minWidth: 170,
+    color: "red",
   },
 ];
 
