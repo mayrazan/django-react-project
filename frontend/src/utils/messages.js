@@ -21,3 +21,14 @@ export function successMessage(className) {
     </div>
   );
 }
+
+export function success(className) {
+  return (
+    <div className={className}>
+      <Alert severity="success">
+        <AlertTitle>Sucesso</AlertTitle>
+        Envio realizado com sucesso!
+      </Alert>
+    </div>
+  );
+}

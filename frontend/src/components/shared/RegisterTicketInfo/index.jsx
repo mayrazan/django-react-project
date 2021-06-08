@@ -1,4 +1,4 @@
-import { useHistory } from "react-router";
+// import { useHistory } from "react-router";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -12,7 +12,7 @@ import { alertMessage, successMessage } from "../../../utils/messages";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
 import { Input, MenuItem } from "@material-ui/core";
 import SelectContainer from "../SelectContainer";
-// import GooglePicker from "react-google-picker";
+import GooglePicker from "react-google-picker";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -76,7 +76,7 @@ const RegisterTicketInfo = () => {
   }, []);
 
   const userId = currentUser.map((el) => el.id);
-  const history = useHistory();
+  // const history = useHistory();
   const classes = useStyles();
 
   const [isMessageVisible, setMessageVisible] = useState(false);
@@ -202,7 +202,7 @@ const RegisterTicketInfo = () => {
           variant="contained"
           color="primary"
           className={classes.submit}
-          onClick={() => history.push("/")}
+          onClick={() => setTimeout(() => window.location.reload(), 500)}
         >
           Voltar
         </Button>
@@ -261,7 +261,7 @@ const RegisterTicketInfo = () => {
             disableUnderline
           />
 
-          {/* <GooglePicker
+          <GooglePicker
             clientId={process.env.REACT_APP_GOOGLE_DRIVE_CLIENT_ID}
             developerKey={process.env.REACT_APP_GOOGLE_DRIVE_API_KEY}
             scope={["https://www.googleapis.com/auth/drive.file"]}
@@ -291,7 +291,7 @@ const RegisterTicketInfo = () => {
           >
             <span>Click</span>
             <div className="google"></div>
-          </GooglePicker> */}
+          </GooglePicker>
 
           <Button
             type="submit"

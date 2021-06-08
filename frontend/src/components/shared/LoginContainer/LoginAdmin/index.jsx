@@ -76,6 +76,7 @@ const LoginAdmin = () => {
     onChangePassword,
     redirectToHome,
     login,
+    isAdmin,
     isMessageVisible,
   } = useUserContext();
   // const [isMessageVisible, setMessageVisible] = useState(false);
@@ -83,9 +84,15 @@ const LoginAdmin = () => {
   const onSubmit = (event) => {
     event.preventDefault();
     // redirectToHome();
-    if (redirectToHome()) {
+    verifyRoute();
+  };
+
+  const verifyRoute = () => {
+    redirectToHome();
+    if (isAdmin) {
+      history.push("/admin");
+    } else {
       history.push("/");
-      setTimeout(() => window.location.reload(), 700);
     }
   };
 

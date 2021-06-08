@@ -12,6 +12,7 @@ import { colors } from "../../../styles/colors";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
 import SelectContainer from "../../shared/SelectContainer";
 import { MenuItem } from "@material-ui/core";
+import { success } from "../../../utils/messages";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -62,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
 const ViewCurrentTicket = () => {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
+  const [isMessageVisible, setMessageVisible] = useState(false);
   const [form, setForm] = useState({
     user: [],
     files: null,
@@ -95,6 +97,7 @@ const ViewCurrentTicket = () => {
         numAp: response.user.numAp,
       });
       setTimeout(() => setIsLoading(false), 1900);
+      setMessageVisible(false);
     })();
   }, [id]);
 
@@ -102,16 +105,16 @@ const ViewCurrentTicket = () => {
 
   const saveChanges = (event) => {
     event.preventDefault();
-
     (async () => {
+      setIsLoading(true);
       await updateTicketPatch(id, {
         status: form.status,
         priority: form.priority,
         feedbackManager: form.feedbackManager,
       });
-      // setTicket(updatedResults);
+      setMessageVisible(true);
+      setTimeout(() => setIsLoading(false), 700);
     })();
-    setTimeout(() => window.location.reload(), 1900);
   };
 
   const selectStatus = () => {
@@ -305,6 +308,7 @@ const ViewCurrentTicket = () => {
           </form>
         )}
       </div>
+      {isMessageVisible && success(classes.alerts)}
     </Container>
   );
 };

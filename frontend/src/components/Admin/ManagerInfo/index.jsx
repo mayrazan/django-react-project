@@ -252,7 +252,9 @@ const ManagerInfo = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => history.push("/")}
+                  onClick={() =>
+                    setTimeout(() => window.location.reload(), 500)
+                  }
                 >
                   Voltar
                 </Button>

@@ -24,7 +24,6 @@ export default function useContextUser() {
   // let user = "";
   let isAdminLogged = null;
   // let isUserLogged = null;
-
   const redirectToHome = () => {
     if (login.email && login.password) {
       let result = credentials.filter((el) => el.email === login.email);
@@ -38,25 +37,17 @@ export default function useContextUser() {
         isAdminLogged = userAdmin.map((el) => el.isAdmin);
         // isUserLogged = user.map((el) => el.isUser);
 
-        console.log(isAdminLogged[0]);
-
         if (isAdminLogged[0]) {
           handleLogin();
           localStorage.setItem("role", JSON.stringify(true));
         } else {
           handleLogin();
           localStorage.setItem("role", JSON.stringify(false));
-          // } else {
-          //   setMessageVisible(true);
-          //   alert("Login invalido");
-          //   localStorage.removeItem("userLogged");
         }
-        return result;
       } else {
         setMessageVisible(true);
         alert("login invalido");
         localStorage.removeItem("userLogged");
-        return 0;
       }
     } else {
       setMessageVisible(true);
@@ -65,13 +56,17 @@ export default function useContextUser() {
     // setTimeout(() => window.location.reload(), 700);
   };
 
-  const handleLogin = () => {
-    const result = registerUser(login);
-    return result;
+  const handleLogin = (props) => {
+    (async () => {
+      const success = await registerUser(login);
+      if (success) {
+        window.location = "/";
+      }
+    })();
   };
 
   let userJSON = JSON.parse(localStorage.getItem("role"));
-
+  console.log(isAuthenticated);
   useEffect(() => {
     const tokenAccess = localStorage.getItem("access");
     const tokenRefresh = localStorage.getItem("refresh");
@@ -84,7 +79,7 @@ export default function useContextUser() {
       }
     }
 
-    if (tokenAccess || tokenRefresh) {
+    if (tokenAccess && tokenRefresh) {
       setIsAuthenticated(true);
       setLoading(false);
     } else {
