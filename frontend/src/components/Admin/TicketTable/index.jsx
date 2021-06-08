@@ -213,6 +213,10 @@ export function TicketsTable({ arrayColumn }) {
     XLSX.writeFile(wb, "tickets.xlsx");
   };
 
+  const selectClassPriority = document.querySelectorAll(".priority");
+  selectClassPriority.forEach((el) => el.getAttribute("priority"));
+  console.log(selectClassPriority.forEach((el) => el.innerHTML));
+
   return (
     <>
       {isLoading ? (
@@ -300,7 +304,7 @@ export function TicketsTable({ arrayColumn }) {
                               const valueUser = row.user[column.id];
                               const value = row[column.id];
                               return (
-                                <TableCell key={column.id}>
+                                <TableCell key={column.id} className="priority">
                                   {value || valueUser}
                                 </TableCell>
                               );

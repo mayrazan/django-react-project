@@ -30,7 +30,33 @@ export default function useContextUser() {
       let result = credentials.filter((el) => el.email === login.email);
       localStorage.setItem("userLogged", JSON.stringify(result));
       if (result.length > 0) {
-        verifyUser();
+        let userJsonString = localStorage.getItem("userLogged");
+        if (userJsonString) {
+          userAdmin = JSON.parse(userJsonString);
+          user = JSON.parse(userJsonString);
+        }
+        isAdminLogged = userAdmin.map((el) => el.isAdmin);
+        isUserLogged = user.map((el) => el.isUser);
+
+        if (
+          window.location.pathname === "/login-admin" &&
+          isAdminLogged[0] &&
+          isUserLogged[0] === false
+        ) {
+          handleLogin();
+          localStorage.setItem("role", JSON.stringify(true));
+        } else if (
+          window.location.pathname === "/login-usuario" &&
+          isUserLogged[0] &&
+          isAdminLogged[0] === false
+        ) {
+          handleLogin();
+          localStorage.setItem("role", JSON.stringify(false));
+        } else {
+          setMessageVisible(true);
+          alert("Login invalido");
+          localStorage.removeItem("userLogged");
+        }
       } else {
         setMessageVisible(true);
         alert("login invalido");
@@ -45,36 +71,6 @@ export default function useContextUser() {
   const handleLogin = () => {
     const result = registerUser(login);
     return result;
-  };
-
-  const verifyUser = () => {
-    let userJsonString = localStorage.getItem("userLogged");
-    if (userJsonString) {
-      userAdmin = JSON.parse(userJsonString);
-      user = JSON.parse(userJsonString);
-    }
-    isAdminLogged = userAdmin.map((el) => el.isAdmin);
-    isUserLogged = user.map((el) => el.isUser);
-
-    if (
-      window.location.pathname === "/login-admin" &&
-      isAdminLogged[0] &&
-      isUserLogged[0] === false
-    ) {
-      handleLogin();
-      localStorage.setItem("role", JSON.stringify(true));
-    } else if (
-      window.location.pathname === "/login-usuario" &&
-      isUserLogged[0] &&
-      isAdminLogged[0] === false
-    ) {
-      handleLogin();
-      localStorage.setItem("role", JSON.stringify(false));
-    } else {
-      setMessageVisible(true);
-      alert("Login invalido");
-      localStorage.removeItem("userLogged");
-    }
   };
 
   let userJSON = JSON.parse(localStorage.getItem("role"));

@@ -157,6 +157,14 @@ const ViewCurrentTicket = () => {
     );
   };
 
+  const downloadFile = () => {
+    const link = document.createElement("a");
+    link.href = form.files;
+    document.body.appendChild(link);
+    link.click();
+    // document.body.removeChild(link);
+  };
+
   return (
     <Container component="main" maxWidth="md" className={classes.main}>
       <CssBaseline />
@@ -274,7 +282,16 @@ const ViewCurrentTicket = () => {
               className={classes.field}
               autoComplete="off"
             />
-            {form.files && <Button>Download Arquivos</Button>}
+            {form.files && (
+              <Button
+                onClick={downloadFile}
+                variant="contained"
+                color="secondary"
+                style={{ backgroundColor: "#8015a3" }}
+              >
+                Download Arquivo
+              </Button>
+            )}
 
             <Button
               type="submit"
