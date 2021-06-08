@@ -21,9 +21,9 @@ export default function useContextUser() {
   }, []);
 
   let userAdmin = "";
-  let user = "";
+  // let user = "";
   let isAdminLogged = null;
-  let isUserLogged = null;
+  // let isUserLogged = null;
 
   const redirectToHome = () => {
     if (login.email && login.password) {
@@ -33,39 +33,36 @@ export default function useContextUser() {
         let userJsonString = localStorage.getItem("userLogged");
         if (userJsonString) {
           userAdmin = JSON.parse(userJsonString);
-          user = JSON.parse(userJsonString);
+          // user = JSON.parse(userJsonString);
         }
         isAdminLogged = userAdmin.map((el) => el.isAdmin);
-        isUserLogged = user.map((el) => el.isUser);
+        // isUserLogged = user.map((el) => el.isUser);
 
-        if (
-          window.location.pathname === "/login-admin" &&
-          isAdminLogged[0] &&
-          isUserLogged[0] === false
-        ) {
+        console.log(isAdminLogged[0]);
+
+        if (isAdminLogged[0]) {
           handleLogin();
           localStorage.setItem("role", JSON.stringify(true));
-        } else if (
-          window.location.pathname === "/login-usuario" &&
-          isUserLogged[0] &&
-          isAdminLogged[0] === false
-        ) {
+        } else {
           handleLogin();
           localStorage.setItem("role", JSON.stringify(false));
-        } else {
-          setMessageVisible(true);
-          alert("Login invalido");
-          localStorage.removeItem("userLogged");
+          // } else {
+          //   setMessageVisible(true);
+          //   alert("Login invalido");
+          //   localStorage.removeItem("userLogged");
         }
+        return result;
       } else {
         setMessageVisible(true);
         alert("login invalido");
+        localStorage.removeItem("userLogged");
+        return 0;
       }
     } else {
       setMessageVisible(true);
       alert("login invalido");
     }
-    setTimeout(() => window.location.reload(), 700);
+    // setTimeout(() => window.location.reload(), 700);
   };
 
   const handleLogin = () => {

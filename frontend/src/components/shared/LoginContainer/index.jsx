@@ -96,18 +96,18 @@ const LoginContainer = () => {
           <Button
             variant="outlined"
             className={classes.button}
-            onClick={() => history.push("/login-admin")}
+            onClick={() => history.push("/login")}
           >
-            Síndico
+            Login
           </Button>
-
+          {/* 
           <Button
             variant="outlined"
             className={classes.button}
             onClick={() => history.push("/login-usuario")}
           >
             Moradores
-          </Button>
+          </Button> */}
           <Button
             variant="outlined"
             className={classes.button}

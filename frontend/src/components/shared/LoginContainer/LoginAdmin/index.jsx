@@ -82,10 +82,11 @@ const LoginAdmin = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    redirectToHome();
-
-    history.push("/");
-    setTimeout(() => window.location.reload(), 700);
+    // redirectToHome();
+    if (redirectToHome()) {
+      history.push("/");
+      setTimeout(() => window.location.reload(), 700);
+    }
   };
 
   return (
@@ -115,7 +116,7 @@ const LoginAdmin = () => {
         </ContainerBtnStyled>
         <div className={classes.paper}>
           <Typography component="h1" variant="h5">
-            Login Síndico
+            Login
           </Typography>
 
           <form className={classes.form}>

@@ -15,7 +15,7 @@ import ViewTickets from "../pages/UserPages/ViewTickets";
 import Problems from "../pages/AdminPages/Problems";
 import Notifications from "../pages/AdminPages/Notifications";
 import Login from "../pages/Login";
-import LoginUser from "../components/shared/LoginContainer/LoginUser";
+// import LoginUser from "../components/shared/LoginContainer/LoginUser";
 import LoginAdmin from "../components/shared/LoginContainer/LoginAdmin";
 import { useUserContext } from "../context/ContextUser";
 
@@ -78,11 +78,11 @@ const Routes = () => {
           </>
         ) : (
           <>
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/login-usuario" component={LoginUser} />
-            <Route exact path="/login-admin" component={LoginAdmin} />
+            <Route exact path="/condominio" component={Login} />
+            {/* <Route exact path="/login-usuario" component={LoginUser} /> */}
+            <Route exact path="/login" component={LoginAdmin} />
             <Route exact path="/cadastro" component={RegisterUser} />
-            <Redirect to="/login" />
+            <Redirect to="/condominio" />
           </>
         )}
       </Switch>
