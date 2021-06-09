@@ -23,11 +23,6 @@ from api.views import CustomTokenObtainPairView
 
 # from api.views import UsersViewSet, TicketsViewSet, NotificationsViewSet, ProblemsViewSet
 
-# router = routers.DefaultRouter()
-# router.register(r'users', UsersViewSet)
-# router.register(r'tickets', TicketsViewSet)
-# router.register(r'notifications', NotificationsViewSet)
-# router.register(r'problems', ProblemsViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -39,5 +34,3 @@ urlpatterns = [
     # path('api/', include(router.urls)),
     # path('api/', include('rest_framework.urls', namespace='rest_framework')),
 ]
-
-# urlpatterns = format_suffix_patterns(urlpatterns)

@@ -165,16 +165,16 @@ class NotificationsView(APIView):
         recievers = []
         if serializer.is_valid():
             serializer.save()
-            serializer_data = request.POST.dict()
-            notificationType = serializer_data.get("notificationType")
-            description = serializer_data.get("description")
+            # serializer_data = request.POST.dict()
+            # notificationType = serializer_data.get("notificationType")
+            # description = serializer_data.get("description")
+            notificationType = request.data['notificationType']
+            description = request.data['description']
 
             for user in Users.objects.all():
                 recievers.append(user.email)
-
             send_mail(notificationType, description,
                       'condominioquintahelpdesk@gmail.com', recievers)
-
         print(serializer.errors)
         return Response(serializer.data)
 

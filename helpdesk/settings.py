@@ -167,7 +167,7 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -204,6 +204,8 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+env_path = Path('.env')
+load_dotenv(dotenv_path=env_path)
 
 AUTH_USER_MODEL = 'api.Users'
 
@@ -214,9 +216,7 @@ EMAIL_USE_SSL = False
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-
-
-load_dotenv()
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = 'mindful-pillar.json'
 GOOGLE_DRIVE_STORAGE_SERVICE_EMAIL = os.environ.get(
