@@ -10,7 +10,7 @@ import { registerInfo } from "../../../services/infoApi";
 import { colors } from "../../../styles/colors";
 import { alertMessage, successMessage } from "../../../utils/messages";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
-import ProfileImage from "../../shared/ProfileImage";
+// import ProfileImage from "../../shared/ProfileImage";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -95,11 +95,11 @@ const RegisterRenter = () => {
 
   const [isMessageVisible, setMessageVisible] = useState(false);
   const [isMessageSuccess, setMessageSuccess] = useState(false);
-  const [preview, setPreview] = useState({ prev: null, src: null });
+  // const [preview, setPreview] = useState({ prev: null, src: null });
 
   async function onSubmit(event) {
     event.preventDefault();
-    setForm({ ...form, avatar: preview.src });
+    // setForm({ ...form, avatar: preview.src });
     if (validateForm()) {
       await registerInfo("users/", form);
       setMessageSuccess(true);
@@ -156,7 +156,7 @@ const RegisterRenter = () => {
           </Typography>
 
           <form className={classes.form}>
-            <ProfileImage setPreview={setPreview} />
+            {/* <ProfileImage setPreview={setPreview} /> */}
             <TextField
               value={form.name}
               onChange={(event) => {

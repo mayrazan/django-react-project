@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import Loading from "../../shared/Loading";
 import { colors } from "../../../styles/colors";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
-import { Avatar } from "@material-ui/core";
+// import { Avatar } from "@material-ui/core";
 import { useUserContext } from "../../../context/ContextUser";
 
 const useStyles = makeStyles((theme) => ({
@@ -131,7 +131,7 @@ const ViewCurrentRenter = () => {
           <Loading />
         ) : (
           <form className={classes.form}>
-            <Avatar defaultValue={form.avatar}></Avatar>
+            {/* <Avatar defaultValue={form.avatar}></Avatar> */}
             <TextField
               value={form.name}
               disabled

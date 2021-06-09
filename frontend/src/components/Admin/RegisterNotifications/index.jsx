@@ -67,9 +67,11 @@ const RegisterNotifications = () => {
   async function onSubmit(event) {
     event.preventDefault();
     if (validateForm()) {
-      await registerInfo("notifications/", form);
+      const success = await registerInfo("notifications/", form);
       setMessageSuccess(true);
-
+      if (!success) {
+        alert("Envio falhou");
+      }
       setTimeout(() => window.location.reload(), 500);
     }
   }

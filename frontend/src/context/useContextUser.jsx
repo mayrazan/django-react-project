@@ -66,7 +66,7 @@ export default function useContextUser() {
   };
 
   let userJSON = JSON.parse(localStorage.getItem("role"));
-  console.log(isAuthenticated);
+
   useEffect(() => {
     const tokenAccess = localStorage.getItem("access");
     const tokenRefresh = localStorage.getItem("refresh");

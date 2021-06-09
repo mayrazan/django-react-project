@@ -32,6 +32,42 @@ const useStyles = makeStyles(() => ({
   link: {
     color: "white",
   },
+  highPriority: {
+    backgroundColor: "red",
+    borderRadius: "10px",
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: "16px",
+    padding: "6px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "60%",
+  },
+  mediumPriority: {
+    backgroundColor: "orange",
+    borderRadius: "10px",
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: "16px",
+    padding: "6px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "60%",
+  },
+  lowPriority: {
+    backgroundColor: "green",
+    borderRadius: "10px",
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: "16px",
+    padding: "6px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "60%",
+  },
 }));
 
 export function TicketsTable({ arrayColumn }) {
@@ -45,6 +81,21 @@ export function TicketsTable({ arrayColumn }) {
   const [isLoading, setIsLoading] = useState(true);
   const [status, setStatus] = useState("Todos");
   const [search, setSearch] = useState("");
+
+  if (!isLoading) {
+    document.querySelectorAll("td").forEach((item) => {
+      const c = item.childNodes;
+      for (let i = 0; i < c.length; i++) {
+        if (c[i].nodeValue === "Alta") {
+          item.className = classes.highPriority;
+        } else if (c[i].nodeValue === "Media") {
+          item.className = classes.mediumPriority;
+        } else if (c[i].nodeValue === "Baixa") {
+          item.className = classes.lowPriority;
+        }
+      }
+    });
+  }
 
   useEffect(() => {
     const load = async () => {
@@ -68,7 +119,7 @@ export function TicketsTable({ arrayColumn }) {
       }
     };
     load();
-  }, [search, status]);
+  }, [isLoading, search, status]);
 
   const selectStatus = () => {
     const options = [
@@ -213,9 +264,7 @@ export function TicketsTable({ arrayColumn }) {
     XLSX.writeFile(wb, "tickets.xlsx");
   };
 
-  const selectClassPriority = document.querySelectorAll(".priority");
-  selectClassPriority.forEach((el) => el.getAttribute("priority"));
-  console.log(selectClassPriority.forEach((el) => el.innerHTML));
+  // console.log(selectClassPriority[5].childNodes[0].textContent);
 
   return (
     <>
@@ -304,7 +353,7 @@ export function TicketsTable({ arrayColumn }) {
                               const valueUser = row.user[column.id];
                               const value = row[column.id];
                               return (
-                                <TableCell key={column.id} className="priority">
+                                <TableCell key={column.id}>
                                   {value || valueUser}
                                 </TableCell>
                               );
