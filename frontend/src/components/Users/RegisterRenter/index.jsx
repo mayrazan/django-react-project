@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#162e54",
     color: colors.white,
     paddingTop: "2rem",
-    "@media (min-height: 1029px)": {
+    "@media (min-height: 856px)": {
       height: "100%",
     },
   },
@@ -82,7 +82,6 @@ const RegisterRenter = () => {
     password: "",
     numAp: 0,
     phone: "",
-    avatar: null,
     floor: "",
     cpf: "",
     isUser: true,
@@ -95,11 +94,9 @@ const RegisterRenter = () => {
 
   const [isMessageVisible, setMessageVisible] = useState(false);
   const [isMessageSuccess, setMessageSuccess] = useState(false);
-  // const [preview, setPreview] = useState({ prev: null, src: null });
 
   async function onSubmit(event) {
     event.preventDefault();
-    // setForm({ ...form, avatar: preview.src });
     if (validateForm()) {
       await registerInfo("users/", form);
       setMessageSuccess(true);

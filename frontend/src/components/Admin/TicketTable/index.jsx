@@ -13,11 +13,16 @@ import { useHistory } from "react-router-dom";
 import { CSVLink } from "react-csv";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { deleteInfo, getDataApi } from "../../../services/infoApi";
+import {
+  deleteInfo,
+  getColorsPriority,
+  getDataApi,
+} from "../../../services/infoApi";
 import Loading from "../../shared/Loading";
 import SelectContainer from "../../shared/SelectContainer";
 import { HeaderFooterContainer } from "../../shared/StyleComponents/style";
 import XLSX from "xlsx";
+import { changeColor } from "../../../utils/changeColor";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -31,42 +36,6 @@ const useStyles = makeStyles(() => ({
   },
   link: {
     color: "white",
-  },
-  highPriority: {
-    backgroundColor: "red",
-    borderRadius: "10px",
-    textAlign: "center",
-    fontWeight: "bold",
-    fontSize: "16px",
-    padding: "6px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "60%",
-  },
-  mediumPriority: {
-    backgroundColor: "orange",
-    borderRadius: "10px",
-    textAlign: "center",
-    fontWeight: "bold",
-    fontSize: "16px",
-    padding: "6px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "60%",
-  },
-  lowPriority: {
-    backgroundColor: "green",
-    borderRadius: "10px",
-    textAlign: "center",
-    fontWeight: "bold",
-    fontSize: "16px",
-    padding: "6px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "60%",
   },
 }));
 
@@ -82,24 +51,10 @@ export function TicketsTable({ arrayColumn }) {
   const [status, setStatus] = useState("Todos");
   const [search, setSearch] = useState("");
 
-  if (!isLoading) {
-    document.querySelectorAll("td").forEach((item) => {
-      const c = item.childNodes;
-      for (let i = 0; i < c.length; i++) {
-        if (c[i].nodeValue === "Alta") {
-          item.className = classes.highPriority;
-        } else if (c[i].nodeValue === "Media") {
-          item.className = classes.mediumPriority;
-        } else if (c[i].nodeValue === "Baixa") {
-          item.className = classes.lowPriority;
-        }
-      }
-    });
-  }
-
   useEffect(() => {
     const load = async () => {
       const response = await getDataApi("tickets/");
+      const responseColors = await getColorsPriority();
 
       let filteredStatus = response;
       if (status !== "Todos") {
@@ -117,8 +72,10 @@ export function TicketsTable({ arrayColumn }) {
         );
         setRows(results);
       }
+      changeColor(isLoading, status, responseColors);
     };
     load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, search, status]);
 
   const selectStatus = () => {

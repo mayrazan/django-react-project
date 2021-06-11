@@ -55,7 +55,6 @@ const RegisterManager = () => {
   const [form, setForm] = useState({
     name: "",
     lastName: "",
-    avatar: null,
     numAp: 0,
     email: "",
     password: "",
@@ -71,11 +70,9 @@ const RegisterManager = () => {
 
   const [isMessageVisible, setMessageVisible] = useState(false);
   const [isMessageSuccess, setMessageSuccess] = useState(false);
-  // const [preview, setPreview] = useState({ prev: null, src: null });
 
   async function onSubmit(event) {
     event.preventDefault();
-    // setForm({ ...form, avatar: preview.src });
     if (validateForm()) {
       await registerInfo("users/", form);
       setMessageSuccess(true);

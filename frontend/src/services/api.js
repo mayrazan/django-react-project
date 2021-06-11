@@ -1,9 +1,5 @@
 import axios from "axios";
 
-// const proxyURL = "https://cors-anywhere.herokuapp.com/";
-
-// https://60aa6cf566f1d00017772d5d.mockapi.io/api/
-
 // http://127.0.0.1:8000/api/
 
 // https://condominio-quinta-tickets.herokuapp.com/api/
@@ -11,7 +7,7 @@ import axios from "axios";
 // https://condominio-quinta.herokuapp.com/api/ backup
 
 const api = axios.create({
-  baseURL: `https://condominio-quinta-tickets.herokuapp.com/api/`,
+  baseURL: `https://condominio-quinta.herokuapp.com/api/`,
   timeout: 5000,
   headers: {
     // Authorization: `Bearer ${localStorage.getItem("access")}`,
@@ -38,7 +34,7 @@ const isCorrectRefreshError = (status) => {
 };
 
 const authRequest = axios.create({
-  baseURL: `https://condominio-quinta-tickets.herokuapp.com/api/`,
+  baseURL: `https://condominio-quinta.herokuapp.com/api/`,
   timeout: 5000,
   headers: {
     Authorization: `Bearer ${localStorage.getItem("access")}`,

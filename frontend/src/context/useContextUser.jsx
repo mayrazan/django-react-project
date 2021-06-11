@@ -48,10 +48,12 @@ export default function useContextUser() {
         setMessageVisible(true);
         alert("login invalido");
         localStorage.removeItem("userLogged");
+        window.location = "/condominio";
       }
     } else {
       setMessageVisible(true);
       alert("login invalido");
+      window.location = "/condominio";
     }
     // setTimeout(() => window.location.reload(), 700);
   };

@@ -91,3 +91,13 @@ export async function updateProfile(id, item = {}) {
   const response = await api.patch(`users/${id}/`, item);
   return response.data;
 }
+
+export async function getColorsPriority() {
+  const response = await api.get(`colors/1/`);
+  return response.data;
+}
+
+export async function updateColors(id, item = {}) {
+  const response = await api.put(`colors/${id}/`, item);
+  return response.data;
+}

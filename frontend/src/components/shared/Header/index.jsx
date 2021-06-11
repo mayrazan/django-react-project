@@ -9,7 +9,6 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import clsx from "clsx";
-import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import { ContainerProfileStyled } from "./style";
 import { useUserContext } from "../../../context/ContextUser";
 import { useHistory } from "react-router";
@@ -67,6 +66,10 @@ export default function Header({ handleDrawerOpen, open }) {
     history.push("/login");
   };
 
+  const rediretToProfile = () => {
+    history.push("/meu-perfil");
+  };
+
   return (
     <>
       <AppBar
@@ -107,15 +110,6 @@ export default function Header({ handleDrawerOpen, open }) {
               {userName.toString()}
             </Typography>
 
-            <IconButton
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              color="inherit"
-            >
-              <SettingsOutlinedIcon />
-            </IconButton>
-
             <Menu
               id="menu-appbar"
               anchorEl={anchorEl}
@@ -131,7 +125,7 @@ export default function Header({ handleDrawerOpen, open }) {
               open={openEl}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose}>Minha Conta</MenuItem>
+              <MenuItem onClick={rediretToProfile}>Minha Conta</MenuItem>
               <MenuItem onClick={rediretToLogin}>Sair</MenuItem>
             </Menu>
           </ContainerProfileStyled>

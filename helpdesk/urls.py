@@ -19,10 +19,6 @@ from rest_framework import routers
 from api.views import TicketsView
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from api.views import CustomTokenObtainPairView
-
-# from api.views import UsersViewSet, TicketsViewSet, NotificationsViewSet, ProblemsViewSet
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,7 +26,5 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(),
          name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    # path('tickets/', TicketsView.as_view()),
-    # path('api/', include(router.urls)),
-    # path('api/', include('rest_framework.urls', namespace='rest_framework')),
+
 ]

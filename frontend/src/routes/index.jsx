@@ -18,6 +18,8 @@ import Login from "../pages/Login";
 // import LoginUser from "../components/shared/LoginContainer/LoginUser";
 import LoginAdmin from "../components/shared/LoginContainer/LoginAdmin";
 import { useUserContext } from "../context/ContextUser";
+import Profile from "../pages/Profile";
+import Tags from "../pages/AdminPages/Tags";
 
 const Routes = () => {
   const { isAuthenticated, isAdmin } = useUserContext();
@@ -29,6 +31,7 @@ const Routes = () => {
       <Switch>
         {isAuthenticated ? (
           <>
+            <Route exact path="/meu-perfil" component={Profile} />
             {isAdmin ? (
               <>
                 <Route exact path="/admin" component={Home} />
@@ -61,6 +64,7 @@ const Routes = () => {
                   component={Problems}
                 />
                 <Route exact path="/admin/avisos" component={Notifications} />
+                <Route exact path="/admin/tags" component={Tags} />
                 <Redirect to="/admin" />
               </>
             ) : (

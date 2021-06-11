@@ -14,7 +14,6 @@ const useStyles = makeStyles(() => ({
 
 export default function ProfileImage({ preview, setPreview }) {
   const classes = useStyles();
-  //   const [preview, setPreview] = useState({ prev: null, src: "" });
 
   const handleImageUpload = (e) => {
     if (e.target.files.length > 0) {

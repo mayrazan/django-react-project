@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import permissions, status
-from api.serializers import CustomTokenObtainPairSerializer, FilesSerializer, NotificationsSerializer, ProblemsSerializer, TicketsFilterUserSerializer, TicketsSerializer, UsersSerializer
-from api.models import Users, Tickets, Notifications, Problems, Files
+from api.serializers import NotificationsSerializer, ProblemsSerializer, TicketsFilterUserSerializer, TicketsSerializer, UsersSerializer, ColorPrioritySerializer
+from api.models import Users, Tickets, Notifications, Problems, ColorPriority
 from django.core.mail import send_mail
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -76,21 +76,13 @@ class TicketView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class TicketsUserListView(viewsets.ModelViewSet):
+class TicketsUserListView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
-    # queryset = Tickets.objects.all()
     serializer_class = TicketsFilterUserSerializer
-    # filter_backends = (filters.DjangoFilterBackend,)
-    # filterset_fields = ['userID']
-    # filterset_class = TicketsFilterUserSerializer
-
-    queryset = Tickets.objects.all()
-    # user, userID, userID_id, user_id
 
     def get_queryset(self):
-        print(self.kwargs.get('user'))
-        return self.queryset \
-            .filter(user=self.kwargs.get('user'))
+        queryset = Tickets.objects.filter(user_id=self.kwargs['pk'])
+        return queryset
 
 
 class UsersView(APIView):
@@ -139,6 +131,14 @@ class UserView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def patch(self, request, pk):
+        user = self.get_object(pk=pk)
+        serializer = UsersSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def delete(self, request, pk, format=None):
         user = self.get_object(pk)
         user.delete()
@@ -165,9 +165,7 @@ class NotificationsView(APIView):
         recievers = []
         if serializer.is_valid():
             serializer.save()
-            # serializer_data = request.POST.dict()
-            # notificationType = serializer_data.get("notificationType")
-            # description = serializer_data.get("description")
+
             notificationType = request.data['notificationType']
             description = request.data['description']
 
@@ -201,51 +199,81 @@ class ProblemsView(APIView):
         return Response(serializer.data)
 
 
-class FilesView(APIView):
+class ProblemView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = ProblemsSerializer
 
-    serializer_class = FilesSerializer
+    def get_object(self, pk):
+        try:
+            return Problems.objects.get(pk=pk)
+        except Problems.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        problem = self.get_object(pk)
+        serializer = ProblemsSerializer(problem)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        problem = self.get_object(pk)
+        serializer = ProblemsSerializer(problem, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        problem = self.get_object(pk)
+        problem.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ColorsPriorityView(APIView):
+
+    serializer_class = ColorPrioritySerializer
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        files = Files.objects.all()
-        return files
+        colors = ColorPriority.objects.all()
+        return colors
 
     def get(self, request, *args, **kwargs):
-        files = self.get_queryset()
-        serializer = FilesSerializer(files, many=True)
+        colors = self.get_queryset()
+        serializer = ColorPrioritySerializer(colors, many=True)
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
-        serializer = FilesSerializer(data=request.data)
+        serializer = ColorPrioritySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
         print(serializer.errors)
         return Response(serializer.data)
 
 
-class FileView(APIView):
+class ColorView(APIView):
     permission_classes = [permissions.AllowAny]
-    serializer_class = FilesSerializer
-    # parser_classes = [MultiPartParser]
+    serializer_class = ColorPrioritySerializer
 
     def get_object(self, pk):
         try:
-            return Files.objects.get(pk=pk)
-        except Files.DoesNotExist:
+            return ColorPriority.objects.get(pk=pk)
+        except ColorPriority.DoesNotExist:
             raise Http404
 
     def get(self, request, pk, format=None):
-        file = self.get_object(pk)
-        serializer = FilesSerializer(file)
+        colors = self.get_object(pk)
+        serializer = ColorPrioritySerializer(colors)
         return Response(serializer.data)
 
+    def put(self, request, pk, format=None):
+        colors = self.get_object(pk)
+        serializer = ColorPrioritySerializer(colors, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def delete(self, request, pk, format=None):
-        file = self.get_object(pk)
-        file.delete()
+        colors = self.get_object(pk)
+        colors.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class CustomTokenObtainPairView(TokenObtainPairView):
-    # Replace the serializer with your custom
-    permission_classes = [permissions.AllowAny]
-    serializer_class = CustomTokenObtainPairSerializer

@@ -80,6 +80,12 @@ export const menuListInfo = [
     icon: <ViewListIcon />,
     link: "/admin/cadastro-problemas",
   },
+  {
+    id: 6,
+    name: "Tags Coloridas",
+    icon: <ViewListIcon />,
+    link: "/admin/tags",
+  },
 ];
 
 export const menuListInfoUser = [

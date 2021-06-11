@@ -1,4 +1,3 @@
-import { useHistory, useParams } from "react-router";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -10,6 +9,7 @@ import Loading from "../../shared/Loading";
 import { colors } from "../../../styles/colors";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
 import { useUserContext } from "../../../context/ContextUser";
+import { getUser, updateProfile } from "../../../services/infoApi";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -57,9 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewCurrentRenter = () => {
-  const { id } = useParams();
-  const [currentRenter, setRenter] = useState({});
+const MyProfile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [form, setForm] = useState({
     name: "",
@@ -71,56 +69,56 @@ const ViewCurrentRenter = () => {
     phone: "",
   });
 
-  const history = useHistory();
-  const { credentials } = useUserContext();
+  const currentUser = JSON.parse(localStorage.getItem("userLogged"));
+  const userID = currentUser.map((el) => el.id);
+  const { handleLogout } = useUserContext();
 
   useEffect(() => {
     (async () => {
-      const renterSelected = await credentials.find(
-        (renter) => renter.id.toString() === id.toString()
-      );
-      renterSelected && setRenter(renterSelected);
+      const response = await getUser(`${userID[0]}`);
       setForm({
-        name: currentRenter.name,
-        numAp: currentRenter.numAp,
-        lastName: currentRenter.lastName,
-        floor: currentRenter.floor,
-        email: currentRenter.email,
-        phone: currentRenter.phone,
-        cpf: currentRenter.cpf,
+        name: response.name,
+        numAp: response.numAp,
+        lastName: response.lastName,
+        floor: response.floor,
+        email: response.email,
+        phone: response.phone,
+        cpf: response.cpf,
       });
       setTimeout(() => setIsLoading(false), 1900);
     })();
-  }, [
-    credentials,
-    currentRenter.cpf,
-    currentRenter.email,
-    currentRenter.floor,
-    currentRenter.lastName,
-    currentRenter.name,
-    currentRenter.numAp,
-    currentRenter.phone,
-    id,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const classes = useStyles();
+
+  const saveChanges = (event) => {
+    event.preventDefault();
+    (async () => {
+      setIsLoading(true);
+
+      await updateProfile(userID[0], {
+        name: form.name,
+        numAp: form.numAp,
+        lastName: form.lastName,
+        floor: form.floor,
+        email: form.email,
+        phone: form.phone,
+        cpf: form.cpf,
+      });
+
+      setTimeout(() => setIsLoading(false), 700);
+    })();
+    setTimeout(() => handleLogout(), 700);
+  };
 
   return (
     <Container component="main" maxWidth="md" className={classes.main}>
       <CssBaseline />
-      <ContainerBtnStyled>
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.submit}
-          onClick={() => history.push("/admin/condominos")}
-        >
-          Voltar
-        </Button>
-      </ContainerBtnStyled>
+      <ContainerBtnStyled></ContainerBtnStyled>
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Condômino
+          Perfil
         </Typography>
 
         {isLoading ? (
@@ -129,7 +127,9 @@ const ViewCurrentRenter = () => {
           <form className={classes.form}>
             <TextField
               value={form.name}
-              disabled
+              onChange={(event) =>
+                setForm({ ...form, name: event.target.value })
+              }
               name="name"
               variant="outlined"
               margin="normal"
@@ -140,7 +140,9 @@ const ViewCurrentRenter = () => {
 
             <TextField
               value={form.lastName}
-              disabled
+              onChange={(event) =>
+                setForm({ ...form, lastName: event.target.value })
+              }
               name="lastName"
               variant="outlined"
               margin="normal"
@@ -150,28 +152,34 @@ const ViewCurrentRenter = () => {
             />
             <TextField
               value={form.numAp}
-              disabled
+              onChange={(event) =>
+                setForm({ ...form, numAp: event.target.value })
+              }
               name="numAp"
               variant="outlined"
               margin="normal"
               fullWidth
               label="Nº Ap."
               className={classes.field}
+              type="number"
             />
             <TextField
               value={form.floor}
-              disabled
+              onChange={(event) =>
+                setForm({ ...form, floor: event.target.value })
+              }
               name="floor"
               variant="outlined"
               margin="normal"
               fullWidth
               label="Andar"
               className={classes.field}
+              type="number"
             />
             <TextField
               value={form.email}
-              disabled
               name="email"
+              disabled
               variant="outlined"
               margin="normal"
               fullWidth
@@ -181,7 +189,9 @@ const ViewCurrentRenter = () => {
 
             <TextField
               value={form.phone}
-              disabled
+              onChange={(event) =>
+                setForm({ ...form, phone: event.target.value })
+              }
               name="phone"
               variant="outlined"
               margin="normal"
@@ -192,7 +202,9 @@ const ViewCurrentRenter = () => {
 
             <TextField
               value={form.cpf}
-              disabled
+              onChange={(event) =>
+                setForm({ ...form, cpf: event.target.value })
+              }
               name="cpf"
               variant="outlined"
               margin="normal"
@@ -200,6 +212,16 @@ const ViewCurrentRenter = () => {
               label="Cpf"
               className={classes.field}
             />
+
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={saveChanges}
+            >
+              Salvar Alterações
+            </Button>
           </form>
         )}
       </div>
@@ -207,4 +229,4 @@ const ViewCurrentRenter = () => {
   );
 };
 
-export default ViewCurrentRenter;
+export default MyProfile;
