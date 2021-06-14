@@ -10,7 +10,7 @@ import { registerInfo } from "../../../services/infoApi";
 import { colors } from "../../../styles/colors";
 import { alertMessage, successMessage } from "../../../utils/messages";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
-// import ProfileImage from "../../shared/ProfileImage";
+import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -141,9 +141,9 @@ const RegisterRenter = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={() => history.push("/login")}
+            onClick={() => history.push("/condominio")}
           >
-            Voltar
+            <KeyboardBackspaceOutlinedIcon />
           </Button>
         </ContainerBtnStyled>
 

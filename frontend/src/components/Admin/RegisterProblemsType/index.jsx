@@ -10,6 +10,7 @@ import { registerInfo } from "../../../services/infoApi";
 import { colors } from "../../../styles/colors";
 import { alertMessage, successMessage } from "../../../utils/messages";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
+import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -91,13 +92,13 @@ const RegisterProblemsType = () => {
           className={classes.submit}
           onClick={() => history.push("/admin")}
         >
-          Voltar
+          <KeyboardBackspaceOutlinedIcon />
         </Button>
       </ContainerBtnStyled>
 
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Registrar Tipo de Problemas
+          Registrar Tipo de Perturbação
         </Typography>
 
         <form className={classes.form}>
@@ -111,7 +112,7 @@ const RegisterProblemsType = () => {
             margin="normal"
             required
             fullWidth
-            label="Tipo de Problema"
+            label="Tipo de Perturbação"
             className={classes.field}
             autoComplete="off"
           />

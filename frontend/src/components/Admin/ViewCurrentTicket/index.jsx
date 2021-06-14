@@ -13,6 +13,7 @@ import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
 import SelectContainer from "../../shared/SelectContainer";
 import { MenuItem } from "@material-ui/core";
 import { success } from "../../../utils/messages";
+import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -178,7 +179,7 @@ const ViewCurrentTicket = () => {
           className={classes.submit}
           onClick={() => history.push("/admin/chamados/")}
         >
-          Voltar
+          <KeyboardBackspaceOutlinedIcon />
         </Button>
       </ContainerBtnStyled>
       <div className={classes.paper}>

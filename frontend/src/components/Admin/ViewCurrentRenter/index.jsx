@@ -10,6 +10,7 @@ import Loading from "../../shared/Loading";
 import { colors } from "../../../styles/colors";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
 import { useUserContext } from "../../../context/ContextUser";
+import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -115,7 +116,7 @@ const ViewCurrentRenter = () => {
           className={classes.submit}
           onClick={() => history.push("/admin/condominos")}
         >
-          Voltar
+          <KeyboardBackspaceOutlinedIcon />
         </Button>
       </ContainerBtnStyled>
       <div className={classes.paper}>

@@ -12,6 +12,7 @@ import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
 import SelectContainer from "../../shared/SelectContainer";
 import { MenuItem } from "@material-ui/core";
 import { alertMessage, successMessage } from "../../../utils/messages";
+import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -124,7 +125,7 @@ const RegisterNotifications = () => {
           className={classes.submit}
           onClick={() => history.push("/admin")}
         >
-          Voltar
+          <KeyboardBackspaceOutlinedIcon />
         </Button>
       </ContainerBtnStyled>
       <div className={classes.paper}>

@@ -23,6 +23,9 @@ import {
   ContainerStyled,
 } from "../../shared/StyleComponents/style";
 import { useUserContext } from "../../../context/ContextUser";
+import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
+import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
+import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -37,6 +40,14 @@ const useStyles = makeStyles(() => ({
   link: {
     color: "white",
   },
+  btnContainer: {
+    display: "flex",
+    gap: "1rem",
+    flexWrap: "wrap",
+  },
+  btn: {
+    marginRight: "0.5rem",
+  },
 }));
 
 const RenterInfo = () => {
@@ -44,8 +55,6 @@ const RenterInfo = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const history = useHistory();
-  const [isSelected, setIsSelected] = useState(false);
-  const [idValue, setIdValue] = useState(0);
   const [rows, setRows] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -68,15 +77,11 @@ const RenterInfo = () => {
   }, [credentials, search]);
 
   const removeUser = (id) => {
-    if (isSelected) {
-      (async () => {
-        await deleteUser(id);
-        const del = rows.filter((row) => id !== row.id);
-        setRows(del);
-      })();
-    } else {
-      alert("Selecione uma informação primeiro!");
-    }
+    (async () => {
+      await deleteUser(id);
+      const del = rows.filter((row) => id !== row.id);
+      setRows(del);
+    })();
   };
 
   const handleChangePage = (event, newPage) => {
@@ -132,11 +137,7 @@ const RenterInfo = () => {
   const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
   const redirectToUser = (id) => {
-    if (isSelected) {
-      history.push(`/admin/visualizar-condomino/${id}`);
-    } else {
-      alert("Selecione uma informação primeiro!");
-    }
+    history.push(`/admin/visualizar-condomino/${id}`);
   };
 
   return (
@@ -154,47 +155,12 @@ const RenterInfo = () => {
             <HeaderFooterContainer>
               <TextField
                 id="outlined-search"
-                label="Nome"
+                label="Pesquisar Nome"
                 type="search"
                 variant="outlined"
                 onChange={(event) => setSearch(event.target.value)}
                 value={search}
               />
-
-              <Button variant="contained" color="primary">
-                <CSVLink data={rows} className={classes.link}>
-                  CSV
-                </CSVLink>
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => window.print()}
-              >
-                Print
-              </Button>
-              <Button variant="contained" color="primary" onClick={exportPDF}>
-                PDF
-              </Button>
-
-              <ExcelFile
-                element={
-                  <Button variant="contained" color="primary">
-                    Excel
-                  </Button>
-                }
-                filename="Condominos"
-              >
-                <ExcelSheet data={rows} name="Condominos">
-                  <ExcelColumn label="Nome" value="name" />
-                  <ExcelColumn label="Sobrenome" value="lastName" />
-                  <ExcelColumn label="Email" value="email" />
-                  <ExcelColumn label="Nº Ap." value="numAp" />
-                  <ExcelColumn label="Andar" value="floor" />
-                  <ExcelColumn label="Telefone" value="phone" />
-                  <ExcelColumn label="CPF" value="cpf" />
-                </ExcelSheet>
-              </ExcelFile>
             </HeaderFooterContainer>
 
             <Paper className={classes.root}>
@@ -226,15 +192,32 @@ const RenterInfo = () => {
                               role="checkbox"
                               tabIndex={-1}
                               key={row.id}
-                              onClick={() => {
-                                setIdValue(row.id);
-                                setIsSelected(true);
-                              }}
-                              selected={idValue === row.id}
                               className={classes.tableRow}
                             >
                               {columnRenters.map((column) => {
                                 const value = row[column.id];
+
+                                if (column.id === "actions") {
+                                  return (
+                                    <TableCell key={column.id}>
+                                      <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => redirectToUser(row.id)}
+                                        className={classes.btn}
+                                      >
+                                        <VisibilityOutlinedIcon />
+                                      </Button>
+                                      <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => removeUser(row.id)}
+                                      >
+                                        <DeleteOutlinedIcon />
+                                      </Button>
+                                    </TableCell>
+                                  );
+                                }
                                 return (
                                   <TableCell key={column.id}>{value}</TableCell>
                                 );
@@ -270,23 +253,49 @@ const RenterInfo = () => {
                     setTimeout(() => window.location.reload(), 500)
                   }
                 >
-                  Voltar
+                  <KeyboardBackspaceOutlinedIcon />
                 </Button>
 
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => redirectToUser(idValue)}
-                >
-                  Visualizar
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => removeUser(idValue)}
-                >
-                  Remover
-                </Button>
+                <div className={classes.btnContainer}>
+                  <Button variant="contained" color="primary">
+                    <CSVLink data={rows} className={classes.link}>
+                      CSV
+                    </CSVLink>
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => window.print()}
+                  >
+                    Print
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={exportPDF}
+                  >
+                    PDF
+                  </Button>
+
+                  <ExcelFile
+                    element={
+                      <Button variant="contained" color="primary">
+                        Excel
+                      </Button>
+                    }
+                    filename="Condominos"
+                  >
+                    <ExcelSheet data={rows} name="Condominos">
+                      <ExcelColumn label="Nome" value="name" />
+                      <ExcelColumn label="Sobrenome" value="lastName" />
+                      <ExcelColumn label="Email" value="email" />
+                      <ExcelColumn label="Nº Ap." value="numAp" />
+                      <ExcelColumn label="Andar" value="floor" />
+                      <ExcelColumn label="Telefone" value="phone" />
+                      <ExcelColumn label="CPF" value="cpf" />
+                    </ExcelSheet>
+                  </ExcelFile>
+                </div>
               </HeaderFooterContainer>
             </Paper>
           </>

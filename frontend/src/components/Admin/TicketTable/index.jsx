@@ -8,7 +8,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import { Button, MenuItem, TextField } from "@material-ui/core";
+import { Button, MenuItem, TextField, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { CSVLink } from "react-csv";
 import jsPDF from "jspdf";
@@ -23,6 +23,10 @@ import SelectContainer from "../../shared/SelectContainer";
 import { HeaderFooterContainer } from "../../shared/StyleComponents/style";
 import XLSX from "xlsx";
 import { changeColor } from "../../../utils/changeColor";
+import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
+import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
+import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
+import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -33,9 +37,33 @@ const useStyles = makeStyles(() => ({
   },
   tableRow: {
     cursor: "pointer",
+    verticalAlign: "baseline",
   },
   link: {
     color: "white",
+  },
+  search: {
+    display: "flex",
+    alignItems: "center",
+    flexWrap: "wrap",
+  },
+  btnContainer: {
+    display: "flex",
+    gap: "1rem",
+    flexWrap: "wrap",
+  },
+  btn: {
+    marginRight: "0.5rem",
+  },
+  count: {
+    display: "flex",
+    justifyContent: "space-evenly",
+    boxShadow: "0px 0px 3px 0px #c5c6c0",
+    borderRadius: "5px",
+    flexWrap: "wrap",
+    padding: "0.8rem",
+    backgroundColor: "#f8f8f8",
+    margin: "0 0.5rem",
   },
 }));
 
@@ -44,8 +72,6 @@ export function TicketsTable({ arrayColumn }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const history = useHistory();
-  const [isSelected, setIsSelected] = useState(false);
-  const [idValue, setIdValue] = useState(0);
   const [rows, setRows] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [status, setStatus] = useState("Todos");
@@ -107,15 +133,11 @@ export function TicketsTable({ arrayColumn }) {
   };
 
   const removeTicket = (id) => {
-    if (isSelected) {
-      (async () => {
-        await deleteInfo(id);
-        const del = rows.filter((row) => id !== row.id);
-        setRows(del);
-      })();
-    } else {
-      alert("Selecione uma informação primeiro!");
-    }
+    (async () => {
+      await deleteInfo(id);
+      const del = rows.filter((row) => id !== row.id);
+      setRows(del);
+    })();
   };
 
   const handleChangePage = (event, newPage) => {
@@ -128,11 +150,7 @@ export function TicketsTable({ arrayColumn }) {
   };
 
   const redirectToTicket = (id) => {
-    if (isSelected) {
-      history.push(`/admin/visualizar-chamado/${id}/`);
-    } else {
-      alert("Selecione uma informação primeiro!");
-    }
+    history.push(`/admin/visualizar-chamado/${id}/`);
   };
 
   const exportPDF = () => {
@@ -221,7 +239,19 @@ export function TicketsTable({ arrayColumn }) {
     XLSX.writeFile(wb, "tickets.xlsx");
   };
 
-  // console.log(selectClassPriority[5].childNodes[0].textContent);
+  const countStatus = (value) => {
+    let count = 0;
+    for (let i = 0; i < rows.length; i++) {
+      if (rows[i].status.includes(value)) {
+        count++;
+      }
+    }
+    return (
+      <Typography>
+        Tickets {value}: {count}
+      </Typography>
+    );
+  };
 
   return (
     <>
@@ -231,42 +261,33 @@ export function TicketsTable({ arrayColumn }) {
         </>
       ) : (
         <>
+          <div className={classes.count}>
+            {countStatus("Em aberto")}
+            {countStatus("Em análise")}
+            {countStatus("Concluído")}
+            {countStatus("Rejeitado")}
+          </div>
+
           <HeaderFooterContainer>
-            <TextField
-              id="outlined-search"
-              label="Perturbação"
-              type="search"
-              variant="outlined"
-              onChange={(event) => setSearch(event.target.value)}
-              value={search}
-            />
+            <div className={classes.search}>
+              <TextField
+                id="outlined-search"
+                label="Pesquisar Perturbação"
+                type="search"
+                variant="outlined"
+                onChange={(event) => setSearch(event.target.value)}
+                value={search}
+              />
 
-            {selectStatus()}
-
-            <Button variant="contained" color="primary">
-              <CSVLink data={rows} className={classes.link}>
-                CSV
-              </CSVLink>
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => window.print()}
-            >
-              Print
-            </Button>
-            <Button variant="contained" color="primary" onClick={exportPDF}>
-              PDF
-            </Button>
+              {selectStatus()}
+            </div>
 
             <Button
               variant="contained"
               color="primary"
-              onClick={(e) => {
-                downloadxls(e, rows);
-              }}
+              onClick={() => history.push("/admin/cadastro-chamado/")}
             >
-              Excel
+              <AddCircleOutlineOutlinedIcon />
             </Button>
           </HeaderFooterContainer>
 
@@ -299,16 +320,32 @@ export function TicketsTable({ arrayColumn }) {
                             role="checkbox"
                             tabIndex={-1}
                             key={row.id}
-                            onClick={() => {
-                              setIdValue(row.id);
-                              setIsSelected(true);
-                            }}
-                            selected={idValue === row.id}
                             className={classes.tableRow}
                           >
                             {arrayColumn.map((column) => {
                               const valueUser = row.user[column.id];
                               const value = row[column.id];
+                              if (column.id === "actions") {
+                                return (
+                                  <TableCell key={column.id}>
+                                    <Button
+                                      variant="contained"
+                                      color="primary"
+                                      onClick={() => redirectToTicket(row.id)}
+                                      className={classes.btn}
+                                    >
+                                      <EditOutlinedIcon />
+                                    </Button>
+                                    <Button
+                                      variant="contained"
+                                      color="primary"
+                                      onClick={() => removeTicket(row.id)}
+                                    >
+                                      <DeleteOutlinedIcon />
+                                    </Button>
+                                  </TableCell>
+                                );
+                              }
                               return (
                                 <TableCell key={column.id}>
                                   {value || valueUser}
@@ -344,29 +381,36 @@ export function TicketsTable({ arrayColumn }) {
                 color="primary"
                 onClick={() => setTimeout(() => window.location.reload(), 500)}
               >
-                Voltar
+                <KeyboardBackspaceOutlinedIcon />
               </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => redirectToTicket(idValue)}
-              >
-                Alterar/Visualizar Chamado
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => history.push("/admin/cadastro-chamado/")}
-              >
-                Cadastrar
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => removeTicket(idValue)}
-              >
-                Remover
-              </Button>
+
+              <div className={classes.btnContainer}>
+                <Button variant="contained" color="primary">
+                  <CSVLink data={rows} className={classes.link}>
+                    CSV
+                  </CSVLink>
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => window.print()}
+                >
+                  Print
+                </Button>
+                <Button variant="contained" color="primary" onClick={exportPDF}>
+                  PDF
+                </Button>
+
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={(e) => {
+                    downloadxls(e, rows);
+                  }}
+                >
+                  Excel
+                </Button>
+              </div>
             </HeaderFooterContainer>
           </Paper>
         </>

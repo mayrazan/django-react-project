@@ -23,6 +23,9 @@ import {
   ContainerStyled,
 } from "../../shared/StyleComponents/style";
 import { useUserContext } from "../../../context/ContextUser";
+import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
+import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
+import GroupAddOutlinedIcon from "@material-ui/icons/GroupAddOutlined";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -37,6 +40,11 @@ const useStyles = makeStyles(() => ({
   link: {
     color: "white",
   },
+  btnContainer: {
+    display: "flex",
+    gap: "1rem",
+    flexWrap: "wrap",
+  },
 }));
 
 const ManagerInfo = () => {
@@ -44,8 +52,6 @@ const ManagerInfo = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const history = useHistory();
-  const [isSelected, setIsSelected] = useState(false);
-  const [idValue, setIdValue] = useState(0);
   const [rows, setRows] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -68,15 +74,11 @@ const ManagerInfo = () => {
   }, [credentials, search]);
 
   const removeManager = (id) => {
-    if (isSelected) {
-      (async () => {
-        await deleteManager(id);
-        const del = rows.filter((row) => id !== row.id);
-        setRows(del);
-      })();
-    } else {
-      alert("Selecione uma informação primeiro!");
-    }
+    (async () => {
+      await deleteManager(id);
+      const del = rows.filter((row) => id !== row.id);
+      setRows(del);
+    })();
   };
 
   const handleChangePage = (event, newPage) => {
@@ -142,45 +144,20 @@ const ManagerInfo = () => {
             <HeaderFooterContainer>
               <TextField
                 id="outlined-search"
-                label="Nome"
+                label="Pesquisar Nome"
                 type="search"
                 variant="outlined"
                 onChange={(event) => setSearch(event.target.value)}
                 value={search}
               />
 
-              <Button variant="contained" color="primary">
-                <CSVLink data={rows} className={classes.link}>
-                  CSV
-                </CSVLink>
-              </Button>
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => window.print()}
+                onClick={() => history.push("/admin/cadastro-sindico")}
               >
-                Print
+                <GroupAddOutlinedIcon />
               </Button>
-              <Button variant="contained" color="primary" onClick={exportPDF}>
-                PDF
-              </Button>
-
-              <ExcelFile
-                element={
-                  <Button variant="contained" color="primary">
-                    Excel
-                  </Button>
-                }
-                filename="Sindicos"
-              >
-                <ExcelSheet data={rows} name="Sindicos">
-                  <ExcelColumn label="Nome" value="name" />
-                  <ExcelColumn label="Sobrenome" value="lastName" />
-                  <ExcelColumn label="Email" value="email" />
-                  <ExcelColumn label="Nº Ap." value="numAp" />
-                  <ExcelColumn label="Telefone" value="phone" />
-                </ExcelSheet>
-              </ExcelFile>
             </HeaderFooterContainer>
 
             <Paper className={classes.root}>
@@ -212,15 +189,23 @@ const ManagerInfo = () => {
                               role="checkbox"
                               tabIndex={-1}
                               key={row.id}
-                              onClick={() => {
-                                setIdValue(row.id);
-                                setIsSelected(true);
-                              }}
-                              selected={idValue === row.id}
                               className={classes.tableRow}
                             >
                               {columnManagers.map((column) => {
                                 const value = row[column.id];
+                                if (column.id === "actions") {
+                                  return (
+                                    <TableCell>
+                                      <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => removeManager(row.id)}
+                                      >
+                                        <DeleteOutlinedIcon />
+                                      </Button>
+                                    </TableCell>
+                                  );
+                                }
                                 return (
                                   <TableCell key={column.id}>{value}</TableCell>
                                 );
@@ -256,23 +241,47 @@ const ManagerInfo = () => {
                     setTimeout(() => window.location.reload(), 500)
                   }
                 >
-                  Voltar
+                  <KeyboardBackspaceOutlinedIcon />
                 </Button>
 
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => history.push("/admin/cadastro-sindico")}
-                >
-                  Cadastrar
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => removeManager(idValue)}
-                >
-                  Remover
-                </Button>
+                <div className={classes.btnContainer}>
+                  <Button variant="contained" color="primary">
+                    <CSVLink data={rows} className={classes.link}>
+                      CSV
+                    </CSVLink>
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => window.print()}
+                  >
+                    Print
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={exportPDF}
+                  >
+                    PDF
+                  </Button>
+
+                  <ExcelFile
+                    element={
+                      <Button variant="contained" color="primary">
+                        Excel
+                      </Button>
+                    }
+                    filename="Sindicos"
+                  >
+                    <ExcelSheet data={rows} name="Sindicos">
+                      <ExcelColumn label="Nome" value="name" />
+                      <ExcelColumn label="Sobrenome" value="lastName" />
+                      <ExcelColumn label="Email" value="email" />
+                      <ExcelColumn label="Nº Ap." value="numAp" />
+                      <ExcelColumn label="Telefone" value="phone" />
+                    </ExcelSheet>
+                  </ExcelFile>
+                </div>
               </HeaderFooterContainer>
             </Paper>
           </>

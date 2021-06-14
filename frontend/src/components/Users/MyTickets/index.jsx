@@ -23,6 +23,8 @@ import {
 } from "../../shared/StyleComponents/style";
 import { columnTicketsUser } from "../../../mocks/tableList";
 import { changeColor } from "../../../utils/changeColor";
+import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
+import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -33,9 +35,15 @@ const useStyles = makeStyles(() => ({
   },
   tableRow: {
     cursor: "pointer",
+    verticalAlign: "baseline",
   },
   link: {
     color: "white",
+  },
+  btnContainer: {
+    display: "flex",
+    gap: "1rem",
+    flexWrap: "wrap",
   },
 }));
 
@@ -175,44 +183,13 @@ const MyTickets = () => {
             <HeaderFooterContainer>
               {selectStatus()}
 
-              <Button variant="contained" color="primary">
-                <CSVLink data={rows} className={classes.link}>
-                  CSV
-                </CSVLink>
-              </Button>
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => window.print()}
+                onClick={() => history.push("/cadastro-chamado")}
               >
-                Print
+                <AddCircleOutlineOutlinedIcon />
               </Button>
-              <Button variant="contained" color="primary" onClick={exportPDF}>
-                PDF
-              </Button>
-
-              <ExcelFile
-                element={
-                  <Button variant="contained" color="primary">
-                    Excel
-                  </Button>
-                }
-                filename="Tickets"
-              >
-                <ExcelSheet data={rows} name="Tickets">
-                  <ExcelColumn label="Data" value="openDate" />
-                  <ExcelColumn label="Perturbação" value="problem" />
-                  <ExcelColumn label="Descrição" value="description" />
-                  <ExcelColumn
-                    label="Nº Ap. Ocorrência"
-                    value="numApOccurrence"
-                  />
-                  <ExcelColumn
-                    label="Resposta Síndico"
-                    value="feedbackManager"
-                  />
-                </ExcelSheet>
-              </ExcelFile>
             </HeaderFooterContainer>
 
             <Paper className={classes.root}>
@@ -281,16 +258,53 @@ const MyTickets = () => {
                   color="primary"
                   onClick={() => history.push("/")}
                 >
-                  Voltar
+                  <KeyboardBackspaceOutlinedIcon />
                 </Button>
 
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => history.push("/cadastro-chamado")}
-                >
-                  Cadastrar
-                </Button>
+                <div className={classes.btnContainer}>
+                  <Button variant="contained" color="primary">
+                    <CSVLink data={rows} className={classes.link}>
+                      CSV
+                    </CSVLink>
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => window.print()}
+                  >
+                    Print
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={exportPDF}
+                  >
+                    PDF
+                  </Button>
+
+                  <ExcelFile
+                    element={
+                      <Button variant="contained" color="primary">
+                        Excel
+                      </Button>
+                    }
+                    filename="Tickets"
+                  >
+                    <ExcelSheet data={rows} name="Tickets">
+                      <ExcelColumn label="Data" value="openDate" />
+                      <ExcelColumn label="Perturbação" value="problem" />
+                      <ExcelColumn label="Descrição" value="description" />
+                      <ExcelColumn
+                        label="Nº Ap. Ocorrência"
+                        value="numApOccurrence"
+                      />
+                      <ExcelColumn
+                        label="Resposta Síndico"
+                        value="feedbackManager"
+                      />
+                    </ExcelSheet>
+                  </ExcelFile>
+                </div>
               </HeaderFooterContainer>
             </Paper>
           </>

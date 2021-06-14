@@ -13,6 +13,7 @@ import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
 import { Input, MenuItem } from "@material-ui/core";
 import SelectContainer from "../SelectContainer";
 import GooglePicker from "react-google-picker";
+import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -204,7 +205,7 @@ const RegisterTicketInfo = () => {
           className={classes.submit}
           onClick={() => setTimeout(() => window.location.reload(), 500)}
         >
-          Voltar
+          <KeyboardBackspaceOutlinedIcon />
         </Button>
       </ContainerBtnStyled>
 

@@ -60,7 +60,7 @@ const Routes = () => {
                 />
                 <Route
                   exact
-                  path="/admin/cadastro-problemas"
+                  path="/admin/cadastro-perturbacao"
                   component={Problems}
                 />
                 <Route exact path="/admin/avisos" component={Notifications} />

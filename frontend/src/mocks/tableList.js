@@ -20,7 +20,11 @@ export const columnTickets = [
     id: "priority",
     label: "Prioridade",
     minWidth: 170,
-    color: "red",
+  },
+  {
+    id: "actions",
+    label: "Ações",
+    minWidth: 170,
   },
 ];
 
@@ -40,6 +44,11 @@ export const columnManagers = [
   {
     id: "phone",
     label: "Telefone",
+    minWidth: 170,
+  },
+  {
+    id: "actions",
+    label: "Ações",
     minWidth: 170,
   },
 ];
@@ -70,6 +79,11 @@ export const columnRenters = [
   {
     id: "cpf",
     label: "CPF",
+    minWidth: 170,
+  },
+  {
+    id: "actions",
+    label: "Ações",
     minWidth: 170,
   },
 ];

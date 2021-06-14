@@ -10,6 +10,7 @@ const TicketsInfo = () => {
         Ticket
       </Typography>
       <ContainerMainStyled>
+        <br />
         <TicketsTable arrayColumn={columnTickets} />
       </ContainerMainStyled>
     </>

@@ -9,6 +9,7 @@ import { TextField } from "@material-ui/core";
 import { ContainerBtnStyled } from "../../StyleComponents/style";
 import { useUserContext } from "../../../../context/ContextUser";
 import { alertMessage } from "../../../../utils/messages";
+import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -118,7 +119,7 @@ const LoginAdmin = () => {
               window.location.reload();
             }}
           >
-            Voltar
+            <KeyboardBackspaceOutlinedIcon />
           </Button>
         </ContainerBtnStyled>
         <div className={classes.paper}>
