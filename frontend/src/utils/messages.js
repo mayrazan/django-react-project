@@ -1,34 +1,35 @@
 import { Alert, AlertTitle } from "@material-ui/lab";
+import { AlertStyledContainer } from "./style";
 
-export function alertMessage(className) {
+export function alertMessage() {
   return (
-    <div className={className}>
+    <AlertStyledContainer>
       <Alert severity="error">
         <AlertTitle>Erro</AlertTitle>
         Preencha todos os campos!
       </Alert>
-    </div>
+    </AlertStyledContainer>
   );
 }
 
-export function successMessage(className) {
+export function successMessage() {
   return (
-    <div className={className}>
+    <AlertStyledContainer>
       <Alert severity="success">
         <AlertTitle>Sucesso</AlertTitle>
         Cadastro realizado com sucesso!
       </Alert>
-    </div>
+    </AlertStyledContainer>
   );
 }
 
-export function success(className) {
+export function success() {
   return (
-    <div className={className}>
+    <AlertStyledContainer>
       <Alert severity="success">
         <AlertTitle>Sucesso</AlertTitle>
         Envio realizado com sucesso!
       </Alert>
-    </div>
+    </AlertStyledContainer>
   );
 }

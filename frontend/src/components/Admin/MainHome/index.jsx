@@ -2,67 +2,20 @@ import {
   ContainerWelcomeStyled,
   ContainerDisplayStyled,
   ContainerHomeStyled,
+  ButtonBaseStyled,
+  GridContainerStyled,
+  GridItemStyled,
+  PaperContainer,
+  TypographyStyled,
 } from "./style";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles, createMuiTheme } from "@material-ui/core/styles";
 import EqualizerOutlinedIcon from "@material-ui/icons/EqualizerOutlined";
 import React from "react";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import ButtonBase from "@material-ui/core/ButtonBase";
 import { useHistory } from "react-router";
 import { useUserContext } from "../../../context/ContextUser";
 
-const themeBreak = createMuiTheme({
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 480,
-      md: 768,
-      lg: 1280,
-      xl: 1920,
-    },
-  },
-});
-
-const useStyles = makeStyles((theme) => ({
-  text: {
-    marginLeft: theme.spacing(4),
-  },
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    // padding: theme.spacing(2),
-    // maxWidth: 500,
-    width: "48%",
-    [themeBreak.breakpoints.between("xs", "sm")]: {
-      width: "100%",
-    },
-  },
-  image: {
-    // width: 128,
-    // height: 128,
-    color: "white",
-    maxWidth: 128,
-  },
-  img: {
-    width: "100%",
-    height: "100%",
-  },
-  grid: {
-    margin: 0,
-    flexWrap: "nowrap",
-  },
-  container: {
-    backgroundColor: "#3d4b8a",
-    width: "80%",
-    maxWidth: "fit-content",
-  },
-}));
-
 const MainHome = () => {
-  const classes = useStyles();
   const history = useHistory();
   const currentUser = JSON.parse(localStorage.getItem("userLogged"));
   const userName = currentUser.map((el) => el.name);
@@ -77,21 +30,18 @@ const MainHome = () => {
   return (
     <ContainerHomeStyled>
       <ContainerWelcomeStyled>
-        <Typography variant="h4" className={classes.text}>
+        <TypographyStyled variant="h4">
           Seja bem-vindo(a) {userName}!
-        </Typography>
+        </TypographyStyled>
       </ContainerWelcomeStyled>
       <ContainerDisplayStyled>
-        <Paper className={classes.paper}>
-          <Grid container spacing={2} className={classes.grid}>
-            <Grid item className={classes.container}>
-              <ButtonBase
-                className={classes.image}
-                onClick={() => redirectTo("condominos")}
-              >
-                <EqualizerOutlinedIcon className={classes.img} />
-              </ButtonBase>
-            </Grid>
+        <PaperContainer>
+          <GridContainerStyled container spacing={2}>
+            <GridItemStyled item>
+              <ButtonBaseStyled onClick={() => redirectTo("condominos")}>
+                <EqualizerOutlinedIcon className="imgIcon" />
+              </ButtonBaseStyled>
+            </GridItemStyled>
             <Grid item xs={12} sm container>
               <Grid item xs container direction="column" spacing={2}>
                 <Grid item xs>
@@ -104,19 +54,16 @@ const MainHome = () => {
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Paper>
+          </GridContainerStyled>
+        </PaperContainer>
 
-        <Paper className={classes.paper}>
-          <Grid container spacing={2} className={classes.grid}>
-            <Grid item className={classes.container}>
-              <ButtonBase
-                className={classes.image}
-                onClick={() => redirectTo("sindicos")}
-              >
-                <EqualizerOutlinedIcon className={classes.img} />
-              </ButtonBase>
-            </Grid>
+        <PaperContainer>
+          <GridContainerStyled container spacing={2}>
+            <GridItemStyled item>
+              <ButtonBaseStyled onClick={() => redirectTo("sindicos")}>
+                <EqualizerOutlinedIcon className="imgIcon" />
+              </ButtonBaseStyled>
+            </GridItemStyled>
             <Grid item xs={12} sm container>
               <Grid item xs container direction="column" spacing={2}>
                 <Grid item xs>
@@ -129,8 +76,8 @@ const MainHome = () => {
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Paper>
+          </GridContainerStyled>
+        </PaperContainer>
       </ContainerDisplayStyled>
     </ContainerHomeStyled>
   );

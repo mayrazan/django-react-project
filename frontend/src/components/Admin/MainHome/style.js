@@ -1,3 +1,5 @@
+import { ButtonBase, Grid, Paper, Typography } from "@material-ui/core";
+import { withTheme } from "@material-ui/core/styles";
 import styled from "styled-components";
 import { colors } from "../../../styles/colors";
 import { device } from "../../../styles/medias";
@@ -41,5 +43,47 @@ export const ContainerDisplayStyled = styled.div`
 
   @media ${device.maxSm} {
     flex-direction: column;
+  }
+`;
+
+export const TypographyStyled = styled(Typography)`
+  && {
+    margin-left: 2rem;
+  }
+`;
+
+export const PaperContainer = withTheme(styled(Paper)`
+  && {
+    width: 48%;
+    ${(props) => props.theme.breakpoints.between(0, 767)} {
+      width: 100%;
+    }
+  }
+`);
+
+export const ButtonBaseStyled = styled(ButtonBase)`
+  && {
+    color: white;
+    max-width: 128px;
+
+    .imgIcon {
+      width: 100%;
+      height: 100%;
+    }
+  }
+`;
+
+export const GridContainerStyled = styled(Grid)`
+  && {
+    margin: 0;
+    flex-wrap: nowrap;
+  }
+`;
+
+export const GridItemStyled = styled(Grid)`
+  && {
+    background-color: #3d4b8a;
+    width: 80%;
+    max-width: fit-content;
   }
 `;

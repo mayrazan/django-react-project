@@ -1,60 +1,22 @@
 import { useHistory } from "react-router";
-import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
 import { useEffect, useState } from "react";
 import { getColorsPriority, updateColors } from "../../../services/infoApi";
-import { colors } from "../../../styles/colors";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
 import { successMessage } from "../../../utils/messages";
 import Loading from "../../shared/Loading";
 import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    [theme.breakpoints.down("sm")]: {
-      marginTop: 0,
-    },
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    backgroundColor: colors.white,
-  },
-  form: {
-    width: "100%",
-    paddingTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, "auto", 2),
-    display: "flex",
-    "@media (max-height: 946px)": {
-      margin: "auto",
-    },
-  },
-  alerts: {
-    width: "100%",
-    "& > * + *": {
-      marginTop: theme.spacing(2),
-    },
-  },
-  main: {
-    backgroundColor: colors.white,
-    borderRadius: "5px",
-  },
-  field: {
-    "@media (max-height: 946px)": {
-      paddingBottom: ".5rem",
-      marginBottom: 0,
-    },
-  },
-}));
+import {
+  BtnSubmitContainer,
+  FormContainer,
+  MainContainer,
+  PaperContainer,
+  TextFieldStyled,
+} from "./style";
 
 const ColorTags = () => {
   const history = useHistory();
-  const classes = useStyles();
 
   const [isMessageSuccess, setMessageSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -92,27 +54,26 @@ const ColorTags = () => {
   };
 
   return (
-    <Container component="main" maxWidth="md" className={classes.main}>
+    <MainContainer component="main" maxWidth="md">
       <CssBaseline />
       <ContainerBtnStyled>
-        <Button
+        <BtnSubmitContainer
           variant="contained"
           color="primary"
-          className={classes.submit}
           onClick={() => history.push("/admin")}
         >
           <KeyboardBackspaceOutlinedIcon />
-        </Button>
+        </BtnSubmitContainer>
       </ContainerBtnStyled>
-      <div className={classes.paper}>
+      <PaperContainer>
         <Typography component="h1" variant="h5">
           Selecione uma cor para identificar cada prioridade
         </Typography>
         {isLoading ? (
           <Loading />
         ) : (
-          <form className={classes.form}>
-            <TextField
+          <FormContainer>
+            <TextFieldStyled
               variant="outlined"
               margin="normal"
               required
@@ -120,7 +81,6 @@ const ColorTags = () => {
               name="high"
               label="Prioridade Alta"
               defaultValue="Prioridade Alta"
-              className={classes.field}
               autoComplete="off"
               disabled
             />
@@ -133,7 +93,7 @@ const ColorTags = () => {
               style={{ width: "50%" }}
             />
 
-            <TextField
+            <TextFieldStyled
               variant="outlined"
               margin="normal"
               required
@@ -141,7 +101,6 @@ const ColorTags = () => {
               name="medium"
               label="Prioridade Media"
               defaultValue="Prioridade Media"
-              className={classes.field}
               autoComplete="off"
               disabled
             />
@@ -155,7 +114,7 @@ const ColorTags = () => {
               style={{ width: "50%" }}
             />
 
-            <TextField
+            <TextFieldStyled
               variant="outlined"
               margin="normal"
               required
@@ -163,7 +122,6 @@ const ColorTags = () => {
               name="low"
               label="Prioridade Baixa"
               defaultValue="Prioridade Baixa"
-              className={classes.field}
               autoComplete="off"
               disabled
             />
@@ -176,20 +134,19 @@ const ColorTags = () => {
               }
               style={{ width: "50%" }}
             />
-            <Button
+            <BtnSubmitContainer
               type="submit"
               variant="contained"
               color="primary"
-              className={classes.submit}
               onClick={saveChanges}
             >
               Salvar
-            </Button>
-          </form>
+            </BtnSubmitContainer>
+          </FormContainer>
         )}
-      </div>
-      {isMessageSuccess && successMessage(classes.alerts)}
-    </Container>
+      </PaperContainer>
+      {isMessageSuccess && successMessage()}
+    </MainContainer>
   );
 };
 

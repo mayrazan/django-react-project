@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
@@ -27,48 +24,17 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
 import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
 import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
-
-const useStyles = makeStyles(() => ({
-  root: {
-    width: "100%",
-  },
-  container: {
-    maxHeight: 440,
-  },
-  tableRow: {
-    cursor: "pointer",
-    verticalAlign: "baseline",
-  },
-  link: {
-    color: "white",
-  },
-  search: {
-    display: "flex",
-    alignItems: "center",
-    flexWrap: "wrap",
-  },
-  btnContainer: {
-    display: "flex",
-    gap: "1rem",
-    flexWrap: "wrap",
-  },
-  btn: {
-    marginRight: "0.5rem",
-  },
-  count: {
-    display: "flex",
-    justifyContent: "space-evenly",
-    boxShadow: "0px 0px 3px 0px #c5c6c0",
-    borderRadius: "5px",
-    flexWrap: "wrap",
-    padding: "0.8rem",
-    backgroundColor: "#f8f8f8",
-    margin: "0 0.5rem",
-  },
-}));
+import {
+  BtnContainerStyled,
+  BtnStyled,
+  CountStatusContainer,
+  PaperRootStyled,
+  SearchContainerStyled,
+  TableContainerStyled,
+  TableRowStyled,
+} from "./style";
 
 export function TicketsTable({ arrayColumn }) {
-  const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const history = useHistory();
@@ -261,15 +227,15 @@ export function TicketsTable({ arrayColumn }) {
         </>
       ) : (
         <>
-          <div className={classes.count}>
+          <CountStatusContainer>
             {countStatus("Em aberto")}
             {countStatus("Em análise")}
             {countStatus("Concluído")}
             {countStatus("Rejeitado")}
-          </div>
+          </CountStatusContainer>
 
           <HeaderFooterContainer>
-            <div className={classes.search}>
+            <SearchContainerStyled>
               <TextField
                 id="outlined-search"
                 label="Pesquisar Perturbação"
@@ -280,7 +246,7 @@ export function TicketsTable({ arrayColumn }) {
               />
 
               {selectStatus()}
-            </div>
+            </SearchContainerStyled>
 
             <Button
               variant="contained"
@@ -291,8 +257,8 @@ export function TicketsTable({ arrayColumn }) {
             </Button>
           </HeaderFooterContainer>
 
-          <Paper className={classes.root}>
-            <TableContainer className={classes.container}>
+          <PaperRootStyled>
+            <TableContainerStyled>
               <Table stickyHeader aria-label="sticky table" id="table-ticket">
                 <TableHead>
                   <TableRow>
@@ -315,27 +281,20 @@ export function TicketsTable({ arrayColumn }) {
                       )
                       .map((row) => {
                         return (
-                          <TableRow
-                            hover
-                            role="checkbox"
-                            tabIndex={-1}
-                            key={row.id}
-                            className={classes.tableRow}
-                          >
+                          <TableRowStyled hover tabIndex={-1} key={row.id}>
                             {arrayColumn.map((column) => {
                               const valueUser = row.user[column.id];
                               const value = row[column.id];
                               if (column.id === "actions") {
                                 return (
                                   <TableCell key={column.id}>
-                                    <Button
+                                    <BtnStyled
                                       variant="contained"
                                       color="primary"
                                       onClick={() => redirectToTicket(row.id)}
-                                      className={classes.btn}
                                     >
                                       <EditOutlinedIcon />
-                                    </Button>
+                                    </BtnStyled>
                                     <Button
                                       variant="contained"
                                       color="primary"
@@ -352,7 +311,7 @@ export function TicketsTable({ arrayColumn }) {
                                 </TableCell>
                               );
                             })}
-                          </TableRow>
+                          </TableRowStyled>
                         );
                       })
                   ) : (
@@ -364,7 +323,7 @@ export function TicketsTable({ arrayColumn }) {
                   )}
                 </TableBody>
               </Table>
-            </TableContainer>
+            </TableContainerStyled>
             <TablePagination
               rowsPerPageOptions={[10, 25, 100]}
               component="div"
@@ -384,9 +343,9 @@ export function TicketsTable({ arrayColumn }) {
                 <KeyboardBackspaceOutlinedIcon />
               </Button>
 
-              <div className={classes.btnContainer}>
+              <BtnContainerStyled>
                 <Button variant="contained" color="primary">
-                  <CSVLink data={rows} className={classes.link}>
+                  <CSVLink data={rows} className="link">
                     CSV
                   </CSVLink>
                 </Button>
@@ -410,9 +369,9 @@ export function TicketsTable({ arrayColumn }) {
                 >
                   Excel
                 </Button>
-              </div>
+              </BtnContainerStyled>
             </HeaderFooterContainer>
-          </Paper>
+          </PaperRootStyled>
         </>
       )}
     </>
