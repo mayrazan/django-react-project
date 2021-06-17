@@ -1,57 +1,20 @@
 import { useHistory } from "react-router";
-import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
 import { useState } from "react";
 import { registerInfo } from "../../../services/infoApi";
-import { colors } from "../../../styles/colors";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
 import SelectContainer from "../../shared/SelectContainer";
 import { MenuItem } from "@material-ui/core";
 import { alertMessage, successMessage } from "../../../utils/messages";
 import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    [theme.breakpoints.down("sm")]: {
-      marginTop: 0,
-    },
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    backgroundColor: colors.white,
-  },
-  form: {
-    width: "100%",
-    paddingTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, "auto", 2),
-    display: "flex",
-    "@media (max-height: 946px)": {
-      margin: "auto",
-    },
-  },
-  alerts: {
-    width: "100%",
-    "& > * + *": {
-      marginTop: theme.spacing(2),
-    },
-  },
-  main: {
-    backgroundColor: colors.white,
-    borderRadius: "5px",
-  },
-  field: {
-    "@media (max-height: 946px)": {
-      paddingBottom: ".5rem",
-      marginBottom: 0,
-    },
-  },
-}));
+import {
+  BtnSubmitStyled,
+  ContainerStyled,
+  FormStyled,
+  PaperContainer,
+  TextFieldStyled,
+} from "./style";
 
 const RegisterNotifications = () => {
   const [form, setForm] = useState({
@@ -60,7 +23,6 @@ const RegisterNotifications = () => {
   });
 
   const history = useHistory();
-  const classes = useStyles();
 
   const [isMessageVisible, setMessageVisible] = useState(false);
   const [isMessageSuccess, setMessageSuccess] = useState(false);
@@ -116,27 +78,26 @@ const RegisterNotifications = () => {
   };
 
   return (
-    <Container component="main" maxWidth="md" className={classes.main}>
+    <ContainerStyled component="main" maxWidth="md">
       <CssBaseline />
       <ContainerBtnStyled>
-        <Button
+        <BtnSubmitStyled
           variant="contained"
           color="primary"
-          className={classes.submit}
           onClick={() => history.push("/admin")}
         >
           <KeyboardBackspaceOutlinedIcon />
-        </Button>
+        </BtnSubmitStyled>
       </ContainerBtnStyled>
-      <div className={classes.paper}>
+      <PaperContainer>
         <Typography component="h1" variant="h5">
           Avisos
         </Typography>
 
-        <form className={classes.form}>
+        <FormStyled>
           {selectNotification()}
 
-          <TextField
+          <TextFieldStyled
             variant="outlined"
             margin="normal"
             required
@@ -150,24 +111,22 @@ const RegisterNotifications = () => {
             onChange={(event) => {
               setForm({ ...form, description: event.target.value });
             }}
-            className={classes.field}
             autoComplete="off"
           />
 
-          <Button
+          <BtnSubmitStyled
             type="submit"
             variant="contained"
             color="primary"
-            className={classes.submit}
             onClick={onSubmit}
           >
             Enviar
-          </Button>
-        </form>
-      </div>
-      {isMessageVisible && alertMessage(classes.alerts)}
-      {isMessageSuccess && successMessage(classes.alerts)}
-    </Container>
+          </BtnSubmitStyled>
+        </FormStyled>
+      </PaperContainer>
+      {isMessageVisible && alertMessage()}
+      {isMessageSuccess && successMessage()}
+    </ContainerStyled>
   );
 };
 

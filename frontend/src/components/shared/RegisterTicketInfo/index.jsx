@@ -1,58 +1,19 @@
-// import { useHistory } from "react-router";
-import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
 import { useEffect, useState } from "react";
 import { getDataApi, registerInfo } from "../../../services/infoApi";
-import { colors } from "../../../styles/colors";
 import { alertMessage, successMessage } from "../../../utils/messages";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
 import { Input, MenuItem } from "@material-ui/core";
 import SelectContainer from "../SelectContainer";
-import GooglePicker from "react-google-picker";
 import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    [theme.breakpoints.down("sm")]: {
-      marginTop: 0,
-    },
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    backgroundColor: colors.white,
-  },
-  form: {
-    width: "100%",
-    paddingTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, "auto", 2),
-    display: "flex",
-    "@media (max-height: 946px)": {
-      margin: "auto",
-    },
-  },
-  alerts: {
-    width: "100%",
-    "& > * + *": {
-      marginTop: theme.spacing(2),
-    },
-  },
-  main: {
-    backgroundColor: colors.white,
-    borderRadius: "5px",
-  },
-  field: {
-    "@media (max-height: 946px)": {
-      paddingBottom: ".5rem",
-      marginBottom: 0,
-    },
-  },
-}));
+import {
+  BtnSubmitStyled,
+  ContainerStyled,
+  FormStyled,
+  PaperContainer,
+  TextFieldStyled,
+} from "./style";
 
 const RegisterTicketInfo = () => {
   const [problems, setProblems] = useState([]);
@@ -77,8 +38,6 @@ const RegisterTicketInfo = () => {
   }, []);
 
   const userId = currentUser.map((el) => el.id);
-  // const history = useHistory();
-  const classes = useStyles();
 
   const [isMessageVisible, setMessageVisible] = useState(false);
   const [isMessageSuccess, setMessageSuccess] = useState(false);
@@ -87,7 +46,7 @@ const RegisterTicketInfo = () => {
     return currentUser.map((item) => {
       return (
         <div key={item.id}>
-          <TextField
+          <TextFieldStyled
             name="user"
             defaultValue={item.name}
             variant="outlined"
@@ -96,9 +55,8 @@ const RegisterTicketInfo = () => {
             disabled
             fullWidth
             label="Nome"
-            className={classes.field}
           />
-          <TextField
+          <TextFieldStyled
             name="numAp"
             defaultValue={item.numAp}
             variant="outlined"
@@ -107,7 +65,6 @@ const RegisterTicketInfo = () => {
             disabled
             fullWidth
             label="Nº Ap."
-            className={classes.field}
           />
         </div>
       );
@@ -196,30 +153,29 @@ const RegisterTicketInfo = () => {
   };
 
   return (
-    <Container component="main" maxWidth="md" className={classes.main}>
+    <ContainerStyled component="main" maxWidth="md">
       <CssBaseline />
       <ContainerBtnStyled>
-        <Button
+        <BtnSubmitStyled
           variant="contained"
           color="primary"
-          className={classes.submit}
           onClick={() => setTimeout(() => window.location.reload(), 500)}
         >
           <KeyboardBackspaceOutlinedIcon />
-        </Button>
+        </BtnSubmitStyled>
       </ContainerBtnStyled>
 
-      <div className={classes.paper}>
+      <PaperContainer>
         <Typography component="h1" variant="h5">
           Registrar Ticket
         </Typography>
 
-        <form className={classes.form}>
+        <FormStyled>
           {selectUser()}
           {selectProblem()}
           {selectPriority()}
 
-          <TextField
+          <TextFieldStyled
             variant="outlined"
             margin="normal"
             required
@@ -233,11 +189,10 @@ const RegisterTicketInfo = () => {
             onChange={(event) => {
               setForm({ ...form, description: event.target.value });
             }}
-            className={classes.field}
             autoComplete="off"
           />
 
-          <TextField
+          <TextFieldStyled
             value={form.numApOccurrence}
             onChange={(event) => {
               setForm({ ...form, numApOccurrence: event.target.value });
@@ -248,7 +203,7 @@ const RegisterTicketInfo = () => {
             required
             fullWidth
             label="Nº Ap. de ocorrência"
-            className={classes.field}
+            type="number"
             autoComplete="off"
           />
 
@@ -262,53 +217,20 @@ const RegisterTicketInfo = () => {
             disableUnderline
           />
 
-          <GooglePicker
-            clientId={process.env.REACT_APP_GOOGLE_DRIVE_CLIENT_ID}
-            developerKey={process.env.REACT_APP_GOOGLE_DRIVE_API_KEY}
-            scope={["https://www.googleapis.com/auth/drive.file"]}
-            onChange={(data) => console.log("on change:", data)}
-            onAuthFailed={(data) => console.log("on auth failed:", data)}
-            multiselect={true}
-            navHidden={true}
-            authImmediate={false}
-            viewId={"FOLDERS"}
-            createPicker={(google, oauthToken) => {
-              const googleViewId = google.picker.ViewId.FOLDERS;
-              const docsView = new google.picker.DocsView(googleViewId)
-                .setIncludeFolders(true)
-                .setMimeTypes("application/vnd.google-apps.folder")
-                .setSelectFolderEnabled(true);
-
-              const picker = new window.google.picker.PickerBuilder()
-                .addView(docsView)
-                .setOAuthToken(oauthToken)
-                .setDeveloperKey(process.env.REACT_APP_GOOGLE_DRIVE_API_KEY)
-                .setCallback(() => {
-                  console.log("Custom picker is ready!");
-                });
-
-              picker.build().setVisible(true);
-            }}
-          >
-            <span>Click</span>
-            <div className="google"></div>
-          </GooglePicker>
-
-          <Button
+          <BtnSubmitStyled
             type="submit"
             variant="contained"
             color="primary"
-            className={classes.submit}
             onClick={onSubmit}
           >
             Cadastrar
-          </Button>
-        </form>
-      </div>
+          </BtnSubmitStyled>
+        </FormStyled>
+      </PaperContainer>
 
-      {isMessageVisible && alertMessage(classes.alerts)}
-      {isMessageSuccess && successMessage(classes.alerts)}
-    </Container>
+      {isMessageVisible && alertMessage()}
+      {isMessageSuccess && successMessage()}
+    </ContainerStyled>
   );
 };
 

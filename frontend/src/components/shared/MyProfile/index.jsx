@@ -1,61 +1,17 @@
-import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
 import { useEffect, useState } from "react";
 import Loading from "../../shared/Loading";
-import { colors } from "../../../styles/colors";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
 import { useUserContext } from "../../../context/ContextUser";
 import { getUser, updateProfile } from "../../../services/infoApi";
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    [theme.breakpoints.down("sm")]: {
-      marginTop: 0,
-    },
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    backgroundColor: colors.white,
-  },
-  form: {
-    width: "100%",
-    paddingTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, "auto", 2),
-    display: "flex",
-    "@media (max-height: 946px)": {
-      margin: "auto",
-    },
-  },
-  alerts: {
-    width: "100%",
-    "& > * + *": {
-      marginTop: theme.spacing(2),
-    },
-  },
-  main: {
-    backgroundColor: colors.white,
-    borderRadius: "5px",
-  },
-  field: {
-    "@media (max-height: 946px)": {
-      paddingBottom: ".5rem",
-      marginBottom: 0,
-    },
-  },
-  dateField: {
-    marginTop: theme.spacing(1),
-    "@media (max-height: 946px)": {
-      paddingBottom: ".5rem",
-      marginBottom: 0,
-    },
-  },
-}));
+import {
+  BtnSubmitStyled,
+  ContainerStyled,
+  FormStyled,
+  PaperContainer,
+  TextFieldStyled,
+} from "./style";
 
 const MyProfile = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -90,8 +46,6 @@ const MyProfile = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const classes = useStyles();
-
   const saveChanges = (event) => {
     event.preventDefault();
     (async () => {
@@ -113,10 +67,10 @@ const MyProfile = () => {
   };
 
   return (
-    <Container component="main" maxWidth="md" className={classes.main}>
+    <ContainerStyled component="main" maxWidth="md">
       <CssBaseline />
       <ContainerBtnStyled></ContainerBtnStyled>
-      <div className={classes.paper}>
+      <PaperContainer>
         <Typography component="h1" variant="h5">
           Perfil
         </Typography>
@@ -124,8 +78,8 @@ const MyProfile = () => {
         {isLoading ? (
           <Loading />
         ) : (
-          <form className={classes.form}>
-            <TextField
+          <FormStyled>
+            <TextFieldStyled
               value={form.name}
               onChange={(event) =>
                 setForm({ ...form, name: event.target.value })
@@ -135,10 +89,9 @@ const MyProfile = () => {
               margin="normal"
               fullWidth
               label="Nome"
-              className={classes.field}
             />
 
-            <TextField
+            <TextFieldStyled
               value={form.lastName}
               onChange={(event) =>
                 setForm({ ...form, lastName: event.target.value })
@@ -148,9 +101,8 @@ const MyProfile = () => {
               margin="normal"
               fullWidth
               label="Sobrenome"
-              className={classes.field}
             />
-            <TextField
+            <TextFieldStyled
               value={form.numAp}
               onChange={(event) =>
                 setForm({ ...form, numAp: event.target.value })
@@ -160,10 +112,9 @@ const MyProfile = () => {
               margin="normal"
               fullWidth
               label="Nº Ap."
-              className={classes.field}
               type="number"
             />
-            <TextField
+            <TextFieldStyled
               value={form.floor}
               onChange={(event) =>
                 setForm({ ...form, floor: event.target.value })
@@ -173,10 +124,9 @@ const MyProfile = () => {
               margin="normal"
               fullWidth
               label="Andar"
-              className={classes.field}
               type="number"
             />
-            <TextField
+            <TextFieldStyled
               value={form.email}
               name="email"
               disabled
@@ -184,10 +134,9 @@ const MyProfile = () => {
               margin="normal"
               fullWidth
               label="Email"
-              className={classes.field}
             />
 
-            <TextField
+            <TextFieldStyled
               value={form.phone}
               onChange={(event) =>
                 setForm({ ...form, phone: event.target.value })
@@ -197,10 +146,9 @@ const MyProfile = () => {
               margin="normal"
               fullWidth
               label="Telefone"
-              className={classes.field}
             />
 
-            <TextField
+            <TextFieldStyled
               value={form.cpf}
               onChange={(event) =>
                 setForm({ ...form, cpf: event.target.value })
@@ -210,22 +158,20 @@ const MyProfile = () => {
               margin="normal"
               fullWidth
               label="Cpf"
-              className={classes.field}
             />
 
-            <Button
+            <BtnSubmitStyled
               type="submit"
               variant="contained"
               color="primary"
-              className={classes.submit}
               onClick={saveChanges}
             >
               Salvar Alterações
-            </Button>
-          </form>
+            </BtnSubmitStyled>
+          </FormStyled>
         )}
-      </div>
-    </Container>
+      </PaperContainer>
+    </ContainerStyled>
   );
 };
 

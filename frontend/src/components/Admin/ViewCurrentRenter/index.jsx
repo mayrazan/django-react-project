@@ -1,62 +1,18 @@
 import { useHistory, useParams } from "react-router";
-import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
 import { useEffect, useState } from "react";
 import Loading from "../../shared/Loading";
-import { colors } from "../../../styles/colors";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
 import { useUserContext } from "../../../context/ContextUser";
 import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    [theme.breakpoints.down("sm")]: {
-      marginTop: 0,
-    },
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    backgroundColor: colors.white,
-  },
-  form: {
-    width: "100%",
-    paddingTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, "auto", 2),
-    display: "flex",
-    "@media (max-height: 946px)": {
-      margin: "auto",
-    },
-  },
-  alerts: {
-    width: "100%",
-    "& > * + *": {
-      marginTop: theme.spacing(2),
-    },
-  },
-  main: {
-    backgroundColor: colors.white,
-    borderRadius: "5px",
-  },
-  field: {
-    "@media (max-height: 946px)": {
-      paddingBottom: ".5rem",
-      marginBottom: 0,
-    },
-  },
-  dateField: {
-    marginTop: theme.spacing(1),
-    "@media (max-height: 946px)": {
-      paddingBottom: ".5rem",
-      marginBottom: 0,
-    },
-  },
-}));
+import {
+  BtnSubmitStyled,
+  ContainerMainStyled,
+  FormStyled,
+  PaperContainer,
+  TextFieldStyled,
+} from "./style";
 
 const ViewCurrentRenter = () => {
   const { id } = useParams();
@@ -104,22 +60,19 @@ const ViewCurrentRenter = () => {
     id,
   ]);
 
-  const classes = useStyles();
-
   return (
-    <Container component="main" maxWidth="md" className={classes.main}>
+    <ContainerMainStyled component="main" maxWidth="md">
       <CssBaseline />
       <ContainerBtnStyled>
-        <Button
+        <BtnSubmitStyled
           variant="contained"
           color="primary"
-          className={classes.submit}
           onClick={() => history.push("/admin/condominos")}
         >
           <KeyboardBackspaceOutlinedIcon />
-        </Button>
+        </BtnSubmitStyled>
       </ContainerBtnStyled>
-      <div className={classes.paper}>
+      <PaperContainer>
         <Typography component="h1" variant="h5">
           Condômino
         </Typography>
@@ -127,8 +80,8 @@ const ViewCurrentRenter = () => {
         {isLoading ? (
           <Loading />
         ) : (
-          <form className={classes.form}>
-            <TextField
+          <FormStyled>
+            <TextFieldStyled
               value={form.name}
               disabled
               name="name"
@@ -136,10 +89,9 @@ const ViewCurrentRenter = () => {
               margin="normal"
               fullWidth
               label="Nome"
-              className={classes.field}
             />
 
-            <TextField
+            <TextFieldStyled
               value={form.lastName}
               disabled
               name="lastName"
@@ -147,9 +99,8 @@ const ViewCurrentRenter = () => {
               margin="normal"
               fullWidth
               label="Sobrenome"
-              className={classes.field}
             />
-            <TextField
+            <TextFieldStyled
               value={form.numAp}
               disabled
               name="numAp"
@@ -157,9 +108,8 @@ const ViewCurrentRenter = () => {
               margin="normal"
               fullWidth
               label="Nº Ap."
-              className={classes.field}
             />
-            <TextField
+            <TextFieldStyled
               value={form.floor}
               disabled
               name="floor"
@@ -167,9 +117,8 @@ const ViewCurrentRenter = () => {
               margin="normal"
               fullWidth
               label="Andar"
-              className={classes.field}
             />
-            <TextField
+            <TextFieldStyled
               value={form.email}
               disabled
               name="email"
@@ -177,10 +126,9 @@ const ViewCurrentRenter = () => {
               margin="normal"
               fullWidth
               label="Email"
-              className={classes.field}
             />
 
-            <TextField
+            <TextFieldStyled
               value={form.phone}
               disabled
               name="phone"
@@ -188,10 +136,9 @@ const ViewCurrentRenter = () => {
               margin="normal"
               fullWidth
               label="Telefone"
-              className={classes.field}
             />
 
-            <TextField
+            <TextFieldStyled
               value={form.cpf}
               disabled
               name="cpf"
@@ -199,12 +146,11 @@ const ViewCurrentRenter = () => {
               margin="normal"
               fullWidth
               label="Cpf"
-              className={classes.field}
             />
-          </form>
+          </FormStyled>
         )}
-      </div>
-    </Container>
+      </PaperContainer>
+    </ContainerMainStyled>
   );
 };
 

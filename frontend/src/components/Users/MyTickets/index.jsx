@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
@@ -25,30 +22,14 @@ import { columnTicketsUser } from "../../../mocks/tableList";
 import { changeColor } from "../../../utils/changeColor";
 import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
 import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
-
-const useStyles = makeStyles(() => ({
-  root: {
-    width: "100%",
-  },
-  container: {
-    maxHeight: 440,
-  },
-  tableRow: {
-    cursor: "pointer",
-    verticalAlign: "baseline",
-  },
-  link: {
-    color: "white",
-  },
-  btnContainer: {
-    display: "flex",
-    gap: "1rem",
-    flexWrap: "wrap",
-  },
-}));
+import {
+  BtnContainerStyled,
+  PaperRootStyled,
+  TableContainerStyled,
+  TableRowStyled,
+} from "./style";
 
 const MyTickets = () => {
-  const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const history = useHistory();
@@ -192,8 +173,8 @@ const MyTickets = () => {
               </Button>
             </HeaderFooterContainer>
 
-            <Paper className={classes.root}>
-              <TableContainer className={classes.container}>
+            <PaperRootStyled>
+              <TableContainerStyled>
                 <Table stickyHeader aria-label="sticky table" id="table-ticket">
                   <TableHead>
                     <TableRow>
@@ -216,12 +197,11 @@ const MyTickets = () => {
                         )
                         .map((row) => {
                           return (
-                            <TableRow
+                            <TableRowStyled
                               hover
                               role="checkbox"
                               tabIndex={-1}
                               key={row.id}
-                              className={classes.tableRow}
                             >
                               {columnTicketsUser.map((column, index) => {
                                 const value = row[column.id];
@@ -229,7 +209,7 @@ const MyTickets = () => {
                                   <TableCell key={column.id}>{value}</TableCell>
                                 );
                               })}
-                            </TableRow>
+                            </TableRowStyled>
                           );
                         })
                     ) : (
@@ -241,7 +221,7 @@ const MyTickets = () => {
                     )}
                   </TableBody>
                 </Table>
-              </TableContainer>
+              </TableContainerStyled>
               <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
@@ -261,9 +241,9 @@ const MyTickets = () => {
                   <KeyboardBackspaceOutlinedIcon />
                 </Button>
 
-                <div className={classes.btnContainer}>
+                <BtnContainerStyled>
                   <Button variant="contained" color="primary">
-                    <CSVLink data={rows} className={classes.link}>
+                    <CSVLink data={rows} className="link">
                       CSV
                     </CSVLink>
                   </Button>
@@ -304,9 +284,9 @@ const MyTickets = () => {
                       />
                     </ExcelSheet>
                   </ExcelFile>
-                </div>
+                </BtnContainerStyled>
               </HeaderFooterContainer>
-            </Paper>
+            </PaperRootStyled>
           </>
         )}
       </ContainerStyled>

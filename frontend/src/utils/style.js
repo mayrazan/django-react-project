@@ -5,7 +5,7 @@ export const AlertStyledContainer = withTheme(styled.div`
   && {
     width: 100%;
     & > * + * {
-      margin-top: ${(props) => props.theme.spacing(2)};
+      margin: ${(props) => props.theme.spacing(2, 0, 0)};
     }
   }
 `);

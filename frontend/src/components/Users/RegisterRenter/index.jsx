@@ -1,78 +1,19 @@
 import { useHistory } from "react-router";
-import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
 import { useState } from "react";
 import { registerInfo } from "../../../services/infoApi";
-import { colors } from "../../../styles/colors";
 import { alertMessage, successMessage } from "../../../utils/messages";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
 import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    [theme.breakpoints.down("sm")]: {
-      marginTop: 0,
-    },
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    color: "white",
-    // backgroundColor: colors.white,
-  },
-  form: {
-    width: "100%",
-    paddingTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, "auto", 2),
-    display: "flex",
-    "@media (max-height: 946px)": {
-      margin: "auto",
-    },
-  },
-  alerts: {
-    width: "100%",
-    "& > * + *": {
-      marginTop: theme.spacing(2),
-    },
-  },
-  main: {
-    backgroundColor: "#274b82",
-    borderRadius: "5px",
-  },
-  field: {
-    "@media (max-height: 946px)": {
-      paddingBottom: ".5rem",
-      marginBottom: 0,
-    },
-    "& .MuiFormLabel-root": {
-      color: colors.white,
-    },
-    "& .MuiInputBase-root": {
-      color: colors.white,
-    },
-    "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
-      borderColor: colors.white,
-    },
-    "& .MuiOutlinedInput-notchedOutline": {
-      borderColor: colors.white,
-    },
-  },
-  container: {
-    width: "100%",
-    height: "auto",
-    backgroundColor: "#162e54",
-    color: colors.white,
-    paddingTop: "2rem",
-    "@media (min-height: 856px)": {
-      height: "100%",
-    },
-  },
-}));
+import {
+  BtnSubmitStyled,
+  ContainerRegisterStyled,
+  ContainerStyled,
+  FormStyled,
+  PaperContainer,
+  TextFieldStyled,
+} from "./style";
 
 const RegisterRenter = () => {
   const [form, setForm] = useState({
@@ -90,8 +31,6 @@ const RegisterRenter = () => {
   });
 
   const history = useHistory();
-  const classes = useStyles();
-
   const [isMessageVisible, setMessageVisible] = useState(false);
   const [isMessageSuccess, setMessageSuccess] = useState(false);
 
@@ -125,7 +64,7 @@ const RegisterRenter = () => {
   };
 
   return (
-    <div className={classes.container}>
+    <ContainerRegisterStyled>
       <Typography
         component="h2"
         variant="h4"
@@ -134,27 +73,25 @@ const RegisterRenter = () => {
       >
         Condomínio Quintas das Flores
       </Typography>
-      <Container component="main" maxWidth="md" className={classes.main}>
+      <ContainerStyled component="main" maxWidth="md">
         <CssBaseline />
         <ContainerBtnStyled>
-          <Button
+          <BtnSubmitStyled
             variant="contained"
             color="primary"
-            className={classes.submit}
             onClick={() => history.push("/condominio")}
           >
             <KeyboardBackspaceOutlinedIcon />
-          </Button>
+          </BtnSubmitStyled>
         </ContainerBtnStyled>
 
-        <div className={classes.paper}>
+        <PaperContainer>
           <Typography component="h1" variant="h5">
             Registrar Condômino
           </Typography>
 
-          <form className={classes.form}>
-            {/* <ProfileImage setPreview={setPreview} /> */}
-            <TextField
+          <FormStyled>
+            <TextFieldStyled
               value={form.name}
               onChange={(event) => {
                 setForm({ ...form, name: event.target.value });
@@ -165,10 +102,9 @@ const RegisterRenter = () => {
               required
               fullWidth
               label="Nome"
-              className={classes.field}
               autoComplete="off"
             />
-            <TextField
+            <TextFieldStyled
               name="lastName"
               value={form.lastName}
               onChange={(event) => {
@@ -179,11 +115,10 @@ const RegisterRenter = () => {
               required
               fullWidth
               label="Sobrenome"
-              className={classes.field}
               autoComplete="off"
             />
 
-            <TextField
+            <TextFieldStyled
               name="numAp"
               value={form.numAp}
               onChange={(event) => {
@@ -194,11 +129,11 @@ const RegisterRenter = () => {
               required
               fullWidth
               label="Nº Apartamento"
-              className={classes.field}
+              type="number"
               autoComplete="off"
             />
 
-            <TextField
+            <TextFieldStyled
               value={form.email}
               onChange={(event) => {
                 setForm({ ...form, email: event.target.value });
@@ -209,11 +144,11 @@ const RegisterRenter = () => {
               required
               fullWidth
               label="Email"
-              className={classes.field}
+              type="email"
               autoComplete="off"
             />
 
-            <TextField
+            <TextFieldStyled
               variant="outlined"
               margin="normal"
               required
@@ -224,12 +159,11 @@ const RegisterRenter = () => {
               onChange={(event) => {
                 setForm({ ...form, password: event.target.value });
               }}
-              className={classes.field}
               type="password"
               autoComplete="off"
             />
 
-            <TextField
+            <TextFieldStyled
               value={form.phone}
               onChange={(event) => {
                 setForm({ ...form, phone: event.target.value });
@@ -240,11 +174,10 @@ const RegisterRenter = () => {
               required
               fullWidth
               label="Telefone"
-              className={classes.field}
               autoComplete="off"
             />
 
-            <TextField
+            <TextFieldStyled
               value={form.cpf}
               onChange={(event) => {
                 setForm({ ...form, cpf: event.target.value });
@@ -255,11 +188,10 @@ const RegisterRenter = () => {
               required
               fullWidth
               label="Cpf"
-              className={classes.field}
               autoComplete="off"
             />
 
-            <TextField
+            <TextFieldStyled
               value={form.floor}
               onChange={(event) => {
                 setForm({ ...form, floor: event.target.value });
@@ -270,26 +202,25 @@ const RegisterRenter = () => {
               required
               fullWidth
               label="Andar"
-              className={classes.field}
+              type="number"
               autoComplete="off"
             />
 
-            <Button
+            <BtnSubmitStyled
               type="submit"
               variant="contained"
               color="primary"
-              className={classes.submit}
               onClick={onSubmit}
             >
               Registrar
-            </Button>
-          </form>
-        </div>
+            </BtnSubmitStyled>
+          </FormStyled>
+        </PaperContainer>
 
-        {isMessageVisible && alertMessage(classes.alerts)}
-        {isMessageSuccess && successMessage(classes.alerts)}
-      </Container>
-    </div>
+        {isMessageVisible && alertMessage()}
+        {isMessageSuccess && successMessage()}
+      </ContainerStyled>
+    </ContainerRegisterStyled>
   );
 };
 

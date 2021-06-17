@@ -1,65 +1,23 @@
 import { useHistory, useParams } from "react-router";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
 import { useEffect, useState } from "react";
 import { getDataApi, updateTicketPatch } from "../../../services/infoApi";
 import Loading from "../../shared/Loading";
-import { colors } from "../../../styles/colors";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
 import SelectContainer from "../../shared/SelectContainer";
 import { MenuItem } from "@material-ui/core";
 import { success } from "../../../utils/messages";
 import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    [theme.breakpoints.down("sm")]: {
-      marginTop: 0,
-    },
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    backgroundColor: colors.white,
-  },
-  form: {
-    width: "100%",
-    paddingTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, "auto", 2),
-    display: "flex",
-    "@media (max-height: 946px)": {
-      margin: "auto",
-    },
-  },
-  alerts: {
-    width: "100%",
-    "& > * + *": {
-      marginTop: theme.spacing(2),
-    },
-  },
-  main: {
-    backgroundColor: colors.white,
-    borderRadius: "5px",
-  },
-  field: {
-    "@media (max-height: 946px)": {
-      paddingBottom: ".5rem",
-      marginBottom: 0,
-    },
-  },
-  dateField: {
-    marginTop: theme.spacing(1),
-    "@media (max-height: 946px)": {
-      paddingBottom: ".5rem",
-      marginBottom: 0,
-    },
-  },
-}));
+import {
+  BtnSubmitStyled,
+  ContainerMainStyled,
+  DateFieldStyled,
+  FormStyled,
+  PaperContainer,
+  TextFieldStyled,
+} from "./style";
 
 const ViewCurrentTicket = () => {
   const { id } = useParams();
@@ -101,8 +59,6 @@ const ViewCurrentTicket = () => {
       setMessageVisible(false);
     })();
   }, [id]);
-
-  const classes = useStyles();
 
   const saveChanges = (event) => {
     event.preventDefault();
@@ -170,19 +126,18 @@ const ViewCurrentTicket = () => {
   };
 
   return (
-    <Container component="main" maxWidth="md" className={classes.main}>
+    <ContainerMainStyled component="main" maxWidth="md">
       <CssBaseline />
       <ContainerBtnStyled>
-        <Button
+        <BtnSubmitStyled
           variant="contained"
           color="primary"
-          className={classes.submit}
           onClick={() => history.push("/admin/chamados/")}
         >
           <KeyboardBackspaceOutlinedIcon />
-        </Button>
+        </BtnSubmitStyled>
       </ContainerBtnStyled>
-      <div className={classes.paper}>
+      <PaperContainer>
         <Typography component="h1" variant="h5">
           Ticket
         </Typography>
@@ -190,8 +145,8 @@ const ViewCurrentTicket = () => {
         {isLoading ? (
           <Loading />
         ) : (
-          <form className={classes.form}>
-            <TextField
+          <FormStyled>
+            <TextFieldStyled
               defaultValue={form.name}
               disabled
               name="name"
@@ -200,10 +155,9 @@ const ViewCurrentTicket = () => {
               required
               fullWidth
               label="Nome"
-              className={classes.field}
             />
 
-            <TextField
+            <TextFieldStyled
               defaultValue={form.numAp}
               disabled
               name="numAp"
@@ -212,10 +166,9 @@ const ViewCurrentTicket = () => {
               required
               fullWidth
               label="Nº Ap."
-              className={classes.field}
             />
 
-            <TextField
+            <TextFieldStyled
               defaultValue={form.problem}
               disabled
               name="problem"
@@ -224,10 +177,9 @@ const ViewCurrentTicket = () => {
               required
               fullWidth
               label="Perturbação"
-              className={classes.field}
             />
 
-            <TextField
+            <TextFieldStyled
               variant="outlined"
               margin="normal"
               required
@@ -239,10 +191,9 @@ const ViewCurrentTicket = () => {
               label="Descrição do problema"
               defaultValue={form.description}
               disabled
-              className={classes.field}
             />
 
-            <TextField
+            <TextFieldStyled
               defaultValue={form.numApOccurrence}
               disabled
               name="numApOccurrence"
@@ -251,26 +202,24 @@ const ViewCurrentTicket = () => {
               required
               fullWidth
               label="Nº Ap. de ocorrência"
-              className={classes.field}
             />
 
             {selectStatus()}
             {selectPriority()}
 
-            <TextField
+            <DateFieldStyled
               value={form.openDate}
               name="openDate"
               variant="outlined"
               margin="normal"
               disabled
               label="Data de abertura"
-              className={classes.dateField}
               onChange={(event) => {
                 setForm({ ...form, openDate: event.target.value });
               }}
             />
 
-            <TextField
+            <TextFieldStyled
               variant="outlined"
               margin="normal"
               fullWidth
@@ -283,7 +232,6 @@ const ViewCurrentTicket = () => {
               onChange={(event) => {
                 setForm({ ...form, feedbackManager: event.target.value });
               }}
-              className={classes.field}
               autoComplete="off"
             />
             {form.files && (
@@ -297,20 +245,19 @@ const ViewCurrentTicket = () => {
               </Button>
             )}
 
-            <Button
+            <BtnSubmitStyled
               type="submit"
               variant="contained"
               color="primary"
-              className={classes.submit}
               onClick={saveChanges}
             >
               Salvar Alterações
-            </Button>
-          </form>
+            </BtnSubmitStyled>
+          </FormStyled>
         )}
-      </div>
-      {isMessageVisible && success(classes.alerts)}
-    </Container>
+      </PaperContainer>
+      {isMessageVisible && success()}
+    </ContainerMainStyled>
   );
 };
 

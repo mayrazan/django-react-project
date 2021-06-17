@@ -9,20 +9,16 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import clsx from "clsx";
-import { ContainerProfileStyled } from "./style";
+import { ContainerProfileStyled, TextStyled, TitleStyled } from "./style";
 import { useUserContext } from "../../../context/ContextUser";
 import { useHistory } from "react-router";
-
-// const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
     marginLeft: 0,
   },
-  title: {
-    flexGrow: 1,
-  },
+
   appBar: {
     transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.sharp,
@@ -30,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
     }),
   },
   appBarShift: {
-    // marginLeft: drawerWidth,
     transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -38,9 +33,6 @@ const useStyles = makeStyles((theme) => ({
   },
   hide: {
     display: "none",
-  },
-  text: {
-    fontSize: "inherit",
   },
 }));
 
@@ -94,7 +86,7 @@ export default function Header({ handleDrawerOpen, open }) {
             <MenuIcon />
           </IconButton>
 
-          <Typography variant="h6" className={classes.title}></Typography>
+          <TitleStyled variant="h6"></TitleStyled>
 
           <ContainerProfileStyled>
             <IconButton
@@ -106,9 +98,9 @@ export default function Header({ handleDrawerOpen, open }) {
             >
               <AccountCircle />
             </IconButton>
-            <Typography variant="h6" noWrap className={classes.text}>
+            <TextStyled variant="h6" noWrap>
               {userName.toString()}
-            </Typography>
+            </TextStyled>
 
             <Menu
               id="menu-appbar"

@@ -1,24 +1,11 @@
-import { makeStyles } from "@material-ui/core/styles";
-import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
-
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 200,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-}));
+import { FormControlStyled } from "./style";
 
 export default function SelectContainer({ children, value, onChange, label }) {
-  const classes = useStyles();
-
   return (
     <>
-      <FormControl variant="outlined" className={classes.formControl}>
+      <FormControlStyled variant="outlined">
         <InputLabel htmlFor="filled-age-native-simple">{label}</InputLabel>
         <Select
           labelId="demo-simple-select-outlined-label"
@@ -30,7 +17,7 @@ export default function SelectContainer({ children, value, onChange, label }) {
         >
           {children}
         </Select>
-      </FormControl>
+      </FormControlStyled>
     </>
   );
 }

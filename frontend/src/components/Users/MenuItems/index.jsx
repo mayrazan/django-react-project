@@ -1,34 +1,27 @@
-import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { NavLink } from "react-router-dom";
 import { menuListInfoUser } from "../../../mocks/menuList";
-
-const useStyles = makeStyles(() => ({
-  iconColor: {
-    color: "white",
-  },
-  link: {
-    textDecoration: "none",
-    color: "white",
-  },
-}));
+import { useLocation } from "react-router-dom";
+import { IconColorStyled, ListItemStyled } from "./style";
 
 function MenuItems() {
-  const classes = useStyles();
+  const location = useLocation();
 
   return (
     <List>
       {menuListInfoUser.map((el) => {
         return (
-          <ListItem button key={el.id}>
-            <ListItemIcon className={classes.iconColor}>{el.icon}</ListItemIcon>
+          <ListItemStyled
+            button
+            key={el.id}
+            selected={el.link === location.pathname}
+          >
+            <IconColorStyled>{el.icon}</IconColorStyled>
 
-            <NavLink to={el.link} className={classes.link}>
+            <NavLink to={el.link} className="link-menu">
               {el.name}
             </NavLink>
-          </ListItem>
+          </ListItemStyled>
         );
       })}
     </List>

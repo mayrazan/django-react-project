@@ -15,16 +15,13 @@ import ViewTickets from "../pages/UserPages/ViewTickets";
 import Problems from "../pages/AdminPages/Problems";
 import Notifications from "../pages/AdminPages/Notifications";
 import Login from "../pages/Login";
-// import LoginUser from "../components/shared/LoginContainer/LoginUser";
-import LoginAdmin from "../components/shared/LoginContainer/LoginAdmin";
+import LoginForm from "../components/shared/LoginContainer/LoginForm";
 import { useUserContext } from "../context/ContextUser";
 import Profile from "../pages/Profile";
 import Tags from "../pages/AdminPages/Tags";
 
 const Routes = () => {
   const { isAuthenticated, isAdmin } = useUserContext();
-  // const user = JSON.parse(localStorage.getItem("userLogged"));
-  // const isAdmin = user !== null && user !== undefined ? user[0].isAdmin : false;
 
   return (
     <BrowserRouter>
@@ -83,8 +80,7 @@ const Routes = () => {
         ) : (
           <>
             <Route exact path="/condominio" component={Login} />
-            {/* <Route exact path="/login-usuario" component={LoginUser} /> */}
-            <Route exact path="/login" component={LoginAdmin} />
+            <Route exact path="/login" component={LoginForm} />
             <Route exact path="/cadastro" component={RegisterUser} />
             <Redirect to="/condominio" />
           </>
