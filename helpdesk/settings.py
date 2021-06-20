@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'api',
     'gdstorage',
-    'django_filters'
+    'django_filters',
+    'simple_history'
 ]
 
 MIDDLEWARE = [
@@ -60,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'helpdesk.urls'

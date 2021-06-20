@@ -20,10 +20,10 @@ import SelectContainer from "../../shared/SelectContainer";
 import { HeaderFooterContainer } from "../../shared/StyleComponents/style";
 import XLSX from "xlsx";
 import { changeColor } from "../../../utils/changeColor";
-import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
 import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
 import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
+import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import {
   BtnContainerStyled,
   BtnStyled,
@@ -293,7 +293,7 @@ export function TicketsTable({ arrayColumn }) {
                                       color="primary"
                                       onClick={() => redirectToTicket(row.id)}
                                     >
-                                      <EditOutlinedIcon />
+                                      <VisibilityOutlinedIcon />
                                     </BtnStyled>
                                     <Button
                                       variant="contained"

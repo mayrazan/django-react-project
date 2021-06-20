@@ -4,6 +4,7 @@ from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin, BaseUserManager
 )
 from django.contrib.auth.hashers import make_password
+from simple_history.models import HistoricalRecords
 
 permission = GoogleDriveFilePermission(
     GoogleDrivePermissionRole.WRITER,
@@ -92,9 +93,11 @@ class Tickets(models.Model):
     openDate = models.DateTimeField(auto_now_add=True)
     files = models.FileField(upload_to='helpdesk/',
                              storage=gd_storage, blank=True, null=True)
+    userResponse = models.TextField(blank=True, null=True)
+    history = HistoricalRecords()
 
     def __str__(self):
-        return self.problem
+        return str(self.problem)
 
 
 class Notifications(models.Model):

@@ -5,90 +5,56 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import { Button, MenuItem, Typography } from "@material-ui/core";
+import { Button, TextField, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { CSVLink } from "react-csv";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { getColorsPriority, getUserTickets } from "../../../services/infoApi";
+import { getDataApi, getTicketsHistory } from "../../../services/infoApi";
 import Loading from "../../shared/Loading";
-import ReactExport from "react-data-export";
-import SelectContainer from "../../shared/SelectContainer";
 import {
-  ContainerStyled,
   HeaderFooterContainer,
+  ContainerStyled,
 } from "../../shared/StyleComponents/style";
-import { columnTicketsUser } from "../../../mocks/tableList";
-import { changeColor } from "../../../utils/changeColor";
-import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
+import XLSX from "xlsx";
+import { columnTicketsHistory } from "../../../mocks/tableList";
 import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
-import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import {
   BtnContainerStyled,
   PaperRootStyled,
+  SearchContainerStyled,
   TableContainerStyled,
   TableRowStyled,
 } from "./style";
 
-const MyTickets = () => {
+export default function TicketsHistory() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const history = useHistory();
-  const [rows, setRows] = useState(null);
+  const [rows, setRows] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [status, setStatus] = useState("Todos");
-  const currentUser = JSON.parse(localStorage.getItem("userLogged"));
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const load = async () => {
-      const userID = currentUser.map((el) => el.id);
-      const response = await getUserTickets(`${userID[0]}`);
-      const responseColors = await getColorsPriority();
+      const response = await getDataApi("tickets-history-changes/");
+      const resultWithChangedElements = response.map((item) => {
+        return item === null ? "" : item;
+      });
+      setRows(resultWithChangedElements);
 
-      let filteredStatus = response;
-
-      if (status !== "Todos") {
-        filteredStatus = filteredStatus.filter(
-          (stat) => stat.status === status
-        );
-      }
-      setRows(filteredStatus);
       setTimeout(() => setIsLoading(false), 700);
 
-      changeColor(isLoading, status, responseColors);
+      // let results = resultWithChangedElements;
+
+      if (search) {
+        const responseSearch = await getTicketsHistory(search);
+        // results = results.filter((value) => value.id === Number(search));
+        setRows(responseSearch);
+      }
     };
-
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status, isLoading]);
-
-  const selectStatus = () => {
-    const options = [
-      "Todos",
-      "Em aberto",
-      "Em análise",
-      "Concluído",
-      "Rejeitado",
-    ];
-
-    return (
-      <SelectContainer
-        value={status}
-        onChange={(event) => {
-          setStatus(event.target.value);
-        }}
-        label="Status"
-      >
-        {options.map((item, index) => {
-          return (
-            <MenuItem key={index} value={item}>
-              {item}
-            </MenuItem>
-          );
-        })}
-      </SelectContainer>
-    );
-  };
+  }, [search]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -110,27 +76,27 @@ const MyTickets = () => {
 
     doc.setFontSize(15);
 
-    const title = "Tickets";
+    const title = "Histórico Tickets";
     const headers = [
       [
-        "PERTURBAÇÃO",
-        "DATA ABERTURA",
+        "Nº TICKET",
+        "NOME",
         "STATUS",
         "PRIORIDADE",
-        "DESCRIÇÃO",
-        "Nº AP. OCORRÊNCIA",
-        "RESPOSTA",
+        "RESPOSTA SÍNDICO",
+        "RESPOSTA CONDÔMINO",
+        "DATA ATUALIZAÇÃO",
       ],
     ];
 
     const data = rows.map((el) => [
-      el.problem,
-      el.openDate,
+      el.id,
+      el.user_name,
       el.status,
       el.priority,
-      el.description,
-      el.numApOccurrence,
       el.feedbackManager,
+      el.userResponse,
+      el.history_date,
     ]);
 
     let content = {
@@ -143,30 +109,44 @@ const MyTickets = () => {
 
     doc.text(title, marginLeft, 40);
     doc.autoTable(content);
-    doc.save("tickets.pdf");
+    doc.save("historico-tickets.pdf");
   };
 
-  const ExcelFile = ReactExport.ExcelFile;
-  const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
-  const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
-
-  const redirectToTicket = (id) => {
-    history.push(`/visualizar-chamado/${id}/`);
-  };
-
-  const verifyTicketResponse = (id) => {
-    const r = rows.filter((el) => el.feedbackManager === "" && el.id === id);
-    if (r.length === 0) {
-      redirectToTicket(id);
-    } else {
-      alert("Ainda não há atualizações no ticket");
-    }
+  const downloadxls = (data) => {
+    const result = rows.map((el) => [
+      el.id,
+      el.user_name,
+      el.status,
+      el.priority,
+      el.feedbackManager,
+      el.userResponse,
+      el.history_date,
+    ]);
+    const headings = [
+      [
+        "Nº TICKET",
+        "NOME",
+        "STATUS",
+        "PRIORIDADE",
+        "RESPOSTA SÍNDICO",
+        "RESPOSTA CONDÔMINO",
+        "DATA ATUALIZAÇÃO",
+      ],
+    ];
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(result, {
+      origin: "A2",
+      skipHeader: true,
+    });
+    XLSX.utils.sheet_add_aoa(ws, headings);
+    XLSX.utils.book_append_sheet(wb, ws);
+    XLSX.writeFile(wb, "historico-tickets.xlsx");
   };
 
   return (
     <>
       <Typography variant="h4" style={{ paddingBottom: "1rem" }}>
-        Tickets
+        Histórico de Atualizações de Tickets
       </Typography>
       <ContainerStyled>
         {isLoading ? (
@@ -176,15 +156,17 @@ const MyTickets = () => {
         ) : (
           <>
             <HeaderFooterContainer>
-              {selectStatus()}
-
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => history.push("/cadastro-chamado")}
-              >
-                <AddCircleOutlineOutlinedIcon />
-              </Button>
+              <SearchContainerStyled>
+                <TextField
+                  id="outlined-search"
+                  label="Pesquisar Nº Ticket"
+                  type="search"
+                  variant="outlined"
+                  onChange={(event) => setSearch(event.target.value)}
+                  value={search}
+                  autoComplete="off"
+                />
+              </SearchContainerStyled>
             </HeaderFooterContainer>
 
             <PaperRootStyled>
@@ -192,7 +174,7 @@ const MyTickets = () => {
                 <Table stickyHeader aria-label="sticky table" id="table-ticket">
                   <TableHead>
                     <TableRow>
-                      {columnTicketsUser.map((column) => (
+                      {columnTicketsHistory.map((column) => (
                         <TableCell
                           key={column.id}
                           style={{ minWidth: column.minWidth }}
@@ -209,32 +191,12 @@ const MyTickets = () => {
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage
                         )
-                        .map((row) => {
+                        .map((row, index) => {
                           return (
-                            <TableRowStyled
-                              hover
-                              role="checkbox"
-                              tabIndex={-1}
-                              key={row.id}
-                            >
-                              {columnTicketsUser.map((column, index) => {
+                            <TableRowStyled hover tabIndex={-1} key={index}>
+                              {columnTicketsHistory.map((column) => {
                                 const value = row[column.id];
 
-                                if (column.id === "actions") {
-                                  return (
-                                    <TableCell key={column.id}>
-                                      <Button
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={() =>
-                                          verifyTicketResponse(row.id)
-                                        }
-                                      >
-                                        <VisibilityOutlinedIcon />
-                                      </Button>
-                                    </TableCell>
-                                  );
-                                }
                                 return (
                                   <TableCell key={column.id}>{value}</TableCell>
                                 );
@@ -266,7 +228,7 @@ const MyTickets = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => history.push("/")}
+                  onClick={() => setTimeout(() => history.push("/admin"), 500)}
                 >
                   <KeyboardBackspaceOutlinedIcon />
                 </Button>
@@ -292,28 +254,15 @@ const MyTickets = () => {
                     PDF
                   </Button>
 
-                  <ExcelFile
-                    element={
-                      <Button variant="contained" color="primary">
-                        Excel
-                      </Button>
-                    }
-                    filename="Tickets"
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={(e) => {
+                      downloadxls(e, rows);
+                    }}
                   >
-                    <ExcelSheet data={rows} name="Tickets">
-                      <ExcelColumn label="Data" value="openDate" />
-                      <ExcelColumn label="Perturbação" value="problem" />
-                      <ExcelColumn label="Descrição" value="description" />
-                      <ExcelColumn
-                        label="Nº Ap. Ocorrência"
-                        value="numApOccurrence"
-                      />
-                      <ExcelColumn
-                        label="Resposta Síndico"
-                        value="feedbackManager"
-                      />
-                    </ExcelSheet>
-                  </ExcelFile>
+                    Excel
+                  </Button>
                 </BtnContainerStyled>
               </HeaderFooterContainer>
             </PaperRootStyled>
@@ -322,6 +271,4 @@ const MyTickets = () => {
       </ContainerStyled>
     </>
   );
-};
-
-export default MyTickets;
+}

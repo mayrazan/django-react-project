@@ -3,6 +3,7 @@ import PeopleAltOutlinedIcon from "@material-ui/icons/PeopleAltOutlined";
 import SendOutlinedIcon from "@material-ui/icons/SendOutlined";
 import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
 import LocalOfferOutlinedIcon from "@material-ui/icons/LocalOfferOutlined";
+import HistoryOutlinedIcon from "@material-ui/icons/HistoryOutlined";
 
 export const menuListInfo = [
   {
@@ -40,6 +41,12 @@ export const menuListInfo = [
     name: "Tags Coloridas",
     icon: <LocalOfferOutlinedIcon />,
     link: "/admin/tags",
+  },
+  {
+    id: 7,
+    name: "Histórico Atualizações",
+    icon: <HistoryOutlinedIcon />,
+    link: "/admin/historico",
   },
 ];
 

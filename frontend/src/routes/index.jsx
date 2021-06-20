@@ -19,6 +19,8 @@ import LoginForm from "../components/shared/LoginContainer/LoginForm";
 import { useUserContext } from "../context/ContextUser";
 import Profile from "../pages/Profile";
 import Tags from "../pages/AdminPages/Tags";
+import HistoryChanges from "../pages/AdminPages/HistoryChanges";
+import ShowCurrentTicket from "../pages/UserPages/ShowCurrentTicket";
 
 const Routes = () => {
   const { isAuthenticated, isAdmin } = useUserContext();
@@ -62,6 +64,11 @@ const Routes = () => {
                 />
                 <Route exact path="/admin/avisos" component={Notifications} />
                 <Route exact path="/admin/tags" component={Tags} />
+                <Route
+                  exact
+                  path="/admin/historico"
+                  component={HistoryChanges}
+                />
                 <Redirect to="/admin" />
               </>
             ) : (
@@ -73,6 +80,11 @@ const Routes = () => {
                 />
                 <Route exact path="/" component={UserHome} />
                 <Route exact path="/chamados" component={ViewTickets} />
+                <Route
+                  exact
+                  path="/visualizar-chamado/:id"
+                  component={ShowCurrentTicket}
+                />
                 <Redirect to="/" />
               </>
             )}

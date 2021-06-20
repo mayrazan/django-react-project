@@ -2,15 +2,12 @@ import axios from "axios";
 
 // http://127.0.0.1:8000/api/
 
-// https://condominio-quinta-tickets.herokuapp.com/api/
-
-// https://condominio-quinta.herokuapp.com/api/ backup
+// https://condominio-quinta.herokuapp.com/api/
 
 const api = axios.create({
   baseURL: `https://condominio-quinta.herokuapp.com/api/`,
   timeout: 5000,
   headers: {
-    // Authorization: `Bearer ${localStorage.getItem("access")}`,
     "Content-Type": "application/json",
     accept: "application/json",
   },

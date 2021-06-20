@@ -101,3 +101,8 @@ export async function updateColors(id, item = {}) {
   const response = await api.put(`colors/${id}/`, item);
   return response.data;
 }
+
+export async function getTicketsHistory(id) {
+  const response = await api.get(`tickets-history-changes/${id}/`);
+  return response.data;
+}

@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import permissions, status
-from api.serializers import NotificationsSerializer, ProblemsSerializer, TicketsFilterUserSerializer, TicketsSerializer, UsersSerializer, ColorPrioritySerializer
+from api.serializers import NotificationsSerializer, ProblemsSerializer, TicketsFilterUserSerializer, TicketsSerializer, UsersSerializer, ColorPrioritySerializer, TicketsHistoryChangeSerializer
 from api.models import Users, Tickets, Notifications, Problems, ColorPriority
 from django.core.mail import send_mail
 from rest_framework.decorators import api_view, permission_classes
@@ -18,7 +18,6 @@ from rest_framework import viewsets
 class TicketsView(APIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = TicketsSerializer
-    # parser_classes = [MultiPartParser]
 
     def get_queryset(self):
         tickets = Tickets.objects.all().order_by('-openDate')
@@ -40,7 +39,6 @@ class TicketsView(APIView):
 class TicketView(APIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = TicketsSerializer
-    # parser_classes = [MultiPartParser]
 
     def get_object(self, pk):
         try:
@@ -58,7 +56,20 @@ class TicketView(APIView):
         serializer = TicketsSerializer(ticket, data=request.data)
         if serializer.is_valid():
             serializer.save()
+
+            subject = "Seu ticket foi atualizado"
+            description = "Seu ticket nº" + \
+                str(serializer.data['id']) + \
+                " foi atualizado, para mais detalhes visite: https://help-desk-seven.vercel.app/"
+            to_email = serializer.data['user_email']
+
+            # send_mail("Ticket atualizado pelo usuário", "O ticket " + str(serializer.data['id']) + " recebeu uma resposta do usuário " + serializer.data['user_email'] + ", para mais detalhes visite: https://help-desk-seven.vercel.app/",
+            #           to_email, ['condominioquintahelpdesk@gmail.com'])
+            send_mail(subject, description,
+                      'condominioquintahelpdesk@gmail.com', [to_email])
+
             return Response(serializer.data)
+
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -72,6 +83,19 @@ class TicketView(APIView):
         serializer = TicketsSerializer(ticket, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
+
+            subject = "Seu ticket foi atualizado"
+            description = "Seu ticket nº" + \
+                str(serializer.data['id']) + \
+                " foi atualizado, para mais detalhes visite: https://help-desk-seven.vercel.app/"
+            to_email = serializer.data['user_email']
+
+            # send_mail("Ticket atualizado pelo usuário", "O ticket " + str(serializer.data['id']) + " recebeu uma resposta do usuário " + serializer.data['user_email'] + ", para mais detalhes visite: https://help-desk-seven.vercel.app/",
+            #           to_email, ['condominioquintahelpdesk@gmail.com'])
+
+            send_mail(subject, description,
+                      'condominioquintahelpdesk@gmail.com', [to_email])
+
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -88,7 +112,6 @@ class TicketsUserListView(generics.ListAPIView):
 class UsersView(APIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = UsersSerializer
-    # parser_classes = [MultiPartParser]
 
     def get_queryset(self):
         users = Users.objects.all()
@@ -110,7 +133,6 @@ class UsersView(APIView):
 class UserView(APIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = UsersSerializer
-    # parser_classes = [MultiPartParser]
 
     def get_object(self, pk):
         try:
@@ -277,3 +299,33 @@ class ColorView(APIView):
         colors = self.get_object(pk)
         colors.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class TicketsHistoryChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = TicketsHistoryChangeSerializer
+
+    def get_queryset(self):
+        tickets = Tickets.history.all().order_by('-id')
+        return tickets
+
+    def get(self, request):
+        tickets = self.get_queryset()
+        serializer = TicketsHistoryChangeSerializer(tickets, many=True)
+        return Response(serializer.data)
+
+
+class TicketHistoryChangeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = TicketsHistoryChangeSerializer
+
+    def get_object(self, id):
+        try:
+            return Tickets.history.filter(id=id)
+        except Tickets.DoesNotExist:
+            raise Http404
+
+    def get(self, request, id, format=None):
+        tickets = self.get_object(id)
+        serializer = TicketsHistoryChangeSerializer(tickets, many=True)
+        return Response(serializer.data)

@@ -7,6 +7,7 @@ export const MainContainerStyled = styled.div`
   width: 100%;
   height: calc(100% - 64px);
   padding: 1.563rem 1rem 1rem 15.938rem;
+  overflow: auto;
 
   @media ${device.maxXs} {
     padding: 0;

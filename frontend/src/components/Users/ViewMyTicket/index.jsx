@@ -1,13 +1,10 @@
 import { useHistory, useParams } from "react-router";
-import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import { useEffect, useState } from "react";
 import { getDataApi, updateTicketPatch } from "../../../services/infoApi";
 import Loading from "../../shared/Loading";
 import { ContainerBtnStyled } from "../../shared/StyleComponents/style";
-import SelectContainer from "../../shared/SelectContainer";
-import { MenuItem } from "@material-ui/core";
 import { success } from "../../../utils/messages";
 import KeyboardBackspaceOutlinedIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
 import {
@@ -17,9 +14,10 @@ import {
   FormStyled,
   PaperContainer,
   TextFieldStyled,
+  ContainerInfoStyled,
 } from "./style";
 
-const ViewCurrentTicket = () => {
+const ViewMyTicket = () => {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const [isMessageVisible, setMessageVisible] = useState(false);
@@ -67,64 +65,11 @@ const ViewCurrentTicket = () => {
     (async () => {
       setIsLoading(true);
       await updateTicketPatch(id, {
-        status: form.status,
-        priority: form.priority,
-        feedbackManager: form.feedbackManager,
+        userResponse: form.userResponse,
       });
       setMessageVisible(true);
       setTimeout(() => setIsLoading(false), 700);
     })();
-  };
-
-  const selectStatus = () => {
-    const options = ["Em aberto", "Em análise", "Concluído", "Rejeitado"];
-
-    return (
-      <SelectContainer
-        value={form.status}
-        onChange={(event) => {
-          setForm({ ...form, status: event.target.value });
-        }}
-        label="Status"
-      >
-        {options.map((item, index) => {
-          return (
-            <MenuItem key={index} value={item}>
-              {item}
-            </MenuItem>
-          );
-        })}
-      </SelectContainer>
-    );
-  };
-
-  const selectPriority = () => {
-    const optionsPriority = ["Baixa", "Media", "Alta"];
-    return (
-      <SelectContainer
-        value={form.priority}
-        onChange={(event) => {
-          setForm({ ...form, priority: event.target.value });
-        }}
-        label="Prioridade"
-      >
-        {optionsPriority.map((item, index) => {
-          return (
-            <MenuItem key={index} value={item}>
-              {item}
-            </MenuItem>
-          );
-        })}
-      </SelectContainer>
-    );
-  };
-
-  const downloadFile = () => {
-    const link = document.createElement("a");
-    link.href = form.files;
-    document.body.appendChild(link);
-    link.click();
-    // document.body.removeChild(link);
   };
 
   return (
@@ -134,7 +79,7 @@ const ViewCurrentTicket = () => {
         <BtnSubmitStyled
           variant="contained"
           color="primary"
-          onClick={() => history.push("/admin/chamados/")}
+          onClick={() => history.push("/chamados/")}
         >
           <KeyboardBackspaceOutlinedIcon />
         </BtnSubmitStyled>
@@ -206,20 +151,36 @@ const ViewCurrentTicket = () => {
               label="Nº Ap. de ocorrência"
             />
 
-            {selectStatus()}
-            {selectPriority()}
+            <ContainerInfoStyled>
+              <TextFieldStyled
+                defaultValue={form.status}
+                disabled
+                name="status"
+                variant="outlined"
+                margin="normal"
+                label="Status"
+              />
+              <TextFieldStyled
+                defaultValue={form.priority}
+                disabled
+                name="priority"
+                variant="outlined"
+                margin="normal"
+                label="Prioridade"
+              />
 
-            <DateFieldStyled
-              value={form.openDate}
-              name="openDate"
-              variant="outlined"
-              margin="normal"
-              disabled
-              label="Data de abertura"
-              onChange={(event) => {
-                setForm({ ...form, openDate: event.target.value });
-              }}
-            />
+              <DateFieldStyled
+                value={form.openDate}
+                name="openDate"
+                variant="outlined"
+                margin="normal"
+                disabled
+                label="Data de abertura"
+                onChange={(event) => {
+                  setForm({ ...form, openDate: event.target.value });
+                }}
+              />
+            </ContainerInfoStyled>
 
             <TextFieldStyled
               variant="outlined"
@@ -230,37 +191,26 @@ const ViewCurrentTicket = () => {
               name="feedback"
               id="feedback"
               label="Resposta Síndico"
-              value={form.feedbackManager}
+              defaultValue={form.feedbackManager}
+              disabled
+              autoComplete="off"
+            />
+
+            <TextFieldStyled
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              multiline
+              rows={4}
+              name="userResponse"
+              id="userResponse"
+              label="Resposta Condômino"
+              value={form.userResponse}
               onChange={(event) => {
-                setForm({ ...form, feedbackManager: event.target.value });
+                setForm({ ...form, userResponse: event.target.value });
               }}
               autoComplete="off"
             />
-            {form.userResponse && (
-              <TextFieldStyled
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                multiline
-                rows={4}
-                name="userResponse"
-                id="userResponse"
-                label="Resposta Condômino"
-                defaultValue={form.userResponse}
-                autoComplete="off"
-                disabled
-              />
-            )}
-            {form.files && (
-              <Button
-                onClick={downloadFile}
-                variant="contained"
-                color="secondary"
-                style={{ backgroundColor: "#8015a3" }}
-              >
-                Download Arquivo
-              </Button>
-            )}
 
             <BtnSubmitStyled
               type="submit"
@@ -278,4 +228,4 @@ const ViewCurrentTicket = () => {
   );
 };
 
-export default ViewCurrentTicket;
+export default ViewMyTicket;

@@ -32,11 +32,12 @@ class TicketsSerializer(serializers.ModelSerializer):
     priority = serializers.ChoiceField(
         choices=Tickets.PRIORITY_CHOICES)
     files = serializers.FileField(required=False, allow_null=True)
+    user_email = serializers.ReadOnlyField(source='user.email')
 
     class Meta:
         model = Tickets
         fields = ['id', 'user', 'problem', 'status', 'priority',
-                  'numApOccurrence', 'description', 'feedbackManager', 'openDate', 'files']
+                  'numApOccurrence', 'description', 'feedbackManager', 'openDate', 'files', 'user_email', 'userResponse']
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
@@ -76,7 +77,7 @@ class TicketsFilterUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tickets
         fields = ['id', 'user', 'problem', 'status', 'priority',
-                  'numApOccurrence', 'description', 'feedbackManager', 'openDate', 'files', 'user_name', 'user_numAp']
+                  'numApOccurrence', 'description', 'feedbackManager', 'openDate', 'files', 'user_name', 'user_numAp', 'userResponse']
 
     def get_status(self, obj):
         return obj.get_status_display()
@@ -89,3 +90,12 @@ class ColorPrioritySerializer(serializers.ModelSerializer):
     class Meta:
         model = ColorPriority
         fields = '__all__'
+
+
+class TicketsHistoryChangeSerializer(serializers.ModelSerializer):
+    user_name = serializers.ReadOnlyField(source='user.name')
+
+    class Meta:
+        model = Tickets.history.model
+        fields = ['id', 'user', 'status', 'priority',
+                  'feedbackManager', 'user_name',  'userResponse', 'history_date']
