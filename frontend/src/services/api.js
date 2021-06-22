@@ -6,7 +6,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: `https://condominio-quinta.herokuapp.com/api/`,
-  timeout: 5000,
+  // timeout: 5000,
   headers: {
     "Content-Type": "application/json",
     accept: "application/json",
@@ -32,7 +32,7 @@ const isCorrectRefreshError = (status) => {
 
 const authRequest = axios.create({
   baseURL: `https://condominio-quinta.herokuapp.com/api/`,
-  timeout: 5000,
+  // timeout: 5000,
   headers: {
     Authorization: `Bearer ${localStorage.getItem("access")}`,
     "Content-Type": "application/json",

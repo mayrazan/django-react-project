@@ -21,22 +21,12 @@ const LoginForm = () => {
     onChangePassword,
     redirectToHome,
     login,
-    isAdmin,
     isMessageVisible,
   } = useUserContext();
 
   const onSubmit = (event) => {
     event.preventDefault();
-    verifyRoute();
-  };
-
-  const verifyRoute = () => {
     redirectToHome();
-    if (isAdmin) {
-      history.push("/admin");
-    } else {
-      history.push("/");
-    }
   };
 
   return (

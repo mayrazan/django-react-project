@@ -21,21 +21,18 @@ export default function useContextUser() {
   }, []);
 
   let userAdmin = "";
-  // let user = "";
   let isAdminLogged = null;
-  // let isUserLogged = null;
   const redirectToHome = () => {
     if (login.email && login.password) {
       let result = credentials.filter((el) => el.email === login.email);
       localStorage.setItem("userLogged", JSON.stringify(result));
+
       if (result.length > 0) {
         let userJsonString = localStorage.getItem("userLogged");
         if (userJsonString) {
           userAdmin = JSON.parse(userJsonString);
-          // user = JSON.parse(userJsonString);
         }
         isAdminLogged = userAdmin.map((el) => el.isAdmin);
-        // isUserLogged = user.map((el) => el.isUser);
 
         if (isAdminLogged[0]) {
           handleLogin();
@@ -55,10 +52,9 @@ export default function useContextUser() {
       alert("login invalido");
       window.location = "/condominio";
     }
-    // setTimeout(() => window.location.reload(), 700);
   };
 
-  const handleLogin = (props) => {
+  const handleLogin = () => {
     (async () => {
       const success = await registerUser(login);
       if (success) {
