@@ -5,7 +5,7 @@ import MenuDrawer from "../../../components/shared/Menu";
 const ShowCurrentTicket = () => {
   return (
     <>
-      <MenuDrawer />
+      <MenuDrawer type />
       <MainContainer>
         <ViewMyTicket />
       </MainContainer>
