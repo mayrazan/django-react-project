@@ -329,3 +329,8 @@ class TicketHistoryChangeView(APIView):
         tickets = self.get_object(id)
         serializer = TicketsHistoryChangeSerializer(tickets, many=True)
         return Response(serializer.data)
+
+    def delete(self, request, id, format=None):
+        tickets = self.get_object(id)
+        tickets.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -80,7 +80,7 @@ class Tickets(models.Model):
         ('Alta', 'Alta'),
     ]
     user = models.ForeignKey(
-        Users, on_delete=models.SET_NULL, null=True, blank=True, related_name='user')
+        Users, on_delete=models.CASCADE, null=True, blank=True, related_name='user')
     problem = models.ForeignKey(
         Problems, on_delete=models.CASCADE, to_field='problemType')
     status = models.CharField(choices=STATUS_CHOICES,
